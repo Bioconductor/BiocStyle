@@ -1,0 +1,78 @@
+%% \VignetteIndexEntry{Bioconductor LaTeX Style}
+
+\documentclass{article}
+
+<<style, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@ 
+
+\title{\Bioconductor{} \LaTeX{} Style}
+\author{Martin Morgan, Wolfgang Huber}
+\date{Revised: 1 July, 2013}
+
+\begin{document}
+
+\maketitle
+
+\section{Use}
+
+Add the following to your package \texttt{DESCRIPTION}:
+\begin{verbatim}
+    Suggests: BiocStyle
+\end{verbatim}
+Add this code chunk to the preamble of each vignette:
+\begin{verbatim}
+    <<style, echo=FALSE, results=tex>>=
+    BiocStyle::latex()
+    @ 
+\end{verbatim}
+
+\section{Mark-up}
+
+\texttt{Bioconductor.sty} defines the following commands.
+%% 
+Software:
+\begin{itemize}
+\item \verb+\R{}+ and \verb+\Bioconductor{}+ to reference \R{}
+  software and the \Bioconductor{} project.
+\item \verb+\software+ to reference third-party software, e.g.,
+  \software{GATK}.
+\end{itemize}
+%% 
+Packages:
+\begin{itemize}
+\item \verb+\Biocpkg+ for \Bioconductor{} software packages, including
+  a link to the release version landing page, \Biocpkg{IRanges}.
+\item \verb+\Biocannopkg+ for \Bioconductor{} annotation packages,
+  including a link to the release version landing page,
+  \Biocannopkg{org.Hs.eg.db}.
+\item \verb+\Biocexptpkg+ for \Bioconductor{} experiment data
+  packages, including a link to the release version landing page,
+  \Biocexptpkg{parathyroidSE}.
+\item \verb+\Rpkg+ for \R{} packages available on CRAN, including a
+  link to the FHCRC CRAN mirror landing page, \Rpkg{data.table}.
+\item \verb+\Rpackage+ for \R{} packages that are \emph{not} available
+  on \Bioconductor{} or CRAN.
+\end{itemize}
+%% 
+Code
+\begin{itemize}
+\item \verb+\Rfunction+ for functions \Rfunction{findOverlaps}.
+\item \verb+\Robject+ for variables \Robject{x}, \Robject{olaps}.
+\item \verb+\Rclass+ when refering to a formal class \Rclass{GRanges}.
+\end{itemize}
+%% 
+Communication
+\begin{itemize}
+\item \verb+\comment+ communicates a \comment{comment to the user}.
+\item \verb+\warning+ signals \warning{common pitfalls}.
+\item \verb+\fixme+ provides an indication of \fixme{incomplete functionality}.
+\end{itemize}
+
+\section{This is a section}
+
+\subsection{This is a subsection}
+
+\subsubsection{This is a subsubsection}
+
+\end{document}

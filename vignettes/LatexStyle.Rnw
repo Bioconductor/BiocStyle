@@ -68,6 +68,20 @@ Communication
 \item \verb+\warning+ signals \warning{common pitfalls}.
 \item \verb+\fixme+ provides an indication of \fixme{incomplete functionality}.
 \end{itemize}
+%% 
+Environments
+\begin{packeditemize}
+\item Use \verb+packeditemize+ for itemizations\ldots
+\item with tighter item spacing
+\end{packeditemize}
+\begin{packedenumerate}
+\item Use \verb+packedenumerate+ for enumerations\ldots
+\item \ldots with tighter item spacing
+\end{packedenumerate}
+\begin{packeddescription}
+\item[first] Use \verb+packeddescription+ for descriptions\ldots
+\item[second] \ldots with tighter item spacing
+\end{packeddescription}
 
 \section{This is a section}
 

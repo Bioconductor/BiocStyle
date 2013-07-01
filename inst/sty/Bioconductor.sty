@@ -37,6 +37,7 @@
 \subsectionfont{\sffamily\bfseries\color{RoyalBlue}}
 \subsubsectionfont{\sffamily\bfseries\color{RoyalBlue}}
 %
+\RequirePackage{titling}  %% captures \title{} as \thetitle for subsequent use
 \RequirePackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
@@ -97,4 +98,10 @@
   \setlength{\parsep}{0pt}
 }{\end{enumerate}}
 %
+\newenvironment{packeddescription}{
+\begin{description}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{description}}
 \endinput

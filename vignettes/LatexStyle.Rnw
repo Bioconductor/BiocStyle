@@ -7,12 +7,14 @@ BiocStyle::latex()
 @ 
 
 \title{\Bioconductor{} \LaTeX{} Style}
-\author{Martin Morgan, Wolfgang Huber}
+\author{Martin Morgan, Andrzej Ole\'s, Wolfgang Huber}
 \date{Revised: 1 July, 2013}
 
 \begin{document}
 
 \maketitle
+
+\tableofcontents
 
 \section{Use}
 
@@ -35,41 +37,47 @@ Software:
 \begin{itemize}
 \item \verb+\R{}+ and \verb+\Bioconductor{}+ to reference \R{}
   software and the \Bioconductor{} project.
-\item \verb+\software+ to reference third-party software, e.g.,
+\item \verb+\software{GATK}+ to reference third-party software, e.g.,
   \software{GATK}.
 \end{itemize}
 %% 
 Packages:
 \begin{itemize}
-\item \verb+\Biocpkg+ for \Bioconductor{} software packages, including
+\item \verb+\Biocpkg{IRanges}+ for \Bioconductor{} software packages, including
   a link to the release version landing page, \Biocpkg{IRanges}.
-\item \verb+\Biocannopkg+ for \Bioconductor{} annotation packages,
-  including a link to the release version landing page,
-  \Biocannopkg{org.Hs.eg.db}.
-\item \verb+\Biocexptpkg+ for \Bioconductor{} experiment data
+\item \verb+\Biocannopkg{org.Hs.eg.db}+ for \Bioconductor{} annotation
   packages, including a link to the release version landing page,
-  \Biocexptpkg{parathyroidSE}.
-\item \verb+\Rpkg+ for \R{} packages available on CRAN, including a
-  link to the FHCRC CRAN mirror landing page, \Rpkg{data.table}.
-\item \verb+\Rpackage+ for \R{} packages that are \emph{not} available
-  on \Bioconductor{} or CRAN.
+  \Biocannopkg{org.Hs.eg.db}.
+\item \verb+\Biocexptpkg{parathyroidSE}+ for \Bioconductor{}
+  experiment data packages, including a link to the release version
+  landing page, \Biocexptpkg{parathyroidSE}.
+\item \verb+\Rpkg{data.table}+ for \R{} packages available on CRAN,
+  including a link to the FHCRC CRAN mirror landing page,
+  \Rpkg{data.table}.
+\item \verb+\Rpackage{MyPkg}+ for \R{} packages that are \emph{not}
+  available on \Bioconductor{} or CRAN.
 \end{itemize}
 %% 
-Code
+Code:
 \begin{itemize}
-\item \verb+\Rfunction+ for functions \Rfunction{findOverlaps}.
-\item \verb+\Robject+ for variables \Robject{x}, \Robject{olaps}.
-\item \verb+\Rclass+ when refering to a formal class \Rclass{GRanges}.
+\item \verb+\Rfunction{findOverlaps}+ for functions
+  \Rfunction{findOverlaps}.
+\item \verb+\Robject{olaps}+ for variables \Robject{olaps}.
+\item \verb+\Rclass{GRanges}+ when refering to a formal class
+  \Rclass{GRanges}.
 \end{itemize}
 %% 
-Communication
+Communication:
 \begin{itemize}
-\item \verb+\comment+ communicates a \comment{comment to the user}.
-\item \verb+\warning+ signals \warning{common pitfalls}.
-\item \verb+\fixme+ provides an indication of \fixme{incomplete functionality}.
+\item \verb+\comment{comment to the user}+ communicates a
+  \comment{comment to the user}.
+\item \verb+\warning{common pitfalls}+ signals \warning{common
+    pitfalls}.
+\item \verb+\fixme{incomplete functionality}+ provides an indication
+  of \fixme{incomplete functionality}.
 \end{itemize}
 %% 
-Environments
+Environments:
 \begin{packeditemize}
 \item Use \verb+packeditemize+ for itemizations\ldots
 \item with tighter item spacing
@@ -83,7 +91,9 @@ Environments
 \item[second] \ldots with tighter item spacing
 \end{packeddescription}
 
-\section{This is a section}
+\section{Sectioning: this is a section}
+
+Use \verb+\tableofcontents+ for hyperlinked table of contents.
 
 \subsection{This is a subsection}
 

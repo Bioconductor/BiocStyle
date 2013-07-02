@@ -7,6 +7,9 @@
 %% \ExecuteOptions{pdftitle,pdfauthor}
 %% \ProcessOptions
 
+\RequirePackage[usenames,dvipsnames]{color}
+\definecolor{BiocBlue}{RGB}{24,129,194}
+\definecolor{BiocGreen}{RGB}{135,177,63}
 \RequirePackage[%
  pdfpagelabels,%
  plainpages=false,%
@@ -16,16 +19,15 @@
  bookmarksnumbered=true,%
  bookmarksopen=true,%
  linktoc=section,%
- linkcolor=BlueViolet,%
- citecolor=BlueViolet,%
- urlcolor=BlueViolet,%
+ linkcolor=BiocBlue,%
+ citecolor=BiocBlue,%
+ urlcolor=BiocBlue,%
  linkbordercolor={.7 .7 .7},
  citebordercolor={.7 .7 .7},
  urlbordercolor={.7 .7 .7} ,
  raiselinks,%
  pdftex]{hyperref}
 \RequirePackage[a4paper,left=1.9cm,top=1.9cm,bottom=2.5cm,right=1.9cm,ignoreheadfoot]{geometry}
-\RequirePackage[usenames,dvipsnames]{color}
 \RequirePackage{graphicx}
 \RequirePackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
@@ -33,9 +35,9 @@
 \pagestyle{empty}
 %
 \RequirePackage{sectsty}
-\sectionfont{\sffamily\bfseries\color{RoyalBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
-\subsectionfont{\sffamily\bfseries\color{RoyalBlue}}
-\subsubsectionfont{\sffamily\bfseries\color{RoyalBlue}}
+\sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
+\subsectionfont{\sffamily\bfseries\color{BiocBlue}}
+\subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
 %
 \RequirePackage{titling}  %% captures \title{} as \thetitle for subsequent use
 \RequirePackage{fancyhdr}
@@ -51,9 +53,9 @@
 %
 \renewcommand{\floatpagefraction}{0.9}
 %  
-\newcommand\R{\textsl{R}}
-\newcommand\Bioconductor{\textsl{Bioconductor}}
 \newcommand{\software}[1]{\textsl{#1}}
+\newcommand\R{\software{R}}
+\newcommand\Bioconductor{\software{Bioconductor}}
 \newcommand\Biocpkg[1]{%
   {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}
     {\textsl{#1}}}}

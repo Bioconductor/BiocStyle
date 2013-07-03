@@ -27,7 +27,8 @@
  urlbordercolor={.7 .7 .7} ,
  raiselinks,%
  pdftex]{hyperref}
-\RequirePackage[a4paper,left=1.9cm,top=1.9cm,bottom=2.5cm,right=1.9cm,ignoreheadfoot]{geometry}
+\pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
+\RequirePackage[a4paper,left=2cm,top=2.5cm,bottom=2.5cm,right=2cm]{geometry}
 \RequirePackage{graphicx}
 \RequirePackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
@@ -39,20 +40,32 @@
 \subsectionfont{\sffamily\bfseries\color{BiocBlue}}
 \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
 %
+%% Page layout
 \RequirePackage{titling}  %% captures \title{} as \thetitle for subsequent use
 \RequirePackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhead{}
-\fancyfoot{}
-\lfoot{}\cfoot{\thetitle}\rfoot{}
+\fancyhf{} % clear all header and footer fields
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{\thetitle}
 \renewcommand{\headrule}{}
+%
+%% Alter some LaTeX defaults for better treatment of floats
+%% See p.105 of "TeX Unbound" for suggested values
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand\topfraction{0.9}
+\renewcommand\bottomfraction{0.5}
+\renewcommand\textfraction{0.1}
+\renewcommand\floatpagefraction{0.8}
+\renewcommand\dbltopfraction{0.9}
+\renewcommand\dblfloatpagefraction{0.8}
 %
 \RequirePackage{xstring}
 %
 \RequirePackage{Sweave}
 %
-\renewcommand{\floatpagefraction}{0.9}
-%  
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
 \newcommand\Bioconductor{\software{Bioconductor}}
@@ -78,7 +91,7 @@
 \newcommand{\fixme}[1]{\textsl{\textcolor{Bittersweet}{fixme: #1}}}
 %
 \newcommand{\myincfig}[4]{%
-  \begin{figure}[htbp]
+  \begin{figure}[tbp]
   \begin{center}
   \includegraphics[width=#2]{#1}
   \caption[#3]{\label{#1}\textbf{#3} #4}

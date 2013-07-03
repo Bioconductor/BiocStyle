@@ -117,15 +117,6 @@ plot(abs(v)*exp(v), type="l", col="Royalblue")
 \verb+  {The code that creates this figure is shown in the code chunk.}+
 
 %---------------------------------------------------------
-%\section{Code listings}
-%---------------------------------------------------------
-%Code listing ~\ref{aCodeListing} is produced by the following \LaTeX command:
-%
-%\verb+\lstinputlisting[language=R,label=aCodeListing,breaklines=true,caption={Code from this package}]{../R/latex.R}+
-%
-%\lstinputlisting[language=R,label=aCodeListing,breaklines=true,caption={Code from this package}]{../R/latex.R}
-
-%---------------------------------------------------------
 \section{Session info}
 %---------------------------------------------------------
  Below, the output is shown of \Rfunction{sessionInfo} on the system on which this document was compiled.

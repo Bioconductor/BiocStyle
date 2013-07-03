@@ -30,8 +30,6 @@ Add this code chunk to the preamble of each vignette:
 
 \section{Mark-up}
 
-\texttt{Bioconductor.sty} defines the following commands.
-%% 
 Software:
 \begin{itemize}
 \item \verb+\R{}+ and \verb+\Bioconductor{}+ to reference \R{}
@@ -93,33 +91,44 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 %---------------------------------------------------------
 \section{Including a figure}
 %---------------------------------------------------------
- Besides the usual \LaTeX capabilities (\verb+figure+ environments for floats,
-the \verb+includegraphics+ command)
-\texttt{Bioconductor.sty} defines a shortcut \verb+\incfig{filename}{width}{shorttitle}{extendedcaption}+, which expects four arguments:
 
-\begin{tabular}{lp{13cm}}
-\texttt{filename}&the name of the figure file, which will also be used as the label by
-    which the float can be refered to by \verb+\ref{}+\\
-\texttt{width}&figure width\\
-\texttt{shorttitle}&a short description of the figure, which will be used for the list of
-     figures, and will be printed in bold as the first part of the figure caption\\
-\texttt{extendedcaption}&continuation of the figure caption
-\end{tabular}
-
-\parindent0mm This is perhaps best demonstrated on an example, see Figure~\ref{LatexStyle-figureexample}.
+Besides the usual \LaTeX{} capabilities (\verb+figure+ environment and
+\verb+includegraphics+ command), \texttt{Bioconductor.sty} defines a
+shortcut \verb+\incfig{filename}{width}{shorttitle}{extendedcaption}+,
+which expects four arguments:
+\begin{description}
+\item[filename] The name of the figure file, also used as the label by
+  which the float can be refered to by \verb+\ref{}+.
+\item[width] Figure width.
+\item[shorttitle] A short description, used in the list of figures and
+  printed in bold as the first part of the caption.
+\item[extendedcaption] Continuation of the figure caption.
+\end{description}
+Thus
+\begin{verbatim}
+    <<figureexample,fig=TRUE,include=FALSE,width=4.2,height=4.6>>=
+    v = seq(0, 60i, length=1000)
+    plot(abs(v)*exp(v), type="l", col="Royalblue")
+    @ 
+    \incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
+        {The code that creates this figure is shown in the code chunk.}
+    as shown in Figure~\ref{LatexStyle-figureexample}.
+\end{verbatim}
+results in 
 <<figureexample,fig=TRUE,include=FALSE,width=4.2,height=4.6>>=
 v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @ 
-
-\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}{The code that creates this figure is shown in the code chunk.}
-\parindent0mm\verb+\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}%+\\
-\verb+  {The code that creates this figure is shown in the code chunk.}+
+%% 
+\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}{The code
+  that creates this figure is shown in the code chunk.}
+as shown in Figure~\ref{LatexStyle-figureexample}.
 
 %---------------------------------------------------------
 \section{Session info}
 %---------------------------------------------------------
- Below, the output is shown of \Rfunction{sessionInfo} on the system on which this document was compiled.
+Here is the output of \Rfunction{sessionInfo} on the system on which
+this document was compiled:
 <<sessionInfo, results=tex, print=TRUE>>=
 toLatex(sessionInfo())
 @

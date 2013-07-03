@@ -85,15 +85,17 @@ Use \verb+\tableofcontents+ for a hyperlinked table of contents,
 \verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for structuring your vignette.
 
 \subsection{This is a subsection}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 \subsubsection{This is a subsubsection}
-
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+ 
 %---------------------------------------------------------
 \section{Including a figure}
 %---------------------------------------------------------
  Besides the usual \LaTeX capabilities (\verb+figure+ environments for floats,
 the \verb+includegraphics+ command)
-\texttt{Bioconductor.sty} defines \verb+\myincfig{filename}{width}{shorttitle}{extendedcaption}+, which expects four arguments:
+\texttt{Bioconductor.sty} defines a shortcut \verb+\incfig{filename}{width}{shorttitle}{extendedcaption}+, which expects four arguments:
 
 \begin{tabular}{lp{13cm}}
 \texttt{filename}&the name of the figure file, which will also be used as the label by
@@ -110,9 +112,8 @@ v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @ 
 
-\myincfig{LatexStyle-figureexample}{0.25\textwidth}{Graph of a function.}{The code for this function
-  is presented in the code chunk.}
-\parindent0mm\verb+\myincfig{LatexStyle-figureexample}{0.25\textwidth}{Graph of a function.}%+\\
+\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}{The code that creates this figure is shown in the code chunk.}
+\parindent0mm\verb+\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}%+\\
 \verb+  {The code that creates this figure is shown in the code chunk.}+
 
 %---------------------------------------------------------

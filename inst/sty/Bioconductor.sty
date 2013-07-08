@@ -62,7 +62,7 @@
 \renewcommand\topfraction{0.9}
 \renewcommand\bottomfraction{0.5}
 \renewcommand\textfraction{0.1}
-\renewcommand\floatpagefraction{0.8}
+\renewcommand\floatpagefraction{0.9}
 \renewcommand\dbltopfraction{0.9}
 \renewcommand\dblfloatpagefraction{0.8}
 %
@@ -70,6 +70,7 @@
 %
 \RequirePackage{Sweave}
 %
+\newcommand{\file}[1]{'#1'}
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
 \newcommand\Bioconductor{\software{Bioconductor}}
@@ -89,6 +90,7 @@
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{\texttt{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
+\newcommand{\Rcode}[1]{\texttt{#1}}
 %
 \newcommand{\comment}[1]{\textsl{\textcolor{Gray}{#1}}}
 \newcommand{\warning}[1]{\textsl{\textcolor{Red}{warning: #1}}}

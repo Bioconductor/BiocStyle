@@ -14,18 +14,18 @@
  pdfpagelabels,%
  plainpages=false,%
  pdfborder={0 0 0},%
- pdfstartview=FitH,%
  bookmarks=true,%
- bookmarksnumbered=true,%
  bookmarksopen=true,%
+ bookmarksnumbered=true,%
  linktoc=section,%
  linkcolor=BiocBlue,%
  citecolor=BiocBlue,%
  urlcolor=BiocBlue,%
- linkbordercolor={.7 .7 .7},
- citebordercolor={.7 .7 .7},
- urlbordercolor={.7 .7 .7} ,
+ citebordercolor={.7 .7 .7},%
+ linkbordercolor={.7 .7 .7},%
+ urlbordercolor={.7 .7 .7},%
  raiselinks,%
+ pdfusetitle,%
  pdftex]{hyperref}
 \pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
 \RequirePackage[left=2cm,top=2.5cm,bottom=2.5cm,right=2cm]{geometry}
@@ -66,16 +66,15 @@
 \renewcommand\dbltopfraction{0.9}
 \renewcommand\dblfloatpagefraction{0.8}
 %
-\RequirePackage{xstring}
-%
 \RequirePackage{Sweave}
 %
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \newcommand{\file}[1]{'#1'}
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
 \newcommand\Bioconductor{\software{Bioconductor}}
 \newcommand\Biocpkg[1]{%
-  {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}
+  {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}%
     {\textsl{#1}}}}
 \newcommand\Biocannopkg[1]{%
   {\href{http://bioconductor.org/packages/release/data/annotation/html/#1.html}%
@@ -87,7 +86,7 @@
   {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
     {\textsl{#1}}}}
 \newcommand{\Rpackage}[1]{\textit{#1}}
-\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Rfunction}[1]{\texttt{#1}}
 \newcommand{\Robject}[1]{\texttt{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 \newcommand{\Rcode}[1]{\texttt{#1}}

@@ -23,10 +23,12 @@ Add the following to your package \texttt{DESCRIPTION}:
 \end{verbatim}
 Add this code chunk to the preamble of each vignette:
 \begin{verbatim}
-    <<style, echo=FALSE, results=tex>>=
+    <<style, eval=TRUE, echo=FALSE, results=tex>>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
+Arguments to \Rfunction{latex} are passed to \Rcode{options}; the
+default sets \Rcode{width=90}.
 
 \section{Mark-up}
 

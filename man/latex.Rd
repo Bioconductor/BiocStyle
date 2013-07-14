@@ -8,16 +8,26 @@
 
 }
 \usage{
-latex(...)
+latex(..., width=90)
 }
 \arguments{
-  \item{\dots}{Additional arguments, currently not used.}
+
+  \item{\dots}{Additional arguments, passed to \code{\link{options}}.}
+
+  \item{width}{integer(1) Maximum number of columns on a line used in
+    printing. See \code{\link{options}}.}
+
 }
 \details{
   Use is described in the \sQuote{Bioconductor LaTeX Style} vignette.
 }
 \value{
-  A character string directing LaTex to use the Bioconductor style file.
+
+  The return value is a character string directing LaTex to use the
+  Bioconductor style file.
+
+  A side effect is setting any options specified as arguments.
+
 }
 \author{
   Martin Mogan \url{mtmorgan@fhcrc.org}, Wolfgang Huber

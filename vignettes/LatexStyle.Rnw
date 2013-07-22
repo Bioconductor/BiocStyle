@@ -100,7 +100,9 @@ shortcut \verb+\incfig{filename}{width}{shorttitle}{extendedcaption}+,
 which expects four arguments:
 \begin{description}
 \item[filename] The name of the figure file, also used as the label by
-  which the float can be refered to by \verb+\ref{}+.
+  which the float can be refered to by \verb+\ref{}+. Some
+  \software{Sweave} and \CRANpkg{knitr} options place figures in a
+  sub-folder; the sub-folder should be included in the file name.
 \item[width] Figure width.
 \item[shorttitle] A short description, used in the list of figures and
   printed in bold as the first part of the caption.
@@ -123,8 +125,9 @@ plot(abs(v)*exp(v), type="l", col="Royalblue")
 @ 
 %% 
 \incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}{The code
-  that creates this figure is shown in the code chunk.}
-as shown in Figure~\ref{LatexStyle-figureexample}.
+  that creates this figure is shown in the code chunk.}  as shown in
+Figure~\ref{LatexStyle-figureexample}. (Use
+\verb+\ref{figure/figureexample}+ with \CRANpkg{knitr}).
 
 %---------------------------------------------------------
 \section{Session info}

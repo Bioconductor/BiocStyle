@@ -7,9 +7,11 @@
 %% \ExecuteOptions{pdftitle,pdfauthor}
 %% \ProcessOptions
 
-\RequirePackage[usenames,dvipsnames]{color}
+\PassOptionsToPackage{usenames,dvipsnames}{color}
+\RequirePackage{color}
 \definecolor{BiocBlue}{RGB}{24,129,194}
 \definecolor{BiocGreen}{RGB}{135,177,63}
+
 \RequirePackage[%
  pdfpagelabels,%
  plainpages=false,%
@@ -29,11 +31,8 @@
  pdftex]{hyperref}
 \pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
 \RequirePackage[left=2cm,top=2.5cm,bottom=2.5cm,right=2cm]{geometry}
-\RequirePackage{graphicx}
 \RequirePackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
-\RequirePackage{cite}
-\pagestyle{empty}
 %
 \RequirePackage{sectsty}
 \sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
@@ -73,35 +72,35 @@
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
 \newcommand\Bioconductor{\software{Bioconductor}}
+\newcommand{\Rpackage}[1]{\textsl{#1}}
 \newcommand\Biocpkg[1]{%
   {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}%
-    {\textsl{#1}}}}
+    {\Rpackage{#1}}}}
 \newcommand\Biocannopkg[1]{%
   {\href{http://bioconductor.org/packages/release/data/annotation/html/#1.html}%
-    {\textsl{#1}}}}
+    {\Rpackage{#1}}}}
 \newcommand\Biocexptpkg[1]{%
   {\href{http://bioconductor.org/packages/release/data/experiment/html/#1.html}%
-    {\textsl{#1}}}}
-\newcommand\Rpkg[1]{%
+    {\Rpackage{#1}}}}
+\newcommand\CRANpkg[1]{%
   {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
-    {\textsl{#1}}}}
-\newcommand{\Rpackage}[1]{\textit{#1}}
-\newcommand{\Rfunction}[1]{\texttt{#1}}
-\newcommand{\Robject}[1]{\texttt{#1}}
-\newcommand{\Rclass}[1]{\textit{#1}}
+    {\Rpackage{#1}}}}
 \newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Robject}[1]{\Rcode{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
 %
 \newcommand{\comment}[1]{\textsl{\textcolor{Gray}{#1}}}
 \newcommand{\warning}[1]{\textsl{\textcolor{Red}{warning: #1}}}
 \newcommand{\fixme}[1]{\textsl{\textcolor{Bittersweet}{fixme: #1}}}
 %
 \newcommand{\incfig}[4]{%
-  \begin{figure}[tbp]
-  \begin{center}
-  \includegraphics[width=#2]{#1}
-  \caption[#3]{\label{#1}\textbf{#3} #4}
-  \end{center}
-  \end{figure}
+  \begin{figure}[tbp]%
+  \begin{center}%
+  \includegraphics[width=#2]{#1}%
+  \caption[#3]{\label{#1}\textbf{#3} #4}%
+  \end{center}%
+  \end{figure}%
 }
 
 \endinput

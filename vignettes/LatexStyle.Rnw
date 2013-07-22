@@ -50,9 +50,9 @@ Packages:
 \item \verb+\Biocexptpkg{parathyroidSE}+ for \Bioconductor{}
   experiment data packages, including a link to the release version
   landing page, \Biocexptpkg{parathyroidSE}.
-\item \verb+\Rpkg{data.table}+ for \R{} packages available on CRAN,
+\item \verb+\CRANpkg{data.table}+ for \R{} packages available on CRAN,
   including a link to the FHCRC CRAN mirror landing page,
-  \Rpkg{data.table}.
+  \CRANpkg{data.table}.
 \item \verb+\Rpackage{MyPkg}+ for \R{} packages that are \emph{not}
   available on \Bioconductor{} or CRAN.
 \end{itemize}

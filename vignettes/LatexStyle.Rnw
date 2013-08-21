@@ -64,6 +64,7 @@ Code:
 \item \verb+\Robject{olaps}+ for variables \Robject{olaps}.
 \item \verb+\Rclass{GRanges}+ when refering to a formal class
   \Rclass{GRanges}.
+\item \verb+\Rcode{log(x)}+ for \R{} code.
 \end{itemize}
 %% 
 Communication:

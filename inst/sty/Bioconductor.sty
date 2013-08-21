@@ -1,17 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{Bioconductor}[2013/07/01 Bioconductor vignette style]
-
-%%     -I would wish to know how to make this work-
-%% \DeclareOption{pdftitle}{\PassOptionsToPackage{pdftitle}{hyperref}}
-%% \DeclareOption{pdfauthor}{\PassOptionsToPackage{pdfauthor}{hyperref}}
-%% \ExecuteOptions{pdftitle,pdfauthor}
-%% \ProcessOptions
-
+% 
 \PassOptionsToPackage{usenames,dvipsnames}{color}
 \RequirePackage{color}
 \definecolor{BiocBlue}{RGB}{24,129,194}
 \definecolor{BiocGreen}{RGB}{135,177,63}
-
+% 
 \RequirePackage[%
  pdfpagelabels,%
  plainpages=false,%
@@ -48,10 +42,8 @@
 \fancyhead[LO,RE]{\thetitle}
 \renewcommand{\headrule}{}
 %
-
 \usepackage{enumitem}
 \setlist{nolistsep}
-
 %% Alter some LaTeX defaults for better treatment of floats
 %% See p.105 of "TeX Unbound" for suggested values
 \setcounter{topnumber}{2}
@@ -102,5 +94,5 @@
   \end{center}%
   \end{figure}%
 }
-
+% 
 \endinput

@@ -27,8 +27,8 @@ Add this code chunk to the preamble of each vignette:
     BiocStyle::latex()
     @ 
 \end{verbatim}
-Arguments to \Rfunction{latex} are passed to \Rcode{options}; the
-default sets \Rcode{width=90}.
+Arguments to \Rfunction{latex} are passed to \Rcode{options}. The
+default sets \Rcode{width=90}, which is optimal for the default font size 11pt; for smaller/larger font size please consider increasing/decreasing this value .
 
 \section{Mark-up}
 
@@ -77,6 +77,11 @@ Communication:
   of \fixme{incomplete functionality}.
 \end{itemize}
 %% 
+General:
+\begin{itemize}
+\item \verb+\email{user@domain.com}+ to provide a linked email address, \email{user@domain.com}.
+\item \verb+\file{script.R}+ for file names and file paths, \file{script.R}.
+\end{itemize}
 
 %---------------------------------------------------------
 \section{Sectioning: this is a section}

@@ -41,7 +41,7 @@
 \fancyhead[LO,RE]{\thetitle}
 \renewcommand{\headrule}{}
 %
-\usepackage{enumitem}
+\RequirePackage{enumitem}
 \setlist{nolistsep}
 %% Alter some LaTeX defaults for better treatment of floats
 %% See p.105 of "TeX Unbound" for suggested values
@@ -60,8 +60,10 @@
 %
 \newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \newcommand{\file}[1]{'#1'}
+%
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
+%
 \newcommand\Bioconductor{\software{Bioconductor}}
 \newcommand{\Rpackage}[1]{\textsl{#1}}
 \newcommand\Biocpkg[1]{%
@@ -76,6 +78,7 @@
 \newcommand\CRANpkg[1]{%
   {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
     {\Rpackage{#1}}}}
+%
 \newcommand{\Rcode}[1]{\texttt{#1}}
 \newcommand{\Rfunction}[1]{\Rcode{#1}}
 \newcommand{\Robject}[1]{\Rcode{#1}}

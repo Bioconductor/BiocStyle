@@ -3,7 +3,7 @@
 \documentclass{article}
 
 <<style, echo=FALSE, results=tex>>=
-BiocStyle::latex()
+BiocStyle::latex(short.figlabels=TRUE)
 @
 \newcommand{\exitem}[3]{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
 
@@ -28,7 +28,7 @@ and this code chunk to the preamble of each vignette:
     BiocStyle::latex()
     @ 
 \end{verbatim}
-Arguments to \Rfunction{latex} are passed to \Rcode{options}. The default sets \Rcode{width=90}, which is optimal for the default font size 11pt; for smaller/larger font size please consider increasing/decreasing this value.
+Arguments to \Rfunction{latex} are passed to \Rcode{options}. The default sets \Rcode{width=90}, which is optimal for the default font size 10pt; for smaller/larger font size please consider increasing/decreasing this value.
 
 The style features headers containing the title of the vignette as defined by \verb+\title+. If you wish to override it, e.g.~in the case of long titles, add the following line to the preamble of your vignette:
 \begin{verbatim}
@@ -127,9 +127,9 @@ v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @ 
 %% 
-\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}{The code
+\incfig{figureexample}{0.25\textwidth}{A curve.}{The code
   that creates this figure is shown in the code chunk.}  as shown in
-Figure~\ref{LatexStyle-figureexample}. (Use
+Figure~\ref{figureexample}. (Use
 \verb+\ref{figure/figureexample}+ with \CRANpkg{knitr}).
 
 %---------------------------------------------------------

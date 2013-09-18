@@ -8,14 +8,18 @@
 
 }
 \usage{
-latex(..., width=90)
+latex(..., width=90, short.figlabels=FALSE, fig.path)
 }
 \arguments{
 
   \item{\dots}{Additional arguments, passed to \code{\link{options}}.}
 
-  \item{width}{integer(1) Maximum number of columns on a line used in
-    printing. See \code{\link{options}}.}
+  \item{width}{integer(1), maximum number of columns on a line used in
+             printing. See \code{\link{options}}.}
+
+  \item{short.figlabels}{logical, should \code{\\incfic} figures be inserted and referred to using short names equal to corresponding code chunk labels without any additional prefix.}
+
+  \item{fig.path}{character, custom prefix to be used for figure file names when compiled with \code{knitr}; has no effect when compiled with \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
 
 }
 \details{
@@ -30,7 +34,7 @@ latex(..., width=90)
 
 }
 \author{
-  Martin Mogan \url{mtmorgan@fhcrc.org}, Wolfgang Huber
+  Martin Morgan \url{mtmorgan@fhcrc.org}, Andrzej Oles, Wolfgang Huber
 }
 
 \examples{

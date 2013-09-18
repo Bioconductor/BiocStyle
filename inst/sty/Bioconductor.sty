@@ -88,13 +88,14 @@
 \newcommand{\warning}[1]{\textsl{\textcolor{Red}{warning: #1}}}
 \newcommand{\fixme}[1]{\textsl{\textcolor{Bittersweet}{fixme: #1}}}
 %
+\newcommand{\prefix}{}
 \newcommand{\incfig}[4]{%
   \begin{figure}[tbp]%
   \begin{center}%
-  \includegraphics[width=#2]{#1}%
+  \includegraphics[width=#2]{\prefix#1}%
   \caption[#3]{\label{#1}\textbf{#3} #4}%
   \end{center}%
   \end{figure}%
-}
+} 
 % 
 \endinput

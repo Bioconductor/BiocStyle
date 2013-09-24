@@ -89,11 +89,11 @@
 \newcommand{\fixme}[1]{\textsl{\textcolor{Bittersweet}{fixme: #1}}}
 %
 \newcommand{\prefix}{}
-\newcommand{\incfig}[4]{%
-  \begin{figure}[tbp]%
+\newcommand{\incfig}[5][tbp]{%
+  \begin{figure}[#1]%
   \begin{center}%
-  \includegraphics[width=#2]{\prefix#1}%
-  \caption[#3]{\label{#1}\textbf{#3} #4}%
+  \includegraphics[width=#3]{\prefix#2}%
+  \caption[#4]{\label{#2}\textbf{#4} #5}%
   \end{center}%
   \end{figure}%
 } 

@@ -2,15 +2,16 @@
 
 \documentclass{article}
 
-<<style, echo=FALSE, results=tex>>=
-BiocStyle::latex(short.figlabels=TRUE)
-@
+<<style, eval=TRUE, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@ 
 \newcommand{\exitem}[3]{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
 
 \title{\Bioconductor{} \LaTeX{} Style}
 \author{Martin Morgan, Andrzej Ole\'s, Wolfgang Huber}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 \maketitle
 
@@ -28,9 +29,11 @@ and this code chunk to the preamble of each vignette:
     BiocStyle::latex()
     @ 
 \end{verbatim}
-Arguments to \Rfunction{latex} are passed to \Rcode{options}. The default sets \Rcode{width=90}, which is optimal for the default font size 10pt; for smaller/larger font size please consider increasing/decreasing this value.
+Arguments to \Rfunction{latex} are passed to \Rcode{options}. The default sets \Rcode{width=90}, which is optimal for the default font size 10pt; for larger font size please consider decreasing this value.
 
-The style features headers containing the title of the vignette as defined by \verb+\title+. If you wish to override it, e.g.~in the case of long titles, add the following line to the preamble of your vignette:
+Two additional arguments control the handling of figure names by the \verb+\incfig+ macro: \Rcode{short.fignames} (logical) indicates whether figures should be inserted and referred to using their full file names (\Rcode{FALSE}, default), or short names equal to corresponding code chunk labels without any prefix (\Rcode{TRUE}), and \Rcode{fig.path} (character) defines custom prefix used with figure file names when \Rpackage{knitr} is used. For details see Section \ref{incfig} and \Rcode{?latex}.
+
+The style features page headers containing the title of the vignette as defined by \verb+\title+. If you wish to override it, e.g.~in the case of long titles, add the following line to the preamble of your vignette:
 \begin{verbatim}
     \renewcommand{\thetitle}{Short header title}
 \end{verbatim}
@@ -61,7 +64,7 @@ Code:
 \begin{itemize}
   \exitem{Rfunction}{findOverlaps}{for functions}
   \exitem{Robject}{olaps}{for variables}
-  \exitem{Rclass}{GRanges}{when refering to a formal class}
+  \exitem{Rclass}{GRanges}{when referring to a formal class}
   \exitem{Rcode}{log(x)}{for \R{} code,}
 \end{itemize}
 \vspace{1em}
@@ -94,47 +97,78 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
  
 %---------------------------------------------------------
-\section{Including a figure}
+\section{Including figures}\label{incfig}
 %---------------------------------------------------------
 
 Besides the usual \LaTeX{} capabilities (\verb+figure+ environment and
-\verb+includegraphics+ command), \file{Bioconductor.sty} defines a
-shortcut \verb+\incfig{filename}{width}{shorttitle}{extendedcaption}+,
+\verb+\includegraphics+ command), \file{Bioconductor.sty} defines a
+macro \verb+\incfig[placement]{filename}{width}{shorttitle}{extendedcaption}+,
 which expects four arguments:
-\begin{description}
+\begin{description}%[font=\texttt]
 \item[filename] The name of the figure file, also used as the label by
-  which the float can be refered to by \verb+\ref{}+. Some
+  which the float can be referred to by \verb+\ref{}+. Some
   \software{Sweave} and \CRANpkg{knitr} options place figures in a
-  sub-folder; the sub-folder should be included in the file name.
+  subdirectory; unless \Rcode{short.fignames=TRUE} is set the full file name, including the subdirectory and any prefixes, should be provided. By default, these are \file{<sweavename>-} 
+  for \Rpackage{Sweave} and \file{figure/} for \CRANpkg{knitr}.
 \item[width] Figure width.
 \item[shorttitle] A short description, used in the list of figures and
   printed in bold as the first part of the caption.
 \item[extendedcaption] Continuation of the figure caption.
 \end{description}
+The optional \textbf{placement} specifier controls where the figure is placed on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list containing \verb+t+, \verb+b+, \verb+p+, or \verb+h+, where letters enumerate permitted placements. If no placement specifier is given, the default \verb+tbp+ is assumed.
+
 Thus
 \begin{verbatim}
-    <<figureexample,fig=TRUE,include=FALSE,width=4.2,height=4.6>>=
+    <<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
     v = seq(0, 60i, length=1000)
     plot(abs(v)*exp(v), type="l", col="Royalblue")
-    @ 
+    @
     \incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
-        {The code that creates this figure is shown in the code chunk.}
+      {The code that creates this figure is shown in the code chunk.}
     as shown in Figure~\ref{LatexStyle-figureexample}.
 \end{verbatim}
-results in 
-<<figureexample,fig=TRUE,include=FALSE,width=4.2,height=4.6>>=
+results in
+<<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
 v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
-@ 
-%% 
-\incfig{figureexample}{0.25\textwidth}{A curve.}{The code
-  that creates this figure is shown in the code chunk.}  as shown in
-Figure~\ref{figureexample}. (Use
-\verb+\ref{figure/figureexample}+ with \CRANpkg{knitr}).
+@
+\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
+  {The code that creates this figure is shown in the code chunk.}
+as shown in Figure~\ref{LatexStyle-figureexample}.
+
+When the option \Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by \verb+\incfig+ and \verb+\ref+ do not contain any prefix and are identical to the corresponding code chunk labels. For example, the respective code for the above example would be \verb+\incfig{figureexample}{...}{...}{...}+ and \verb+\ref{figureexample}+.
+
+%---------------------------------------------------------
+\section{Using \Rpackage{BiocStyle} with \Rpackage{knitr}}
+%---------------------------------------------------------
+
+There is a number of differences between \Rpackage{Sweave} and \CRANpkg{knitr} with respect to syntax. When \Biocpkg{BiocStyle} is used with \CRANpkg{knitr} some of the code chunk options need to be replaced by their \Rpackage{knitr} counterparts. For instance, the option \Rcode{results=tex} in the preamble code should be substituted by \Rcode{results='asis'}, the complete code chunk being:
+\begin{verbatim}
+    <<style, eval=TRUE, echo=FALSE, results='asis'>>=
+    BiocStyle::latex()
+    @ 
+\end{verbatim}
+
+Knitr creates figures automatically, so there is no need to explicitly indicate by \Rcode{fig=TRUE} code chunks producing graphical output. Additionally, there is a difference in meaning of the \Rcode{include} option: while in \Rpackage{Sweave} it indicates whether \verb+\includegraphics+ statements should be auto-generated, \Rpackage{knitr} uses it to specify whether to include the chunk output in the final document. Therefore, if you wish to use \verb+\incfig+ for inserting figures in \Rpackage{knitr}, use the option \Rcode{fig.show='hide'} rather than \Rcode{include=FALSE} to hide the generated plots. The knitr-equivalent code generating Figure~\ref{LatexStyle-figureexample} is:
+\begin{verbatim}
+    <<figureexample, fig.show='hide', fig.width=4.2, fig.height=4.6>>=
+    v = seq(0, 60i, length=1000)
+    plot(abs(v)*exp(v), type="l", col="Royalblue")
+    @
+\end{verbatim}
+Note the difference in option names setting the figure width and height compared to \Rpackage{Sweave}. 
+
+Unless \Rcode{short.fignames=TRUE} is set, use the default \file{figure/} prefix when inserting and referring to figures, e.g.:
+\begin{verbatim}
+    \incfig{figure/figureexample}{0.25\textwidth}{A curve.}
+      {The code that creates this figure is shown in the code chunk.}
+\end{verbatim}
+Custom prefix used for figure file names can be passed to \Rfunction{latex} using the \Rcode{fig.path} option. When \Rcode{short.fignames=TRUE} figures can be referred to directly by code chunk labels, as described in Section~\ref{incfig}.
 
 %---------------------------------------------------------
 \section{Session info}
 %---------------------------------------------------------
+
 Here is the output of \Rfunction{sessionInfo} on the system on which
 this document was compiled:
 <<sessionInfo, results=tex, print=TRUE>>=

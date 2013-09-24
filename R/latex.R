@@ -1,5 +1,5 @@
 latex <-
-    function(..., width=90, short.figlabels=FALSE, fig.path)
+    function(..., width=90, short.fignames=FALSE, fig.path)
 {
     options(..., width=width)
     fl <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
@@ -24,16 +24,16 @@ latex <-
 #         fig.path = paste(filename, "-", sep="")
       }
       
-      if ( isTRUE(short.figlabels) ) setPrefix(fig.path)
+      if ( isTRUE(short.fignames) ) setPrefix(fig.path)
         
       ## set knitr options
       opts_knit$set(latex.options.color="usenames,dvipsnames")
       opts_chunk$set(fig.path=fig.path) 
     }
     
-    ## assume sweave
+    ## assume Sweave
     else {
-      if ( isTRUE(short.figlabels) ) setPrefix("\\jobname-") 
+      if ( isTRUE(short.fignames) ) setPrefix("\\jobname-") 
     }
     
 }

@@ -11,7 +11,7 @@ latex <-
     
     ## check whether called from knitr
     fs = sapply(sys.calls(), function(x) as.character(x)[1])
-    id = match("knit", fs, nomatch=0)
+    id = pmatch("knit", fs, nomatch=0)
     
     ## knitr
     if ( id > 0 ) {

@@ -17,9 +17,13 @@ latex(..., width=90, short.fignames=FALSE, fig.path)
   \item{width}{integer(1), maximum number of columns on a line used in
              printing. See \code{\link{options}}.}
 
-  \item{short.fignames}{logical, indicates whether \code{\\incfic} figures should be inserted and refered to using short names equal to corresponding code chunk labels without any additional prefix.}
+  \item{short.fignames}{logical, indicates whether \code{\\incfic}
+    figures should be inserted and refered to using short names equal to
+    corresponding code chunk labels without any additional prefix.}
 
-  \item{fig.path}{character, custom prefix to be used for figure file names when used with \code{knitr}; has no effect when compiled with \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
+  \item{fig.path}{character, custom prefix to be used for figure file
+    names when used with \code{knitr}; has no effect when compiled with
+    \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
 
 }
 \details{

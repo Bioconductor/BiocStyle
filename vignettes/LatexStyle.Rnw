@@ -19,26 +19,32 @@ BiocStyle::latex()
 
 \section{Use}
 
-Add the following to your package \file{DESCRIPTION} file:
+To use with Sweave, add the following to your package \file{DESCRIPTION} file:
 \begin{verbatim}
     Suggests: BiocStyle
 \end{verbatim}
-and this code chunk to the preamble of each vignette:
+and add this code chunk to your \texttt{.Rnw} file:
 \begin{verbatim}
     <<style, eval=TRUE, echo=FALSE, results=tex>>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
-Arguments to \Rfunction{latex} are passed to \Rcode{options}. The default sets \Rcode{width=90}, which is optimal for the default font size 10pt; for larger font size please consider decreasing this value.
-
-Two additional arguments control the handling of figure names by the \verb+\incfig+ macro: \Rcode{short.fignames} (logical) indicates whether figures should be inserted and referred to using their full file names (\Rcode{FALSE}, default), or short names equal to corresponding code chunk labels without any prefix (\Rcode{TRUE}), and \Rcode{fig.path} (character) defines custom prefix used with figure file names when \Rpackage{knitr} is used. For details see Section \ref{incfig} and \Rcode{?latex}.
-
-The style features page headers containing the title of the vignette as defined by \verb+\title+. If you wish to override it, e.g.~in the case of long titles, add the following line to the preamble of your vignette:
+To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
+\begin{verbatim}
+    VignetteBuilder: knitr
+    Suggests: BiocStyle
+\end{verbatim}
+and this to your \texttt{.Rnw} file:
+\begin{verbatim}
+    <<style, eval=TRUE, echo=FALSE, results="asis">>=
+    BiocStyle::latex()
+    @ 
+\end{verbatim}
+See \Rcode{?latex} for additional options. Page headers contain the title of the vignette as defined by \verb+\title+, override it by adding the following line to the preamble of your vignette:
 \begin{verbatim}
     \renewcommand{\thetitle}{Short header title}
 \end{verbatim}
-
-\Biocpkg{BiocStyle} automatically attaches the following \LaTeX{} packages: \texttt{color}, \texttt{fancyhdr}, \texttt{geometry}, \texttt{helvet}, \texttt{hyperref}, \texttt{sectsty}, \texttt{Sweave} and \texttt{titling}, so there is no need to reload them with \verb+\usepackage+.
+\Biocpkg{BiocStyle} automatically attaches the following \LaTeX{} packages: \texttt{color}, \texttt{fancyhdr}, \texttt{geometry}, \texttt{helvet}, \texttt{hyperref}, \texttt{sectsty}, \texttt{Sweave} and \texttt{titling}.
 
 \section{Markup commands}
 \Biocpkg{BiocStyle} introduces the following additional markup styling commands useful in typical \Bioconductor{} vignettes.\\\\

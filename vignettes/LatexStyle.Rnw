@@ -123,7 +123,7 @@ which expects four arguments:
 \end{description}
 The optional \textbf{placement} specifier controls where the figure is placed on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list containing \verb+t+, \verb+b+, \verb+p+, or \verb+h+, where letters enumerate permitted placements. If no placement specifier is given, the default \verb+tbp+ is assumed.
 
-Thus
+For \verb+incfig+ with Sweave, use
 \begin{verbatim}
     <<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
     v = seq(0, 60i, length=1000)
@@ -133,23 +133,24 @@ Thus
       {The code that creates this figure is shown in the code chunk.}
     as shown in Figure~\ref{LatexStyle-figureexample}.
 \end{verbatim}
-results in
+This results in
 <<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
 v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @
+
 \incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
   {The code that creates this figure is shown in the code chunk.}
-as shown in Figure~\ref{LatexStyle-figureexample}.
+as shown in Figure~\ref{LatexStyle-figureexample}.  When the option
+\Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by
+\verb+\incfig+ and \verb+\ref+ do not contain any prefix and are
+identical to the corresponding code chunk labels. For example, the
+respective code for the above example would be
+\verb+\incfig{figureexample}{...}{...}{...}+ and
+\verb+\ref{figureexample}+.
 
-When the option \Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by \verb+\incfig+ and \verb+\ref+ do not contain any prefix and are identical to the corresponding code chunk labels. For example, the respective code for the above example would be \verb+\incfig{figureexample}{...}{...}{...}+ and \verb+\ref{figureexample}+.
-
-%---------------------------------------------------------
-\section{Additional features when using \Rpackage{knitr}}
-%---------------------------------------------------------
-
-To use \verb+\incfig+ to insert figures in \Rpackage{knitr}, use the
-option \Rcode{fig.show='hide'} rather than \Rcode{include=FALSE}. The
+For \verb+\incfig+ with \Rpackage{knitr}, use the option
+\Rcode{fig.show='hide'} rather than \Rcode{include=FALSE}. The
 \Rpackage{knitr}-equivalent code for
 Figure~\ref{LatexStyle-figureexample} is:
 \begin{verbatim}

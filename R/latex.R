@@ -6,7 +6,7 @@ latex <-
     cat(sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", fl)))
     
     setPrefix = function(x) {
-      cat(sprintf("\\renewcommand{\\prefix}{%s}", x))
+      cat(sprintf("\\renewcommand{\\prefix}[1]{%s#1}", x))
     }
     
     ## check whether called from knitr

@@ -5,13 +5,14 @@
 <<style, eval=TRUE, echo=FALSE, results=tex>>=
 BiocStyle::latex()
 @ 
-\newcommand{\exitem}[3]{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
 
+\newcommand{\exitem}[3]{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
 \title{\Bioconductor{} \LaTeX{} Style}
 \author{Martin Morgan, Andrzej Ole\'s, Wolfgang Huber}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
+
 
 \maketitle
 
@@ -178,8 +179,21 @@ code chunk labels, as described in Section~\ref{incfig}.
 
 Here is the output of \Rfunction{sessionInfo} on the system on which
 this document was compiled:
-<<sessionInfo, results=tex, print=TRUE>>=
+<<sessionInfo, results=tex, print=TRUE, eval=TRUE>>=
 toLatex(sessionInfo())
 @
+
+
+\section{Bibliography}
+
+BLAH BLAH \cite{Gentleman:2004}
+
+BLAH BLAH \citet{Gentleman:2004}
+
+BLAH BLAH \citep{Gentleman:2004}
+
+\nocite{*}
+% \bibliographystyle{/Users/khansen/Work/packages/BiocStyle/inst/sty/unsrturl}
+\bibliography{Bioc}
 
 \end{document}

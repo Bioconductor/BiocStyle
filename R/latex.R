@@ -2,8 +2,10 @@ latex <-
     function(..., width=90, short.fignames=FALSE, fig.path)
 {
     options(..., width=width)
-    fl <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
-    cat(sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", fl)))
+    sty <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
+    cat(sprintf("\\RequirePackage{%s}\n\n", sub(".sty$", "", sty)))
+    bst <- system.file(package="BiocStyle", "sty", "unsrturl.bst")
+    cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", sub(".bst$", "", bst)))
     
     setPrefix = function(x) {
       cat(sprintf("\\renewcommand{\\prefix}[1]{%s#1}", x))

@@ -13,8 +13,11 @@
  bookmarks=true,%
  bookmarksopen=true,%
  bookmarksnumbered=true,%
+ colorlinks,%
+ breaklinks,%
  linkcolor=BiocBlue,%
  citecolor=BiocBlue,%
+ anchorcolor=BiocBlue,%
  urlcolor=BiocBlue,%
  citebordercolor={.7 .7 .7},%
  linkbordercolor={.7 .7 .7},%
@@ -43,6 +46,10 @@
 %
 \RequirePackage{enumitem}
 \setlist{nolistsep}
+%
+\RequirePackage[numbers]{natbib}
+%
+\RequirePackage{parskip}
 %% Alter some LaTeX defaults for better treatment of floats
 %% See p.105 of "TeX Unbound" for suggested values
 \setcounter{topnumber}{2}
@@ -55,8 +62,6 @@
 \renewcommand\floatpagefraction{0.9}
 \renewcommand\dbltopfraction{0.9}
 \renewcommand\dblfloatpagefraction{0.8}
-%
-\RequirePackage{Sweave}
 %
 \newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \newcommand{\file}[1]{'#1'}

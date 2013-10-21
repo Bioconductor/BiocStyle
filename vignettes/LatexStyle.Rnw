@@ -24,19 +24,25 @@ To use with Sweave, add the following to your package \file{DESCRIPTION} file:
 \begin{verbatim}
     Suggests: BiocStyle
 \end{verbatim}
-and add this code chunk to your \texttt{.Rnw} file:
+and add this code chunk to the header of your \texttt{.Rnw} file:
 \begin{verbatim}
     <<style, eval=TRUE, echo=FALSE, results=tex>>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
+
 To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
 \begin{verbatim}
     VignetteBuilder: knitr
     Suggests: BiocStyle
 \end{verbatim}
-and this to your \texttt{.Rnw} file:
+the following to the header of the \texttt{.Rnw} file:
 \begin{verbatim}
+    %\VignetteEngine{knitr::knitr}
+\end{verbatim}
+and
+\begin{verbatim}
+    %\VignetteEngine{knitr::knitr}
     <<style, eval=TRUE, echo=FALSE, results="asis">>=
     BiocStyle::latex()
     @ 

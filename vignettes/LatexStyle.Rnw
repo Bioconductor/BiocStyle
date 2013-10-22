@@ -1,4 +1,6 @@
-%% \VignetteIndexEntry{Bioconductor LaTeX Style}
+%\VignetteIndexEntry{Bioconductor LaTeX Style}
+%\VignettePackage{BiocStyle}
+%\VignetteEngine{utils::Sweave}
 
 \documentclass{article}
 
@@ -37,10 +39,6 @@ To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
     Suggests: BiocStyle
 \end{verbatim}
 the following to the header of the \texttt{.Rnw} file:
-\begin{verbatim}
-    %\VignetteEngine{knitr::knitr}
-\end{verbatim}
-and
 \begin{verbatim}
     %\VignetteEngine{knitr::knitr}
     <<style, eval=TRUE, echo=FALSE, results="asis">>=

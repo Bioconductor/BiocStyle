@@ -92,6 +92,9 @@ General:
 \begin{itemize}
   \exitem{email}{user@domain.com}{to provide a linked email address,}
   \exitem{file}{script.R}{for file names and file paths}
+  \exitem{cite}{Gentleman:2004}{for \software{unsrturl.bst} citations}
+  This style supports hyperlinks to DOI and PubMed IDs but not
+  \verb+\citet+ or \verb+\citep+.
 \end{itemize}
 
 %---------------------------------------------------------
@@ -186,17 +189,6 @@ this document was compiled:
 toLatex(sessionInfo())
 @
 
-
-\section{Bibliography}
-
-BLAH BLAH \cite{Gentleman:2004}
-
-BLAH BLAH \citet{Gentleman:2004}
-
-BLAH BLAH \citep{Gentleman:2004}
-
-\nocite{*}
-% \bibliographystyle{/Users/khansen/Work/packages/BiocStyle/inst/sty/unsrturl}
 \bibliography{Bioc}
 
 \end{document}

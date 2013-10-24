@@ -1,11 +1,15 @@
 latex <-
-    function(..., width=90, short.fignames=FALSE, fig.path)
+    function(..., width=90, short.fignames=FALSE, fig.path, bibstyle="unsrturl")
 {
     options(..., width=width)
     sty <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
     cat(sprintf("\\RequirePackage{%s}\n\n", sub(".sty$", "", sty)))
-    bst <- system.file(package="BiocStyle", "sty", "unsrturl.bst")
-    cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", sub(".bst$", "", bst)))
+    
+    if(bibstyle=="unsrturl")
+      bst <- sub(".bst$", "", system.file(package="BiocStyle", "sty", paste0(bibstyle,".bst"))) 
+    else bst <- bibstyle
+    if(nchar(bst)>0)
+      cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
     
     setPrefix = function(x) {
       cat(sprintf("\\renewcommand{\\prefix}[1]{%s#1}", x))

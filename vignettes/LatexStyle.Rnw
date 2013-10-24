@@ -47,7 +47,7 @@ See \Rcode{?latex} for additional options. Page headers contain the title of the
 \begin{verbatim}
     \renewcommand{\thetitle}{Short header title}
 \end{verbatim}
-\Biocpkg{BiocStyle} automatically attaches the following \LaTeX{} packages: \texttt{color}, \texttt{enumitem}, \texttt{fancyhdr}, \texttt{geometry}, \texttt{helvet}, \texttt{hyperref}, \texttt{natbib}, \texttt{parskip}, \texttt{sectsty}, and \texttt{titling}.
+\Biocpkg{BiocStyle} automatically attaches the following \LaTeX{} packages: \texttt{color}, \texttt{enumitem}, \texttt{fancyhdr}, \texttt{geometry}, \texttt{helvet}, \texttt{hyperref}, \texttt{parskip}, \texttt{sectsty}, and \texttt{titling}.
 
 \section{Markup commands}
 \Biocpkg{BiocStyle} introduces the following additional markup styling commands useful in typical \Bioconductor{} vignettes.\\\\

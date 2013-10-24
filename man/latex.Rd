@@ -8,7 +8,7 @@
 
 }
 \usage{
-latex(..., width=90, short.fignames=FALSE, fig.path)
+latex(..., width=90, short.fignames=FALSE, fig.path, bibstyle="unsrturl")
 }
 \arguments{
 
@@ -24,6 +24,8 @@ latex(..., width=90, short.fignames=FALSE, fig.path)
   \item{fig.path}{character, custom prefix to be used for figure file
     names when used with \code{knitr}; has no effect when compiled with
     \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
+    
+  \item{bibstyle}{character, bibliography style to be used, as provided to the \code{\\bibliographystyle} or \code{\\bibstyle} commands}
 
 }
 \details{

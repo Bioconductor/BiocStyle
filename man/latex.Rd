@@ -25,13 +25,15 @@ latex(..., width=90, short.fignames=FALSE, fig.path, bibstyle="unsrturl")
     names when used with \code{knitr}; has no effect when compiled with
     \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
     
-  \item{bibstyle}{character, bibliography style to be used, as provided to the \code{\\bibliographystyle} or \code{\\bibstyle} commands}
+  \item{bibstyle}{character, bibliography style to be used, as provided to the LaTeX \code{\\bibliographystyle} command.}
 
 }
 \details{
   Use is described in the \sQuote{Bioconductor LaTeX Style} vignette.
-}
-\value{
+  
+  The \code{bibstyle} option is used to customize the bibliography appearance. It's value is passed to the LaTeX \code{\\bibliographystyle} command. By default the 'unsrturl' is used, which automatically creates links to URL, DOIs, etc. To suppress setting \code{bibliographystyle} use \code{bibstyle=NA}.
+}  
+  \value{
 
   The return value is a character string directing LaTex to use the
   Bioconductor style file.

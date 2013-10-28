@@ -5,11 +5,13 @@ latex <-
     sty <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
     cat(sprintf("\\RequirePackage{%s}\n\n", sub(".sty$", "", sty)))
     
-    if(bibstyle=="unsrturl")
-      bst <- sub(".bst$", "", system.file(package="BiocStyle", "sty", paste0(bibstyle,".bst"))) 
-    else bst <- bibstyle
-    if(nchar(bst)>0)
-      cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
+    if( !is.na(bibstyle) ) {
+      if(bibstyle=="unsrturl")
+        bst <- sub(".bst$", "", system.file(package="BiocStyle", "sty", paste0(bibstyle,".bst"))) 
+      else bst <- bibstyle
+      if( nchar(bst)>0 )
+        cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
+    }
     
     setPrefix = function(x) {
       cat(sprintf("\\renewcommand{\\prefix}[1]{%s#1}", x))

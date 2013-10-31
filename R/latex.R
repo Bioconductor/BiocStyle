@@ -1,15 +1,13 @@
 latex <-
-    function(..., width=90, short.fignames=FALSE, fig.path, bibstyle="unsrturl")
+    function(..., width=90, short.fignames=FALSE, fig.path,
+             use.unsrturl=TRUE)
 {
     options(..., width=width)
     sty <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
     cat(sprintf("\\RequirePackage{%s}\n\n", sub(".sty$", "", sty)))
     
-    if( !is.na(bibstyle) ) {
-      if(bibstyle=="unsrturl")
-        bst <- sub(".bst$", "", system.file(package="BiocStyle", "sty", paste0(bibstyle,".bst"))) 
-      else bst <- bibstyle
-      if( nchar(bst)>0 )
+    if (use.unsrturl) {
+        bst <- file.path(system.file(package="BiocStyle", "sty"), "unsrturl")
         cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
     }
     

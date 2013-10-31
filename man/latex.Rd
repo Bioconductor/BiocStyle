@@ -8,32 +8,38 @@
 
 }
 \usage{
-latex(..., width=90, short.fignames=FALSE, fig.path, bibstyle="unsrturl")
+latex(..., width=90, short.fignames=FALSE, fig.path, use.unsrturl=TRUE)
 }
 \arguments{
 
   \item{\dots}{Additional arguments, passed to \code{\link{options}}.}
 
   \item{width}{integer(1), maximum number of columns on a line used in
-             printing. See \code{\link{options}}.}
+    printing. See \code{\link{options}}.}
 
-  \item{short.fignames}{logical, indicates whether \code{\\incfic}
+  \item{short.fignames}{logical(1), indicates whether \code{\\incfic}
     figures should be inserted and refered to using short names equal to
     corresponding code chunk labels without any additional prefix.}
 
-  \item{fig.path}{character, custom prefix to be used for figure file
+  \item{fig.path}{character(1), custom prefix to be used for figure file
     names when used with \code{knitr}; has no effect when compiled with
     \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
     
-  \item{bibstyle}{character, bibliography style to be used, as provided to the LaTeX \code{\\bibliographystyle} command.}
+  \item{use.unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
+    style will be used (\code{\\bibliographystyle} command \emph{not}
+    required).}
 
 }
 \details{
   Use is described in the \sQuote{Bioconductor LaTeX Style} vignette.
   
-  The \code{bibstyle} option is used to customize the bibliography appearance. It's value is passed to the LaTeX \code{\\bibliographystyle} command. By default the 'unsrturl' is used, which automatically creates links to URL, DOIs, etc. To suppress setting \code{bibliographystyle} use \code{bibstyle=NA}.
-}  
-  \value{
+  By default the 'unsrturl' bibliography style is used, which
+  automatically creates links to URL, DOIs, etc. Use a different
+  \code{bibliographystyle} with \code{use.unsrturl=FALSE} and standard
+  LaTeX commands for styling bibliographies.
+}
+
+\value{
 
   The return value is a character string directing LaTex to use the
   Bioconductor style file.

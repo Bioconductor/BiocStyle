@@ -36,7 +36,7 @@ To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
     VignetteBuilder: knitr
     Suggests: BiocStyle
 \end{verbatim}
-the following to the header of the \texttt{.Rnw} file:
+and the following to the header of the \texttt{.Rnw} file:
 \begin{verbatim}
     %\VignetteEngine{knitr::knitr}
     <<style, eval=TRUE, echo=FALSE, results="asis">>=

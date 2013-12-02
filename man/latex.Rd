@@ -8,7 +8,8 @@
 
 }
 \usage{
-latex(..., width=90, short.fignames=FALSE, fig.path, use.unsrturl=TRUE)
+latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
+      use.unsrturl=TRUE)
 }
 \arguments{
 
@@ -24,6 +25,12 @@ latex(..., width=90, short.fignames=FALSE, fig.path, use.unsrturl=TRUE)
   \item{fig.path}{character(1), custom prefix to be used for figure file
     names when used with \code{knitr}; has no effect when compiled with
     \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
+
+  \item{error}{logical(1), behavior of \code{knitr} when errors occur in
+    vignette code chunks, has no effect when compiled with
+    \code{Sweave}. The default (\code{FALSE}) means that errors in stop
+    vignette processing, which is appropriate when packages are being
+    built and checked. For details see \code{\link[knitr]{opts_chunk}}.}
     
   \item{use.unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
     style will be used (\code{\\bibliographystyle} command \emph{not}

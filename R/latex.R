@@ -1,6 +1,6 @@
 latex <-
     function(..., width=90, short.fignames=FALSE, fig.path,
-             use.unsrturl=TRUE)
+             error=FALSE, use.unsrturl=TRUE)
 {
     options(..., width=width)
     sty <- system.file(package="BiocStyle", "sty", "Bioconductor.sty")
@@ -22,7 +22,7 @@ latex <-
     ## knitr
     if ( id > 0 && exists("opts_chunk")) {
         if (missing(fig.path)) { 
-            fig.path = opts_chunk$get("fig.path", default=TRUE)
+            fig.path = knitr::opts_chunk$get("fig.path", default=TRUE)
             ## ## resolve document file name for figure name prefixing
             ## filepath = sys.frame(id)$input
             ## filename = unlist(strsplit(basename(filepath),
@@ -34,8 +34,8 @@ latex <-
         if ( isTRUE(short.fignames) ) setPrefix(fig.path)
         
         ## set knitr options
-        opts_knit$set(latex.options.color="usenames,dvipsnames")
-        opts_chunk$set(fig.path=fig.path) 
+        knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
+        knitr::opts_chunk$set(fig.path=fig.path, error=error)
     }
     
     ## assume Sweave

@@ -80,7 +80,7 @@ Code:
 %%
 Communication:
 \begin{itemize}
-  \exitem{comment}{comment to the user}{communicates a}
+  \exitem{bioccomment}{comment to the user}{communicates a}
   \exitem{warning}{common pitfalls}{signals}
   \exitem{fixme}{incomplete functionality}{provides an indication of}
 \end{itemize}

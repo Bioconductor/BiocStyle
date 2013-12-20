@@ -40,8 +40,8 @@
 \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
 %
 %% Page layout
-\RequirePackage{titling}  %% captures \title{} as \thetitle for subsequent use
 \RequirePackage{fancyhdr}
+\AtBeginDocument{\let\thetitle\@title}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 \fancyhead[LE,RO]{\thepage}

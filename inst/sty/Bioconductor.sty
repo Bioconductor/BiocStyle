@@ -41,11 +41,15 @@
 %
 %% Page layout
 \RequirePackage{fancyhdr}
-\AtBeginDocument{\let\thetitle\@title}
+\AtBeginDocument{%
+  \let\@bioctitle\@empty%
+  \let\@biocmaketitle\maketitle%
+  \renewcommand\maketitle{\let\@bioctitle\@title\@biocmaketitle}%
+}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 \fancyhead[LE,RO]{\thepage}
-\fancyhead[LO,RE]{\thetitle}
+\fancyhead[LO,RE]{\@bioctitle}
 \renewcommand{\headrule}{}
 %
 \RequirePackage{enumitem}

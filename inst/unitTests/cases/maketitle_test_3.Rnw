@@ -1,0 +1,14 @@
+%% \maketitle & title header tests -- no header / title
+
+\documentclass{article}
+
+<<style, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
+
+\begin{document}
+
+\clearpage
+hello world
+
+\end{document}

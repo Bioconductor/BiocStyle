@@ -28,7 +28,7 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
 
   \item{error}{logical(1), behavior of \code{knitr} when errors occur in
     vignette code chunks, has no effect when compiled with
-    \code{Sweave}. The default (\code{FALSE}) means that errors in stop
+    \code{Sweave}. The default (\code{FALSE}) means that errors stop
     vignette processing, which is appropriate when packages are being
     built and checked. For details see \code{\link[knitr]{opts_chunk}}.}
     

@@ -6,7 +6,7 @@ test_maketitle <- function()
     on.exit(setwd(pwd))
 
     for (fl in fls) {
-        checkTrue(file.copy(fl, rnw <- tempfile()))
+        checkTrue(file.copy(fl, rnw <- file.path(tempdir(), basename(fl))))
         tex <- utils::Sweave(rnw)
         pdf <- tools::texi2pdf(tex)
     }

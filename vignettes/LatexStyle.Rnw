@@ -24,7 +24,9 @@ To use with Sweave, add the following to your package \file{DESCRIPTION} file:
 \begin{verbatim}
     Suggests: BiocStyle
 \end{verbatim}
-and add this code chunk to the header of your \texttt{.Rnw} file:
+and add this code chunk to the preamble (between the
+\verb+\documentclass{article}+ and \verb+\begin{document}+ latex
+commands) of your \texttt{.Rnw} file:
 \begin{verbatim}
     <<style, eval=TRUE, echo=FALSE, results=tex>>=
     BiocStyle::latex()
@@ -36,18 +38,21 @@ To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
     VignetteBuilder: knitr
     Suggests: BiocStyle
 \end{verbatim}
-and the following to the header of the \texttt{.Rnw} file:
+this to the top of the \texttt{.Rnw} file:
 \begin{verbatim}
     %\VignetteEngine{knitr::knitr}
+\end{verbatim}
+and this to the premable:
+\begin{verbatim}
     <<style, eval=TRUE, echo=FALSE, results="asis">>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
-See \Rcode{?latex} for additional options. Page headers contain the title of the vignette as defined by \verb+\title+, override it by adding the following line to the preamble of your vignette:
-\begin{verbatim}
-    \renewcommand{\thetitle}{Short header title}
-\end{verbatim}
-\Biocpkg{BiocStyle} automatically attaches the following \LaTeX{} packages: \texttt{color}, \texttt{enumitem}, \texttt{fancyhdr}, \texttt{geometry}, \texttt{helvet}, \texttt{hyperref}, \texttt{parskip}, \texttt{sectsty}, and \texttt{titling}.
+See \Rcode{?latex} for additional options. \Biocpkg{BiocStyle}
+automatically attaches the following \LaTeX{} packages:
+\texttt{color}, \texttt{enumitem}, \texttt{fancyhdr},
+\texttt{geometry}, \texttt{helvet}, \texttt{hyperref},
+\texttt{parskip}, \texttt{sectsty}.
 
 \section{Markup commands}
 \Biocpkg{BiocStyle} introduces the following additional markup styling commands useful in typical \Bioconductor{} vignettes.\\\\
@@ -96,11 +101,23 @@ General:
 \end{itemize}
 
 %---------------------------------------------------------
-\section{Sectioning: this is a section}
+\section{Title and sectioning: this is a section}
 %---------------------------------------------------------
 
+Create a title and running headers by defining the \verb+\bioctitle+
+and \verb+\author+ commands in the preamble
+\begin{verbatim}
+    \bioctitle[Short title for headers]{Full title for title page}
+    %% also: \bioctitle{Title used for both header and title page} 
+    %% or... \title{Title used for both header and title page} 
+    \author{Iman Author\footnote{iman@author.org}}
+\end{verbatim}
+Use \verb+\maketitle+ at the start of the document to create the title
+in the document.
+
 Use \verb+\tableofcontents+ for a hyperlinked table of contents,
-\verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for structuring your vignette.
+\verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for
+structuring your vignette.
 
 \subsection{This is a subsection}
 Apud Helvetios longe nobilissimus fuit et ditissimus Orgetorix. Is M.\ Messala, M.\ Pisone consulibus regni cupiditate inductus coniurationem nobilitatis fecit et civitati persuasit ut de finibus suis cum omnibus copiis exirent: perfacile esse, cum virtute omnibus praestarent, totius Galliae imperio potiri. Id hoc facilius iis persuasit, quod undique loci natura Helvetii continentur: una ex parte flumine Rheno latissimo atque altissimo, qui agrum Helvetium a Germanis dividit; altera ex parte monte Iura altissimo, qui est inter Sequanos et Helvetios; tertia lacu Lemanno et flumine Rhodano, qui provinciam nostram ab Helvetiis dividit. 

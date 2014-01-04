@@ -38,14 +38,14 @@
 \sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
 \subsectionfont{\sffamily\bfseries\color{BiocBlue}}
 \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
-%
+%% Title
+\let\@bioctitle\@empty
+\let\@oldtitle\title
+\renewcommand{\title}[1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+\newcommand{\bioctitle}[2][]{\@oldtitle{#2}%
+  \def\tmp{#1}\ifx\tmp\@empty\def\@bioctitle{#2}\else\def\@bioctitle{#1}\fi}
 %% Page layout
 \RequirePackage{fancyhdr}
-\AtBeginDocument{%
-  \let\@bioctitle\@empty%
-  \let\@biocmaketitle\maketitle%
-  \renewcommand\maketitle{\let\@bioctitle\@title\@biocmaketitle}%
-}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 \fancyhead[LE,RO]{\thepage}
@@ -54,8 +54,6 @@
 %
 \RequirePackage{enumitem}
 \setlist{nolistsep}
-%
-%\RequirePackage[numbers]{natbib}
 %
 \RequirePackage{parskip}
 %% Alter some LaTeX defaults for better treatment of floats

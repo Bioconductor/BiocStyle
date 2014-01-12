@@ -85,7 +85,7 @@ Code:
 %%
 Communication:
 \begin{itemize}
-  \exitem{bioccomment}{comment to the user}{communicates a}
+  \exitem{bioccomment}{additional information for the user}{communicates}
   \exitem{warning}{common pitfalls}{signals}
   \exitem{fixme}{incomplete functionality}{provides an indication of}
 \end{itemize}
@@ -95,9 +95,6 @@ General:
 \begin{itemize}
   \exitem{email}{user@domain.com}{to provide a linked email address,}
   \exitem{file}{script.R}{for file names and file paths}
-  \exitem{cite}{Gentleman:2004}{for \software{unsrturl.bst} citations}
-  This style supports hyperlinks to DOI and PubMed IDs but not
-  \verb+\citet+ or \verb+\citep+.
 \end{itemize}
 
 %---------------------------------------------------------
@@ -120,12 +117,39 @@ Use \verb+\tableofcontents+ for a hyperlinked table of contents,
 structuring your vignette.
 
 \subsection{This is a subsection}
-Apud Helvetios longe nobilissimus fuit et ditissimus Orgetorix. Is M.\ Messala, M.\ Pisone consulibus regni cupiditate inductus coniurationem nobilitatis fecit et civitati persuasit ut de finibus suis cum omnibus copiis exirent: perfacile esse, cum virtute omnibus praestarent, totius Galliae imperio potiri. Id hoc facilius iis persuasit, quod undique loci natura Helvetii continentur: una ex parte flumine Rheno latissimo atque altissimo, qui agrum Helvetium a Germanis dividit; altera ex parte monte Iura altissimo, qui est inter Sequanos et Helvetios; tertia lacu Lemanno et flumine Rhodano, qui provinciam nostram ab Helvetiis dividit. 
+
+Apud Helvetios longe nobilissimus fuit et ditissimus Orgetorix. Is M.\
+Messala, M.\ Pisone consulibus regni cupiditate inductus coniurationem
+nobilitatis fecit et civitati persuasit ut de finibus suis cum omnibus
+copiis exirent: perfacile esse, cum virtute omnibus praestarent,
+totius Galliae imperio potiri.
+
 \subsubsection{This is a subsubsection}
-His rebus fiebat ut et minus late vagarentur et minus facile finitimis bellum inferre possent; qua ex parte homines bellandi cupidi magno dolore adficiebantur. Pro multitudine autem hominum et pro gloria belli atque fortitudinis angustos se fines habere arbitrabantur, qui in longitudinem milia passuum CCXL, in latitudinem CLXXX patebant. 
+
+His rebus fiebat ut et minus late vagarentur et minus facile finitimis
+bellum inferre possent; qua ex parte homines bellandi cupidi magno
+dolore adficiebantur. Pro multitudine autem hominum et pro gloria
+belli atque fortitudinis angustos se fines habere arbitrabantur, qui
+in longitudinem milia passuum CCXL, in latitudinem CLXXX patebant.
 
 %---------------------------------------------------------
-\section{Including figures}\label{incfig}
+\section{Bibliography}
+%---------------------------------------------------------
+
+\Rcode{BiocStyle::latex()} has default argument
+\Rcode{use.unsrturl=TRUE} to automatically format bibliographies using
+\software{natbib}'s unsrturl style. There is no need to explicitly
+include \software{natbib}, and it is an error to use a
+\verb+\bibliographystyle+ command. The \software{unsrturl.bst} format,
+e.g., \cite{Gentleman:2004, 10.1371/journal.pcbi.1003118}, supports
+hyperlinks to DOI and PubMed IDs but not \verb+\citet+ or
+\verb+\citep+.
+
+To use a bibliography style different from \verb+unsrturl+, set
+\Rcode{use.unsrturl=FALSE} and follow normal \LaTeX{} convetions.
+
+%---------------------------------------------------------
+\section{Figures}\label{incfig}
 %---------------------------------------------------------
 
 Besides the usual \LaTeX{} capabilities (\verb+figure+ environment and

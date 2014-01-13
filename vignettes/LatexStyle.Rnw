@@ -42,7 +42,7 @@ this to the top of the \texttt{.Rnw} file:
 \begin{verbatim}
     %\VignetteEngine{knitr::knitr}
 \end{verbatim}
-and this to the premable:
+and this to the preamble:
 \begin{verbatim}
     <<style, eval=TRUE, echo=FALSE, results="asis">>=
     BiocStyle::latex()
@@ -146,7 +146,7 @@ hyperlinks to DOI and PubMed IDs but not \verb+\citet+ or
 \verb+\citep+.
 
 To use a bibliography style different from \verb+unsrturl+, set
-\Rcode{use.unsrturl=FALSE} and follow normal \LaTeX{} convetions.
+\Rcode{use.unsrturl=FALSE} and follow normal \LaTeX{} conventions.
 
 %---------------------------------------------------------
 \section{Figures}\label{incfig}

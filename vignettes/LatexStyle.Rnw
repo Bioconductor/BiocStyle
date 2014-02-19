@@ -28,7 +28,7 @@ and add this code chunk to the preamble (between the
 \verb+\documentclass{article}+ and \verb+\begin{document}+ latex
 commands) of your \texttt{.Rnw} file:
 \begin{verbatim}
-    <<style, eval=TRUE, echo=FALSE, results=tex>>=
+    <<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
@@ -44,7 +44,7 @@ this to the top of the \texttt{.Rnw} file:
 \end{verbatim}
 and this to the preamble:
 \begin{verbatim}
-    <<style, eval=TRUE, echo=FALSE, results="asis">>=
+    <<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
     BiocStyle::latex()
     @ 
 \end{verbatim}
@@ -53,6 +53,31 @@ automatically attaches the following \LaTeX{} packages:
 \texttt{color}, \texttt{enumitem}, \texttt{fancyhdr},
 \texttt{geometry}, \texttt{helvet}, \texttt{hyperref},
 \texttt{parskip}, \texttt{sectsty}.
+
+Provided the package has been installed, a convenient way to view the
+vignette as it is being written is with the command
+\begin{verbatim}
+    R CMD Sweave --pdf vignette.Rnw
+\end{verbatim}
+A short-cut useful for checking the \LaTeX{} portion of vignettes is
+to toggle evaluation of code chunks to \Rcode{FALSE}
+\begin{verbatim}
+    SWEAVE_OPTIONS="eval=FALSE" R CMD Sweave --pdf vignette.Rnw
+\end{verbatim}
+When using \CRANpkg{knitr}, the command to process the vignette is
+\begin{verbatim}
+    R CMD Sweave --engine=knitr::knitr --pdf vignette.Rnw
+\end{verbatim}
+By default, \CRANpkg{knitr} automatically caches results of vignette
+chunks, greatly accelerating the turnaround time required for
+edits. Both the default and \CRANpkg{knitr} incantations create PDF
+files using \software{texi2dvi --pdf}; many versions of this software
+incorrectly display non-breaking spaces as a tilde, \verb|~|. This can be
+remedied (as on the \Bioconductor{} build system) with a final run of
+\begin{verbatim}
+    R CMD texi2dvi --pdf vignette.tex
+    R CMD pdflatex vignette.tex
+\end{verbatim}
 
 \section{Markup commands}
 \Biocpkg{BiocStyle} introduces the following additional markup styling commands useful in typical \Bioconductor{} vignettes.\\\\

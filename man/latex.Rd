@@ -18,8 +18,8 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
   \item{width}{integer(1), maximum number of columns on a line used in
     printing. See \code{\link{options}}.}
 
-  \item{short.fignames}{logical(1), indicates whether \code{\\incfic}
-    figures should be inserted and refered to using short names equal to
+  \item{short.fignames}{logical(1), indicates whether \code{\\incfig}
+    figures should be inserted and referred to using short names equal to
     corresponding code chunk labels without any additional prefix.}
 
   \item{fig.path}{character(1), custom prefix to be used for figure file

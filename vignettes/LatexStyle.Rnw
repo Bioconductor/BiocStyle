@@ -8,7 +8,9 @@
 BiocStyle::latex()
 @ 
 
-\newcommand{\exitem}[3]{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
+\newcommand{\exitem}[3]
+{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
+
 \title{\Bioconductor{} \LaTeX{} Style}
 \author{Martin Morgan, Andrzej Ole\'s, Wolfgang Huber}
 
@@ -80,22 +82,29 @@ remedied (as on the \Bioconductor{} build system) with a final run of
 \end{verbatim}
 
 \section{Markup commands}
-\Biocpkg{BiocStyle} introduces the following additional markup styling commands useful in typical \Bioconductor{} vignettes.\\\\
+\Biocpkg{BiocStyle} introduces the following additional markup styling commands
+useful in typical \Bioconductor{} vignettes.\\\\
 %%
 Software:
 \begin{itemize}
-  \item \verb+\R{}+ and \verb+\Bioconductor{}+ to reference \R{} software and the \Bioconductor{} project.
+  \item \verb+\R{}+ and \verb+\Bioconductor{}+ to reference \R{} software and
+  the \Bioconductor{} project.
   \exitem{software}{GATK}{to reference third-party software, e.g.,}
 \end{itemize}
 %\vspace{1em}
 %%
 Packages:
 \begin{itemize}
-  \exitem{Biocpkg}{IRanges}{for \Bioconductor{} software packages, including a link to the release version landing page,}
-  \exitem{Biocannopkg}{org.Hs.eg.db}{for \Bioconductor{} annotation packages, including a link to the release version landing page,}
-  \exitem{Biocexptpkg}{parathyroidSE}{for \Bioconductor{} experiment data packages, including a link to the release version landing page,}
-  \exitem{CRANpkg}{data.table}{for \R{} packages available on CRAN, including a link to the FHCRC CRAN mirror landing page,}
-  \exitem{Rpackage}{MyPkg}{for \R{} packages that are \emph{not} available on \Bioconductor{} or CRAN,}
+  \exitem{Biocpkg}{IRanges}{for \Bioconductor{} software packages, including a
+  link to the release version landing page,}
+  \exitem{Biocannopkg}{org.Hs.eg.db}{for \Bioconductor{} annotation packages,
+  including a link to the release version landing page,}
+  \exitem{Biocexptpkg}{parathyroidSE}{for \Bioconductor{} experiment data
+  packages, including a link to the release version landing page,}
+  \exitem{CRANpkg}{data.table}{for \R{} packages available on CRAN, including
+  a link to the FHCRC CRAN mirror landing page,}
+  \exitem{Rpackage}{MyPkg}{for \R{} packages that are \emph{not} available on
+  \Bioconductor{} or CRAN,}
 \end{itemize}
 %\vspace{1em}
 %%
@@ -185,14 +194,20 @@ which expects four arguments:
 \item[filename] The name of the figure file, also used as the label by
   which the float can be referred to by \verb+\ref{}+. Some
   \software{Sweave} and \CRANpkg{knitr} options place figures in a
-  subdirectory; unless \Rcode{short.fignames=TRUE} is set the full file name, including the subdirectory and any prefixes, should be provided. By default, these are \file{<sweavename>-} 
-  for \Rpackage{Sweave} and \file{figure/} for \CRANpkg{knitr}.
+  subdirectory; unless \Rcode{short.fignames=TRUE} is set the full file name,
+  including the subdirectory and any prefixes, should be provided. By default,
+  these are \file{<sweavename>-} for \Rpackage{Sweave} and \file{figure/} for
+  \CRANpkg{knitr}.
 \item[width] Figure width.
 \item[shorttitle] A short description, used in the list of figures and
   printed in bold as the first part of the caption.
 \item[extendedcaption] Continuation of the figure caption.
 \end{description}
-The optional \textbf{placement} specifier controls where the figure is placed on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list containing \verb+t+, \verb+b+, \verb+p+, or \verb+h+, where letters enumerate permitted placements. If no placement specifier is given, the default \verb+tbp+ is assumed.
+The optional \textbf{placement} specifier controls where the figure is placed
+on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list
+containing \verb+t+, \verb+b+, \verb+p+, or \verb+h+, where letters enumerate
+permitted placements. If no placement specifier is given, the default
+\verb+tbp+ is assumed.
 
 For \verb+incfig+ with Sweave, use
 \begin{verbatim}

@@ -53,8 +53,7 @@ and this to the preamble:
 See \Rcode{?latex} for additional options. \Biocpkg{BiocStyle}
 automatically attaches the following \LaTeX{} packages:
 \texttt{color}, \texttt{enumitem}, \texttt{fancyhdr},
-\texttt{geometry}, \texttt{helvet}, \texttt{hyperref},
-\texttt{parskip}, \texttt{sectsty}.
+\texttt{geometry}, \texttt{hyperref}, \texttt{parskip}, \texttt{sectsty}.
 
 Provided the package has been installed, a convenient way to view the
 vignette as it is being written is with the command

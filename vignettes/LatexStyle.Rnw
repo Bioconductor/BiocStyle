@@ -38,7 +38,7 @@ commands) of your \texttt{.Rnw} file:
 To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
 \begin{verbatim}
     VignetteBuilder: knitr
-    Suggests: BiocStyle
+    Suggests: BiocStyle, knitr
 \end{verbatim}
 this to the top of the \texttt{.Rnw} file:
 \begin{verbatim}

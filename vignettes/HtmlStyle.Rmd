@@ -1,0 +1,46 @@
+<!--
+%\VignetteIndexEntry{Bioconductor style for HTML documents}
+%\VignettePackage{BiocStyle}
+%\VignetteEngine{knitr::knitr}
+-->
+
+```{r style, echo = FALSE}
+BiocStyle::markdown()
+```
+
+# Bioconductor style for HTML documents
+
+To enable Bioconductor style in your Markdown vignettes, you need to
+
+- add the following to the `DESCRIPTION` file
+
+        VignetteBuilder: knitr
+        Suggests: BiocStyle, knitr
+    
+- specify the vignette engine `\VignetteEngine{knitr::knitr}` in the `Rmd` files (inside HTML comments)
+- add the following code chunk to your `Rmd` vignettes
+
+        ```{r, echo = FALSE , results = 'asis'}
+        cat("```{r style, echo = FALSE}\nBiocStyle::markdown()\n```")
+        ```
+        
+The exact location of the above code chunk doesn't really matter, however, to maintain a clear presentation it is good practive to have it as the first code chunk.
+
+## Extending the default style
+
+Additional custom style sheets can be used by providing them to the `BiocStyle::markdown` function. For example, to include the `my.css` file use
+
+    ```{r, echo = FALSE , results = 'asis'}
+    cat("```{r style, echo = FALSE}\nBiocStyle::markdown(css.files = c('my.css'))\n```")
+    ```
+
+## Using Math Symbols
+
+You can write math expressions the same way you would in `Latex`, except some differences in escaping them.
+
+### Inline
+For inline formulas use `$P(x) = \frac{1}{2}$` or `\(P(x) = \frac{1}{2}\)`, which both render as $P(x) = \frac{1}{2}$.
+
+### Standalone
+
+Math can be displayed in a separate line by writing `$$P(x) = \frac{1}{2}$$` or `\[P(x) = \frac{1}{2}.\]`, which both result in $$P(x) = \frac{1}{2}.$$

@@ -2,9 +2,10 @@ Package: BiocStyle
 Title: Standard styles for vignettes and other Bioconductor documents
 Description: Provides standard formatting styles for Bioconductor
     documents. The vignette illustrates use and functionality.
-Version: 1.3.2
+Version: 1.3.3
 Author: Martin Morgan, Andrzej Oles, Wolfgang Huber
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Suggests: knitr, BiocGenerics, RUnit
 biocViews: Software
 License: Artistic-2.0
+VignetteBuilder: knitr

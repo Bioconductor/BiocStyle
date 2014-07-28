@@ -1,5 +1,13 @@
 markdown = function(css.files, self.contained = TRUE) {
+  ## load the package to expose macros
+  require(BiocStyle, quietly = TRUE)
+  
   options(markdown.HTML.stylesheet = system.file(package = 'BiocStyle', 'css', 'bioconductor.css'))
+  
+  ## check whether called from rmarkdown::render
+  fs = sapply(sys.calls(), function(x) as.character(x)[1])
+  id = pmatch("render", fs, nomatch = 0L)
+  rmarkdown = (id > 0L)
   
   if ( !missing(css.files) ) {
     # fail save
@@ -21,4 +29,22 @@ markdown = function(css.files, self.contained = TRUE) {
   }
   
   invisible()
+}
+
+## macro definitions
+
+Biocpkg = function(pkg) {
+  sprintf('[%s](http://bioconductor.org/packages/release/bioc/html/%s.html)', pkg, pkg)
+}
+
+Biocannopkg = function(pkg) {
+  sprintf('[%s](http://bioconductor.org/packages/release/data/annotation/html/%s.html)', pkg, pkg)
+}
+
+Biocexptpkg = function(pkg) {
+  sprintf('[%s](http://bioconductor.org/packages/release/data/experiment/html/%s.html)', pkg, pkg)
+}
+
+CRANpkg = function(pkg) {
+  sprintf('[%s](http://cran.fhcrc.org/web/packages/%s/index.html)', pkg, pkg)
 }

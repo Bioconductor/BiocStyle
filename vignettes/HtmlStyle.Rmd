@@ -44,3 +44,19 @@ For inline formulas use `$P(x) = \frac{1}{2}$` or `\(P(x) = \frac{1}{2}\)`, whic
 ### Standalone
 
 Math can be displayed in a separate line by writing `$$P(x) = \frac{1}{2}$$` or `\[P(x) = \frac{1}{2}.\]`, which both result in $$P(x) = \frac{1}{2}.$$
+
+## BioC macros
+
+```{r macro, echo = FALSE}
+macro = function(txt) sprintf("`` `r %s` ``", txt)
+```
+
+BiocStyle introduces the following macros useful when refering to R packages:
+
+* `r macro("Biocpkg('IRanges')")` for Bioconductor software packages, including a link to the release version landing page, `r Biocpkg("IRanges")`
+
+* `r macro("Biocannopkg('org.Hs.eg.db')")` for Bioconductor annotation packages, including a link to the release version landing page, `r Biocannopkg("org.Hs.eg.db")`
+  
+* `r macro("Biocexptpkg('parathyroidSE')")` for Bioconductor experiment data packages, including a link to the release version landing page, `r Biocexptpkg('parathyroidSE')`
+
+* `r macro("CRANpkg('data.table')")` for R packages available on CRAN, including a link to the FHCRC CRAN mirror landing page, `r CRANpkg('data.table')`

@@ -1,2 +1,2 @@
 export(latex)
-export(markdown)
+export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg)

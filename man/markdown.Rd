@@ -1,6 +1,10 @@
 \name{markdown}
 
 \alias{markdown}
+\alias{Biocpkg}
+\alias{Biocannopkg}
+\alias{Biocexptpkg}
+\alias{CRANpkg}
 
 \title{Use Bioconductor style to format HTML vignettes}
 

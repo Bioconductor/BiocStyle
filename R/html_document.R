@@ -1,4 +1,4 @@
-html_document <- function(css, ...) {
+html_document <- function(css, theme = NULL, ...) {
   # get the location of the CSS file located within the package
   bioc.css = system.file(package = 'BiocStyle', 'css', 'bioconductor.css')
   
@@ -10,5 +10,5 @@ html_document <- function(css, ...) {
       c(bioc.css, css)
   
   # call the base html_document function
-  rmarkdown::html_document(css = css, ...)
+  rmarkdown::html_document(css = css, theme = theme, ...)
 }

@@ -5,6 +5,7 @@
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
 \alias{CRANpkg}
+\alias{html_document}
 
 \title{Use Bioconductor style to format HTML vignettes}
 

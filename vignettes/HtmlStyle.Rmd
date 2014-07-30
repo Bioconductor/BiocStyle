@@ -1,14 +1,21 @@
+---
+output:
+  BiocStyle::html_document
+---
+
 <!--
 %\VignetteIndexEntry{Bioconductor style for HTML documents}
 %\VignettePackage{BiocStyle}
 %\VignetteEngine{knitr::knitr}
 -->
 
+# Bioconductor style for HTML documents
+
 ```{r style, echo = FALSE}
 BiocStyle::markdown()
 ```
 
-# Bioconductor style for HTML documents
+## Use
 
 To enable Bioconductor style in your Markdown vignettes, you need to
 
@@ -18,21 +25,37 @@ To enable Bioconductor style in your Markdown vignettes, you need to
         Suggests: BiocStyle, knitr
     
 - specify the vignette engine `\VignetteEngine{knitr::knitr}` in the `Rmd` files (inside HTML comments)
-- add the following code chunk to your `Rmd` vignettes
+- add the following code chunk at the beginning of your `Rmd` vignettes
 
         ```{r, echo = FALSE , results = 'asis'}
         cat("```{r style, echo = FALSE}\nBiocStyle::markdown()\n```")
         ```
         
-The exact location of the above code chunk doesn't really matter, however, to maintain a clear presentation it is good practive to have it as the first code chunk.
+### Adding custom style sheets
 
-## Extending the default style
-
-Additional custom style sheets can be used by providing them to the `BiocStyle::markdown` function. For example, to include the `my.css` file use
+Additional style sheets can be used by providing them to the `BiocStyle::markdown` function. For example, to include the `my.css` file use
 
     ```{r, echo = FALSE , results = 'asis'}
     cat("```{r style, echo = FALSE}\nBiocStyle::markdown(css.files = c('my.css'))\n```")
     ```
+
+## Use with R Markdown v2
+
+If you are using RStudio to "knit" the document or compile it through the `rmarkdown` package you need to include, in addition to the code chunk calling `BiocStyle::markdown()`, the metadata header defining the output format. Add at the very top of your document
+
+    ---
+    output:
+      BiocStyle::html_document
+    ---
+
+The `BiocStyle::html_document` output format extends the `rmarkdown` build-in `html_document` format and you can use any of its parameters, e.g. to add the table of contents and a custom CSS file use
+
+    ---
+    output:
+      BiocStyle::html_document:
+        toc: true
+        css: my.css
+    ---
 
 ## Using Math Symbols
 

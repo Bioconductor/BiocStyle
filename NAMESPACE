@@ -1,3 +1,3 @@
 export(latex)
 export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg)
-export(html_document)
+export(html_document, pdf_document)

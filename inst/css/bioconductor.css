@@ -7,8 +7,12 @@ body, td {
 body {
   max-width: 800px;
   margin: 0 auto;
-  padding: 1em;
-  line-height: 20px;
+  padding: 0em 1em 2em 1em;
+  line-height: 1.5em;
+}
+
+p {
+  text-align: justify;
 }
 
 tt, code, pre {
@@ -17,13 +21,12 @@ tt, code, pre {
 
 h1, h2, h3, h4, h5, h6 { 
   font-family: Helvetica, Arial, Verdana, Sans-serif;
-  margin: 1em 0em;
+  margin: 1.2em 0em 0.6em 0em;
   font-weight: bold;
 }
 
 h1 {
   font-size: 250%;
-  margin-top: 0em;
   font-weight: normal;
   color: #87b13f;
   line-height: 1.1em;
@@ -32,9 +35,8 @@ h1 {
 h2 {
   font-size: 160%;
   font-weight: normal;
-  line-height: 1.1em;
+  line-height: 1.4em;
   border-bottom: 1px #1a81c2 solid;
-  padding-bottom: 3px;
 }
 
 h3 {
@@ -54,27 +56,43 @@ a { color: #1a81c2; }
 a:visited { color: #1a81c2; }
 a:hover { color: #4c94c2; }
 
+pre, img {
+  max-width: 100%;
+}
+
 pre {
   background-color: #F8F8F8;
   border: 1px #aaa dashed;
-  padding: 1em;
   margin: 1em 0;
   overflow-x: auto;
   white-space: pre;
 }
 
-pre, img {
-  max-width: 100%;
+pre code {
+  background-color: #FFFFFF; 
+  padding: 1em;
+  color: #000000;
+  display: block;
 }
 
-pre code {
-   color: #000000;
-   display: block;
+pre code.r {
+   background-color: #F8F8F8;
 }
 
 code { 
   color: #87b13f;
   font-size: 92%;
+}
+
+/* center images */
+img {
+  display: block;
+  margin: 1.5em auto;
+}
+
+/* center tables */
+table {
+  margin: 0em auto;
 }
 
 table, td, th {

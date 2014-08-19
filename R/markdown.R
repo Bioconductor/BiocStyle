@@ -2,34 +2,49 @@ markdown = function(css.files, self.contained = TRUE) {
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  options(markdown.HTML.stylesheet = system.file(package = 'BiocStyle', 'css', 'bioconductor.css'))
+  ## check version of markdown renderer
+  # rmarkdown.version = if ( as.character(sys.call(1))[1] == "rmarkdown::render" ) 2L else 1L
+
+  ## in case of rmarkdown v1insert directly into document body to circumvent
+  ## issess with preview in R Studio
   
-  ## check whether called from rmarkdown::render
-  fs = sapply(sys.calls(), function(x) as.character(x)[1])
-  id = pmatch("render", fs, nomatch = 0L)
-  rmarkdown = (id > 0L)
+  insert.into.body = (
+    is.null(knitr::opts_knit$get("rmarkdown.version")) && 
+    as.character(sys.call(1))[1] != "tools::buildVignettes" )
   
+  bioc.css = system.file(package = 'BiocStyle', 'css', 'bioconductor.css')
+  
+  if (insert.into.body)
+    cat(.paste(bioc.css, scoped = TRUE))
+  else
+    options(markdown.HTML.stylesheet = bioc.css)
+    
   if ( !missing(css.files) ) {
     # fail save
     css.files = css.files[file.exists(css.files)]
 
     if ( length(css.files) > 0 ) {
-    
-      options(markdown.HTML.header = 
-        if(isTRUE(self.contained))
-          # insert the contents of the CSS files into the HTML document
-          sapply(css.files, function(x) {
-            paste('<style type="text/css">', paste(readLines(x), collapse = '\n'), '</style>', sep = "\n")
-          })
-        else          
-          # insert relative links to the .css files
-          sprintf('<link rel="stylesheet" type="text/css" href="./%s"/>', css.files)
-        )
+      if (insert.into.body)
+        cat(.paste(css.files, scoped = TRUE))      
+      else
+        options(markdown.HTML.header = 
+          if(isTRUE(self.contained))
+            # insert the contents of the CSS files into the HTML document
+            sapply(css.files, .paste)
+          else          
+            # insert relative links to the .css files
+            sprintf('<link rel="stylesheet" type="text/css" href="./%s"/>', css.files)
+          )
     }
   }
   
   invisible()
 }
+
+.paste = function(x, scoped = FALSE)
+  paste(if (scoped) '<style type="text/css" scoped>' else '<style type="text/css">',
+        paste(readLines(x), collapse = '\n'),
+        '</style>', sep = "\n")
 
 ## macro definitions
 

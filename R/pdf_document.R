@@ -7,8 +7,7 @@ pdf_document <- function(toc = TRUE,
   # get the locations of resource files located within the package
   template <- system.file(package = "BiocStyle", "templates", "bioconductor.tex")
   
-  sty <- system.file(package = "BiocStyle", "sty", "Bioconductor.sty")
-  head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", sty))
+  head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", bioc.sty))
   
   if (use.unsrturl) {
     bst <- file.path(system.file(package="BiocStyle", "sty"), "unsrturl")

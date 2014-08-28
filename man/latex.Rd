@@ -60,7 +60,7 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
 
 \examples{
 ## location of the .sty file
-system.file(package = "BiocStyle", "sty", "Bioconductor.sty")
+BiocStyle:::bioc.sty
 }
 
 \keyword{ manip }

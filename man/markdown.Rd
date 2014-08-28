@@ -5,8 +5,10 @@
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
 \alias{CRANpkg}
+\alias{Rpackage}
+\alias{Githubpkg}
 
-\title{Use Bioconductor style to format HTML vignettes}
+\title{Use Bioconductor CSS style to format HTML vignettes}
 
 \description{
   This function sets the Bioconductor style sheet to provide a
@@ -14,14 +16,16 @@
 }
 
 \usage{
-markdown(css.files, self.contained = TRUE)
+markdown(css.files, self.contained = TRUE, links.target = TRUE)
 }
 
 \arguments{
 
   \item{css.files}{character vector containing the location of additional \code{.css} files.}
 
-  \item{self.contained}{logical(1), should the content of the CSS \code{stylesheet} files be beincluded into the html file or should they be saved as separte files}
+  \item{self.contained}{logical(1), should the content of the CSS \code{stylesheet} files be beincluded into the html file or should they be saved as separte files.}
+  
+  \item{links.target}{logical(1), should external links open in new browser tab/window.}
   
 }
 
@@ -39,7 +43,7 @@ markdown(css.files, self.contained = TRUE)
 
 \examples{
 ## location of the .css file
-system.file(package = "BiocStyle", "css", "bioconductor.css")
+BiocStyle:::bioc.css
 }
 
 \keyword{ manip }

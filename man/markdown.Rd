@@ -43,7 +43,7 @@ markdown(css.files, self.contained = TRUE, links.target = TRUE)
 
 \examples{
 ## location of the .css file
-BiocStyle:::bioc.css
+BiocStyle:::.bioconductor.css
 }
 
 \keyword{ manip }

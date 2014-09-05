@@ -22,9 +22,9 @@ markdown = function(css.files, self.contained = TRUE, links.target = TRUE) {
   insert.into.body = ( rmarkdown.version == 1L && all(sapply(pattern, function(x) length(grep(x, calls, fixed = TRUE)) == 0)) )
     
   if (insert.into.body)
-    cat(.print.css(bioc.css, scoped = TRUE))
+    cat(.print.css(.bioconductor.css, scoped = TRUE))
   else
-    options(markdown.HTML.stylesheet = bioc.css)
+    options(markdown.HTML.stylesheet = .bioconductor.css)
     
   if ( !missing(css.files) ) {
     # fail save

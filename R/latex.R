@@ -3,10 +3,12 @@ latex <-
              error=FALSE, use.unsrturl=TRUE)
 {
     options(..., width=width)
-    cat(sprintf("\\RequirePackage{%s}\n\n", sub(".sty$", "", bioc.sty)))
+    cat(sprintf("\\RequirePackage{%s}\n\n",
+                sub(".sty$", "", .bioconductor.sty)))
     
     if (use.unsrturl) {
-        bst <- file.path(system.file(package="BiocStyle", "resources", "latex"), "unsrturl")
+        bst <- file.path(system.file(package="BiocStyle", "resources",
+                                     "latex"), "unsrturl")
         cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
     }
     

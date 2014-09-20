@@ -8,8 +8,9 @@
 BiocStyle::latex()
 @ 
 
-\newcommand{\exitem}[3]
-{\item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.}
+\newcommand{\exitem}[3]{%
+  \item \texttt{\textbackslash#1\{#2\}} #3 \csname#1\endcsname{#2}.%
+}
 
 \title{\Bioconductor{} \LaTeX{} Style}
 \author{Martin Morgan, Andrzej Ole\'s, Wolfgang Huber}
@@ -20,7 +21,7 @@ BiocStyle::latex()
 
 \tableofcontents
 
-\section{Use}
+\section{Authoring Sweave / \LaTeX{} package vignettes}
 
 To use with Sweave, add the following to your package \file{DESCRIPTION} file:
 \begin{verbatim}
@@ -80,7 +81,7 @@ remedied (as on the \Bioconductor{} build system) with a final run of
     R CMD pdflatex vignette.tex
 \end{verbatim}
 
-\section{Markup commands}
+\section{Style macros}
 \Biocpkg{BiocStyle} introduces the following additional markup styling commands
 useful in typical \Bioconductor{} vignettes.\\\\
 %%
@@ -131,7 +132,7 @@ General:
 \end{itemize}
 
 %---------------------------------------------------------
-\section{Title and sectioning: this is a section}
+\section{Title, running headers, and table of contents}
 %---------------------------------------------------------
 
 Create a title and running headers by defining the \verb+\bioctitle+
@@ -149,37 +150,11 @@ Use \verb+\tableofcontents+ for a hyperlinked table of contents,
 \verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for
 structuring your vignette.
 
+Formatting of subsections and subsubsections are as follows.
+
 \subsection{This is a subsection}
 
-Apud Helvetios longe nobilissimus fuit et ditissimus Orgetorix. Is M.\
-Messala, M.\ Pisone consulibus regni cupiditate inductus coniurationem
-nobilitatis fecit et civitati persuasit ut de finibus suis cum omnibus
-copiis exirent: perfacile esse, cum virtute omnibus praestarent,
-totius Galliae imperio potiri.
-
 \subsubsection{This is a subsubsection}
-
-His rebus fiebat ut et minus late vagarentur et minus facile finitimis
-bellum inferre possent; qua ex parte homines bellandi cupidi magno
-dolore adficiebantur. Pro multitudine autem hominum et pro gloria
-belli atque fortitudinis angustos se fines habere arbitrabantur, qui
-in longitudinem milia passuum CCXL, in latitudinem CLXXX patebant.
-
-%---------------------------------------------------------
-\section{Bibliography}
-%---------------------------------------------------------
-
-\Rcode{BiocStyle::latex()} has default argument
-\Rcode{use.unsrturl=TRUE} to automatically format bibliographies using
-\software{natbib}'s unsrturl style. There is no need to explicitly
-include \software{natbib}, and it is an error to use a
-\verb+\bibliographystyle+ command. The \software{unsrturl.bst} format,
-e.g., \cite{Gentleman:2004, 10.1371/journal.pcbi.1003118}, supports
-hyperlinks to DOI and PubMed IDs but not \verb+\citet+ or
-\verb+\citep+.
-
-To use a bibliography style different from \verb+unsrturl+, set
-\Rcode{use.unsrturl=FALSE} and follow normal \LaTeX{} conventions.
 
 %---------------------------------------------------------
 \section{Figures}\label{incfig}
@@ -256,6 +231,22 @@ A custom prefix for figure file names can be passed to
 \Rfunction{latex} using the \Rcode{fig.path} option. When
 \Rcode{short.fignames=TRUE}, figures can be referred to directly by
 code chunk labels, as described in Section~\ref{incfig}.
+
+%---------------------------------------------------------
+\section{Bibliography}
+%---------------------------------------------------------
+
+\Rcode{BiocStyle::latex()} has default argument
+\Rcode{use.unsrturl=TRUE} to automatically format bibliographies using
+\software{natbib}'s unsrturl style. There is no need to explicitly
+include \software{natbib}, and it is an error to use a
+\verb+\bibliographystyle+ command. The \software{unsrturl.bst} format,
+e.g., \cite{Gentleman:2004, 10.1371/journal.pcbi.1003118}, supports
+hyperlinks to DOI and PubMed IDs but not \verb+\citet+ or
+\verb+\citep+.
+
+To use a bibliography style different from \verb+unsrturl+, set
+\Rcode{use.unsrturl=FALSE} and follow normal \LaTeX{} conventions.
 
 %---------------------------------------------------------
 \section{Session info}

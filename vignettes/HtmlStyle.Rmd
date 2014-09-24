@@ -1,8 +1,3 @@
----
-output:
-  BiocStyle::html_document:
-    css: my.css
----
 <!-- rmarkdown v1 -->
 <!--
 %\VignetteIndexEntry{Bioconductor style for HTML documents}
@@ -32,7 +27,7 @@ code2 <- function(...) {
 
 # Bioconductor style for HTML documents
 
-## Authoring `r CRANpkg("rmarkdown")` / HTML package vignettes
+## Authoring _rmarkdown_ / HTML package vignettes
 
 To enable the _Bioconductor_ style in your markdown (`.Rmd`)
 vignettes:
@@ -49,7 +44,7 @@ vignettes:
         %% \VignetteEngine{knitr::knitr}
         -->
 
-- Add the following code chunk at the beginning of your `Rmd`
+- Add the following code chunk at the beginning of your `.Rmd`
   vignettes
 
         ```{r, echo = FALSE , results = 'asis'}
@@ -117,7 +112,10 @@ include:
         bananas | 1.2
         apples  | 1.0
         oranges | 2.5
-            
+
+* Paragraph text is justified
+
+* External links open in new browser tab/window
 
 Math symbols can be included in markdown documents. You can write math
 expressions the same way you would in `Latex`, except some differences
@@ -166,14 +164,14 @@ ls
 If you are rendering your documents using `r
 Githubpkg("rstudio/rmarkdown")` (e.g. using recent versions of
 _RStudio_) you need to specify the CSS files in the document header
-rather than as an argument to `BiocStyle::markdown`. See [Use with the
-`r CRANpkg("rmarkdown")` package](#rmarkdown) for details.
+rather than as an argument to `BiocStyle::markdown`. See the following
+section for details.
 
-## Use with _[RStudio][]_
+## Use with _RStudio_
 
-Currently, there are two markdown engines build into _RStudio_: the
+Currently, there are two markdown engines build into _[RStudio][]_: the
 older one based on the `r CRANpkg('markdown')` package, and the newer
-one using the `r CRANpkg("rmarkdown")` package. There are some
+one using the `r CRANpkg('rmarkdown')` package. There are some
 differences in setup and the resulting output between these two
 engines. For now, package vignettes can be only build using the former
 one. You can force _RStudio_ to render your markdown documents using the
@@ -212,7 +210,7 @@ defined in header and *not* in the call to `BiocStyle::markdown`.
 _RStudio_-specific `output:` instructions are _not_ supported by _R_'s
 vignette building facilities.
 
-# Session info
+## Session info
 
 Here is the output of `sessionInfo()` on the system on which this
 document was compiled:

@@ -88,6 +88,9 @@
 \newcommand\CRANpkg[1]{%
   {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
     {\Rpackage{#1}}}}
+\newcommand\Githubpkg[1]{\split#1\relax}
+\def\split#1/#2\relax{{\href{https://github.com/#1/#2}%
+    {\Rpackage{#2}}}}
 %
 \newcommand{\Rcode}[1]{\texttt{#1}}
 \newcommand{\Rfunction}[1]{\Rcode{#1}}

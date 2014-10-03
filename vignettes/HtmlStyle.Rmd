@@ -27,7 +27,7 @@ code2 <- function(...) {
 
 # Bioconductor style for HTML documents
 
-## Authoring _rmarkdown_ / HTML package vignettes
+## Authoring _markdown_ / HTML package vignettes
 
 To enable the _Bioconductor_ style in your markdown (`.Rmd`)
 vignettes:
@@ -52,6 +52,42 @@ vignettes:
              "BiocStyle::markdown()",
              "```")
         ```
+
+### <a id = "rmarkdown"></a>Use with _rmarkdown_ vignette engine
+
+To enable the newer `r CRANpkg('rmarkdown')` (_R_ Markdown v2) vignette builder engine you need to:
+
+- Edit to the `DESCRIPTION` file by adding
+
+        VignetteBuilder: knitr
+        Suggests: BiocStyle, knitr, rmarkdown
+        
+- Set the vignette engine in your `.Rmd` files to
+
+        <!--
+        %% \VignetteEngine{knitr::rmarkdown}
+        -->
+
+- Include, in addition to the code
+chunk calling `BiocStyle::markdown()` (see above), the metadata header defining
+the output format. Add at the very top of your document
+
+        ---
+        output:
+          BiocStyle::html_document
+        ---
+
+The `BiocStyle::html_document` output format extends the `rmarkdown`
+build-in `html_document` format and you can use any of its parameters,
+e.g. set the title and add the table of contents
+
+    ---
+    title: "Document Title"
+    output:
+      BiocStyle::html_document:
+        toc: true
+    ---
+
 
 ## Style macros
 
@@ -163,9 +199,14 @@ ls
 
 If you are rendering your documents using `r
 Githubpkg("rstudio/rmarkdown")` (e.g. using recent versions of
-_RStudio_) you need to specify the CSS files in the document header
-rather than as an argument to `BiocStyle::markdown`. See the following
-section for details.
+_RStudio_) additional CSS style sheets need to be
+defined in header and *not* in the call to `BiocStyle::markdown`:
+
+    ---
+    output:
+      BiocStyle::html_document:
+        css: my.css
+    ---
 
 ## Use with _RStudio_
 
@@ -173,42 +214,17 @@ Currently, there are two markdown engines build into _[RStudio][]_: the
 older one based on the `r CRANpkg('markdown')` package, and the newer
 one using the `r CRANpkg('rmarkdown')` package. There are some
 differences in setup and the resulting output between these two
-engines. For now, package vignettes can be only build using the former
-one. You can force _RStudio_ to render your markdown documents using the
-same engine as the one used to build vignettes by adding a special
+engines. 
+
+Starting from  _RStudio_ version 0.98.932 markdown documents are by default compiled 
+using the newer `r CRANpkg('rmarkdown')` engine.
+You can override this and force _RStudio_ to render your markdown documents using the
+former engine by adding a special
 comment to your source file:
 
     ```{r, echo = FALSE , results = 'asis'}
     cat("<!--", "rmarkdown", "v1", "-->")
     ```
-
-If you are using _RStudio_ to "knit" the document or compile it
-through the `rmarkdown::render()` to compile your documents, i.e. you
-use _R_ Markdown v2, you need to include, in addition to the code
-chunk calling `BiocStyle::markdown()`, the metadata header defining
-the output format. Add at the very top of your document
-
-    ---
-    output:
-      BiocStyle::html_document
-    ---
-
-The `BiocStyle::html_document` output format extends the `rmarkdown`
-build-in `html_document` format and you can use any of its parameters,
-e.g. add the table of contents and a custom CSS file using
-
-    ---
-    output:
-      BiocStyle::html_document:
-        toc: true
-        css: my.css
-    ---
-    
-Note that in _R_ markdown v2 additional CSS style sheets need to be
-defined in header and *not* in the call to `BiocStyle::markdown`.
-
-_RStudio_-specific `output:` instructions are _not_ supported by _R_'s
-vignette building facilities.
 
 ## Session info
 

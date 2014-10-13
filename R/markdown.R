@@ -85,7 +85,7 @@ markdown <-
 
 ## macros definitions
 
-.release.repository <- "http://bioconductor.org/packages/release/"
+.release.repository <- "http://bioconductor.org/packages/release"
 
 Biocpkg <- function(pkg) {
     fmt <- '[%s](%s/bioc/html/%s.html)'

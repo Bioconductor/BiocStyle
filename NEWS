@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.4.0
+------------------------
+
+USER VISIBLE CHANGES
+
+    o Support for markdown documents
+
+    o Add \Githubpkg markup command
+
 CHANGES IN VERSION 1.2.0
 ------------------------
 

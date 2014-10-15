@@ -6,7 +6,7 @@ Description: Provides standard formatting styles for Bioconductor PDF
 Version: 1.4.1
 Author: Martin Morgan, Andrzej Oles, Wolfgang Huber
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
-Suggests: knitr, rmarkdown, BiocGenerics, RUnit
+Suggests: knitr (>= 1.7), rmarkdown, BiocGenerics, RUnit
 biocViews: Software
 License: Artistic-2.0
 VignetteBuilder: knitr

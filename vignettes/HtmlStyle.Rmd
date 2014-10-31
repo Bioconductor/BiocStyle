@@ -27,6 +27,10 @@ code2 <- function(...) {
 
 # Bioconductor style for HTML documents
 
+Package: `r Biocpkg("BiocStyle")`<br />
+Author: Andrzej Oles, Wolfgang Huber, Martin Morgan<br />
+Compilation date: `r Sys.Date()`
+
 ## Authoring _markdown_ / HTML package vignettes
 
 To enable the _Bioconductor_ style in your markdown (`.Rmd`)

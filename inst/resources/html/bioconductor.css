@@ -99,10 +99,9 @@ pre[class] code {
   background-color: inherit;
 }
 
-
-
 /* formatting of inline code */
 code { 
+  background-color: transparent;
   color: #87b13f;
   font-size: 92%;
 }

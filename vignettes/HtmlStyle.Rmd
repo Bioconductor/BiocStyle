@@ -102,7 +102,7 @@ macro <- function(name, pkg, description)
 ```
 
 `r Biocpkg("BiocStyle")` introduces the following macros useful when
-refering to _R_ packages:
+referring to _R_ packages:
 
 * `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software packages,
   including a link to the release version landing page,")`.
@@ -170,8 +170,11 @@ in escaping them.
 
 ### Adding custom style sheets
 
-Additional style sheets can be used by providing them to the
-`BiocStyle::markdown` function. To include `my.css` file use
+The way of attaching CSS files depends on whether the
+`r CRANpkg('markdown')` or `r CRANpkg('rmarkdown')` engine is used to
+compile the document. In the former case additional style sheets can be
+used by providing them to the `BiocStyle::markdown` function.
+To include `my.css` file use
 
     ```{r, echo = FALSE, results = 'asis'}
     code("```{r style, echo = FALSE, results = 'asis'}",
@@ -201,9 +204,8 @@ which results in
 ls
 ```    
 
-If you are rendering your documents using `r
-Githubpkg("rstudio/rmarkdown")` (e.g. using recent versions of
-_RStudio_) additional CSS style sheets need to be
+If you are rendering your documents using `r CRANpkg('rmarkdown')`
+(e.g. using recent versions of_RStudio_) additional CSS style sheets need to be
 defined in header and *not* in the call to `BiocStyle::markdown`:
 
     ---

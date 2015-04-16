@@ -1,0 +1,114 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Bioconductor}[2013/07/01 Bioconductor vignette style]
+% 
+\PassOptionsToPackage{usenames,dvipsnames}{color}
+\RequirePackage{color}
+\definecolor{BiocBlue}{RGB}{24,129,194}
+\definecolor{BiocGreen}{RGB}{135,177,63}
+\definecolor{BiocGray}{cmyk}{0,0,0,0.50}
+\definecolor{BiocMagenta}{rgb}{1, 0, 1}
+\definecolor{BiocRed}{rgb}{1, 0, 0}
+\definecolor{BiocBittersweet}{cmyk}{0,0.75,1,0.24}
+% 
+\RequirePackage[%
+ pdfpagelabels,%
+ plainpages=false,%
+ pdfborder={0 0 0},%
+ bookmarks=true,%
+ bookmarksopen=true,%
+ bookmarksnumbered=true,%
+ colorlinks,%
+ breaklinks,%
+ linkcolor=BiocBlue,%
+ citecolor=BiocBlue,%
+ anchorcolor=BiocBlue,%
+ urlcolor=BiocBlue,%
+ citebordercolor={.7 .7 .7},%
+ linkbordercolor={.7 .7 .7},%
+ urlbordercolor={.7 .7 .7},%
+ raiselinks,%
+ pdfusetitle,%
+ pdftex]{hyperref}
+\pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
+\RequirePackage[left=2cm,top=2.5cm,bottom=2.5cm,right=2cm]{geometry}
+\renewcommand{\familydefault}{\sfdefault}
+%
+\RequirePackage{sectsty}
+\sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
+\subsectionfont{\sffamily\bfseries\color{BiocBlue}}
+\subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
+%% Title
+\let\@bioctitle\@empty
+\let\@oldtitle\title
+\renewcommand{\title}[1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+\newcommand{\bioctitle}[2][]{\@oldtitle{#2}%
+  \def\tmp{#1}\ifx\tmp\@empty\def\@bioctitle{#2}\else\def\@bioctitle{#1}\fi}
+%% Page layout
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{\@bioctitle}
+\renewcommand{\headrule}{}
+%
+\RequirePackage{enumitem}
+\setlist{nolistsep}
+%
+\RequirePackage{parskip}
+%% Alter some LaTeX defaults for better treatment of floats
+%% See p.105 of "TeX Unbound" for suggested values
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand\topfraction{0.9}
+\renewcommand\bottomfraction{0.5}
+\renewcommand\textfraction{0.1}
+\renewcommand\floatpagefraction{0.9}
+\renewcommand\dbltopfraction{0.9}
+\renewcommand\dblfloatpagefraction{0.8}
+%
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\file}[1]{'#1'}
+%
+\newcommand{\software}[1]{\textsl{#1}}
+\newcommand\R{\software{R}}
+%
+\newcommand\Bioconductor{\software{Bioconductor}}
+\newcommand{\Rpackage}[1]{\textsl{#1}}
+\newcommand\Biocpkg[1]{%
+  {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}%
+    {\Rpackage{#1}}}}
+\newcommand\Biocannopkg[1]{%
+  {\href{http://bioconductor.org/packages/release/data/annotation/html/#1.html}%
+    {\Rpackage{#1}}}}
+\newcommand\Biocexptpkg[1]{%
+  {\href{http://bioconductor.org/packages/release/data/experiment/html/#1.html}%
+    {\Rpackage{#1}}}}
+\newcommand\CRANpkg[1]{%
+  {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
+    {\Rpackage{#1}}}}
+\newcommand\Githubpkg[1]{\GithubSplit#1\relax}
+\def\GithubSplit#1/#2\relax{{\href{https://github.com/#1/#2}%
+    {\Rpackage{#2}}}}
+%
+\newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Robject}[1]{\Rcode{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+%
+\newcommand{\bioccomment}[1]{\textsl{\textcolor{BiocGray}{comment: #1}}}
+\newcommand{\warning}[1]{\textsl{\textcolor{BiocMagenta}{warning: #1}}}
+\newcommand{\fixme}[1]{\textsl{\textcolor{BiocBittersweet}{fixme: #1}}}
+%
+\newcommand{\prefix}[1]{#1}
+\newcommand{\incfig}[5][tbp]{%
+  \begin{figure}[#1]%
+  \begin{center}%
+  \includegraphics[width=#3]{\prefix{#2}}%
+  \caption[#4]{\label{#2}\textbf{#4} #5}%
+  \end{center}%
+  \end{figure}%
+} 
+% 
+\endinput

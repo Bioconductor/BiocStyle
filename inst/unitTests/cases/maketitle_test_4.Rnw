@@ -1,0 +1,18 @@
+%% \maketitle & title header tests -- no header / title
+
+\documentclass{article}
+
+<<style, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
+
+\bioctitle[A short title]{An Amazing Document}
+\author{author1\footnote{a@abc.com}}
+
+\begin{document}
+
+\maketitle
+\clearpage
+hello world
+
+\end{document}

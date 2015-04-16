@@ -1,0 +1,246 @@
+<!-- rmarkdown v1 -->
+<!--
+%\VignetteIndexEntry{Bioconductor style for HTML documents}
+%\VignettePackage{BiocStyle}
+%\VignetteEngine{knitr::knitr}
+-->
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown(css.files = "my.css")
+```
+
+<!-- override white background for classless code chunks -->
+<style type="text/css" scoped>
+  pre:not([class]) { background-color: #F8F8F8; }
+  pre code { background-color: transparent; }
+</style>
+
+```{r code, echo = FALSE}
+code <- function(...) {
+    cat(paste(..., sep = "\n"))
+}
+
+code2 <- function(...) {
+    cat(paste("```markdown", ..., "\n", "```", sep = "\n"))
+}
+```
+
+# Bioconductor style for HTML documents
+
+Package: `r Biocpkg("BiocStyle")`<br />
+Author: Andrzej Oles, Wolfgang Huber, Martin Morgan<br />
+Compilation date: `r Sys.Date()`
+
+## Authoring _markdown_ / HTML package vignettes
+
+To enable the _Bioconductor_ style in your markdown (`.Rmd`)
+vignettes:
+
+- Add the following to the `DESCRIPTION` file
+
+        VignetteBuilder: knitr
+        Suggests: BiocStyle, knitr
+        
+- Specify the vignette engine in the `.Rmd` files (inside HTML
+  comments)
+
+        <!--
+        %% \VignetteEngine{knitr::knitr}
+        -->
+
+- Add the following code chunk at the beginning of your `.Rmd`
+  vignettes
+
+        ```{r, echo = FALSE , results = 'asis'}
+        code("```{r style, echo = FALSE, results = 'asis'}",
+             "BiocStyle::markdown()",
+             "```")
+        ```
+
+### <a id = "rmarkdown"></a>Use with _rmarkdown_ vignette engine
+
+To enable the newer `r CRANpkg('rmarkdown')` (_R_ Markdown v2) vignette builder engine you need to:
+
+- Edit to the `DESCRIPTION` file by adding
+
+        VignetteBuilder: knitr
+        Suggests: BiocStyle, knitr, rmarkdown
+        
+- Set the vignette engine in your `.Rmd` files to
+
+        <!--
+        %% \VignetteEngine{knitr::rmarkdown}
+        -->
+
+- Include, in addition to the code
+chunk calling `BiocStyle::markdown()` (see above), the metadata header defining
+the output format. Add at the very top of your document
+
+        ---
+        output:
+          BiocStyle::html_document
+        ---
+
+The `BiocStyle::html_document` output format extends the `rmarkdown`
+build-in `html_document` format and you can use any of its parameters,
+e.g. set the title and add the table of contents
+
+    ---
+    title: "Document Title"
+    output:
+      BiocStyle::html_document:
+        toc: true
+    ---
+
+
+## Style macros
+
+```{r macro, echo=FALSE}
+macro <- function(name, pkg, description)
+    sprintf('`` `r %s("%s")` `` %s %s', name, pkg,
+            description, do.call(name, list(pkg)))
+```
+
+`r Biocpkg("BiocStyle")` introduces the following macros useful when
+referring to _R_ packages:
+
+* `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software packages,
+  including a link to the release version landing page,")`.
+
+* `r macro("Biocannopkg", "org.Hs.eg.db", "for _Bioconductor_ annotation
+  packages, including a link to the release version landing page,")`.
+  
+* `r macro("Biocexptpkg", "parathyroidSE", "for _Bioconductor_
+  experiment data packages, including a link to the release version
+  landing page,")`.
+
+* `r macro("CRANpkg", "data.table", "for _R_ packages available on
+  CRAN, including a link to the FHCRC CRAN mirror landing page,")`.
+
+* `r macro("Githubpkg", "rstudio/rmarkdown", "for _R_ packages
+  available on GitHub, including a link to the package repository,")`.
+
+* `r macro("Rpackage", "MyPkg", "for _R_ packages that are _not_
+  available on _Bioconductor_, CRAN or GitHub;")`.
+
+## Additional formatting features
+
+Compared to the default markdown appearance the formatting differences
+include:
+
+* Images and tables appear centered, e.g.
+
+    ```{r figure, fig.width=4.0, fig.height=4.4}
+    v = seq(0, 60i, length = 1000)
+    plot(abs(v)*exp(v), type = "l", col = "Royalblue")
+    ``` 
+                
+* Tables are displayed with striped rows:
+    
+    ```markdown
+    Fruit   | Price
+    ------- | -----
+    bananas | 1.2
+    apples  | 1.0
+    oranges | 2.5
+    ```
+        
+  produces
+
+        Fruit   | Price
+        ------- | -----
+        bananas | 1.2
+        apples  | 1.0
+        oranges | 2.5
+
+* Paragraph text is justified
+
+* External links open in new browser tab/window
+
+Math symbols can be included in markdown documents. You can write math
+expressions the same way you would in `Latex`, except some differences
+in escaping them.
+
+- Inline: For inline formulas use `$P(x) = \frac{1}{2}$` or `\(P(x)
+  = \frac{1}{2}\)`, which both render as $P(x) = \frac{1}{2}$.
+
+- Standalone: Math can be displayed in a separate line by writing
+  `$$P(x) = \frac{1}{2}$$` or `\[P(x) = \frac{1}{2}.\]`, which both
+  result in $$P(x) = \frac{1}{2}.$$
+
+### Adding custom style sheets
+
+The way of attaching CSS files depends on whether the
+`r CRANpkg('markdown')` or `r CRANpkg('rmarkdown')` engine is used to
+compile the document. In the former case additional style sheets can be
+used by providing them to the `BiocStyle::markdown` function.
+To include `my.css` file use
+
+    ```{r, echo = FALSE, results = 'asis'}
+    code("```{r style, echo = FALSE, results = 'asis'}",
+         "BiocStyle::markdown(css.files = c('my.css'))",
+         "```")
+    ```
+    
+For example, you might want to include some code chunks containing
+shell commands and distinguish them by different formatting.  For
+this, let the code chunk class be `.sh`
+
+    ```{r, echo = FALSE , results = 'asis'}
+    code("```{.sh}",
+         "ls",
+         "```")
+    ```
+
+**my.css**
+
+    ```{r, echo = FALSE , results = 'asis'}
+    cat(BiocStyle:::.print.file("my.css"))
+    ```
+
+which results in
+
+```{.sh}
+ls
+```    
+
+If you are rendering your documents using `r CRANpkg('rmarkdown')`
+(e.g. using recent versions of_RStudio_) additional CSS style sheets need to be
+defined in header and *not* in the call to `BiocStyle::markdown`:
+
+    ---
+    output:
+      BiocStyle::html_document:
+        css: my.css
+    ---
+
+## Use with _RStudio_
+
+Currently, there are two markdown engines build into _[RStudio][]_: the
+older one based on the `r CRANpkg('markdown')` package, and the newer
+one using the `r CRANpkg('rmarkdown')` package. There are some
+differences in setup and the resulting output between these two
+engines. 
+
+Starting from  _RStudio_ version 0.98.932 markdown documents are by default compiled 
+using the newer `r CRANpkg('rmarkdown')` engine.
+You can override this and force _RStudio_ to render your markdown documents using the
+former engine by adding a special
+comment to your source file:
+
+    ```{r, echo = FALSE , results = 'asis'}
+    cat("<!--", "rmarkdown", "v1", "-->")
+    ```
+
+## Session info
+
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
+
+[R]: http://r-project.org
+[RStudio]: http://www.rstudio.com/

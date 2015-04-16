@@ -1,0 +1,19 @@
+%% \maketitle & title header tests -- title, author in preamble
+
+\documentclass{article}
+
+<<style, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
+
+\title{An Amazing Document}
+\author{author1\footnote{a@abc.com}}
+
+\begin{document}
+
+\maketitle
+
+\clearpage
+hello world
+
+\end{document}

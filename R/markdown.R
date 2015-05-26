@@ -4,16 +4,12 @@ markdown <-
     ## load the package to expose macros
     require(BiocStyle, quietly = TRUE)
     
-    ## correct title margin (this has to be done from JS and not CSS
-    ## becasue of differences in tag layout between markdown v1 and
-    ## v2)
-    cat( .print.js(system.file(package = "BiocStyle", "resources",
-                               "html", "setTitleMargin.js")) )
+    ## set document title class as in R Markdown v2
+    cat( .print.file(file.path(resources, "html", "setDocumentTitleClass.js")) )
 
     ## set up target of external links
     if ( isTRUE(links.target) )
-        cat( .print.js(system.file(package = "BiocStyle", "resources",
-                                   "html", "setExternalLinksTarget.js")) )
+        cat( .print.file(file.path(resources, "html", "setExternalLinksTarget.js")) )
     
     ## set up CSS
     
@@ -36,9 +32,9 @@ markdown <-
         }) == 0)
     
     if (insert.into.body)
-        cat(.print.css(.bioconductor.css, scoped = TRUE))
+        cat(.print.file(bioconductor.css, scoped = TRUE))
     else
-        options(markdown.HTML.stylesheet = .bioconductor.css)
+        options(markdown.HTML.stylesheet = bioconductor.css)
     
     if ( !missing(css.files) ) {
         ## fail save
@@ -46,12 +42,12 @@ markdown <-
 
         if ( length(css.files) > 0 ) {
             if (insert.into.body)
-                cat(.print.css(css.files, scoped = TRUE))      
+                cat(.print.file(css.files, scoped = TRUE))      
             else
                 options(markdown.HTML.header = if(isTRUE(self.contained)) {
                     ## insert the contents of the CSS files into the
                     ## HTML document
-                    sapply(css.files, .print.css)
+                    sapply(css.files, .print.file)
                 } else {
                     ## insert relative links to the .css files
                     txt <- '<link rel="stylesheet" type="text/css" href="./%s"/>'
@@ -66,20 +62,23 @@ markdown <-
 
 ### print file content
 
-.print.file <- function(x) {
-    paste(readLines(x), collapse = '\n')
-}
-
-.print.css <- function(x, scoped = FALSE) {
-    prefix <- if (scoped) {
-        '<style type="text/css" scoped>'
-    } else '<style type="text/css">'
-    paste(prefix, .print.file(x), '</style>\n', sep = "\n")
-}
-
-.print.js <- function(x) {
-    paste('<script type="text/javascript">', .print.file(x),
-          '</script>\n', sep = "\n")
+.print.file <- function(file, scoped = FALSE) {
+  type = unlist(strsplit(file, split=".", fixed=TRUE))
+  type = tolower(type[length(type)])
+  
+  paste(c(
+    switch(type, 
+           js  = '<script type="text/javascript">',
+           css = if (isTRUE(scoped)) '<style type="text/css" scoped>'
+                 else '<style type="text/css">',
+           NULL),
+    ## actual file content
+    readLines(file),
+    switch(type, 
+           js  = '</script>\n',
+           css = '</style>\n',
+           NULL)
+    ), collapse = '\n')
 }
 
 
@@ -117,3 +116,14 @@ Githubpkg <- function(pkg) {
     pkg = strsplit(pkg, split = "/", fixed = TRUE)[[1]]
     Rpackage( sprintf('[%s](%s/%s/%s)', pkg[2], github, pkg[1], pkg[2]) )
 }
+
+## yaml header convenience functions
+
+pkg_ver <- function(name) {
+  paste(name, packageVersion(name))
+}
+
+doc_date <- function() {
+  format(Sys.Date(), '%d %B %Y')
+}
+

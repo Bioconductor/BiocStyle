@@ -3,7 +3,7 @@ Title: Standard styles for vignettes and other Bioconductor documents
 Description: Provides standard formatting styles for Bioconductor PDF
     and HTML documents. Package vignettes illustrate use and
     functionality.
-Version: 1.7.0
+Version: 1.7.1
 Author: Martin Morgan, Andrzej Oles, Wolfgang Huber
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Suggests: knitr (>= 1.7), rmarkdown, BiocGenerics, RUnit

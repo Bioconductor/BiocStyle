@@ -1,11 +1,8 @@
-.bioconductor.sty <- .bioconductor.css <- NULL
+resources <- bioconductor.sty <- bioconductor.css <- NULL
 
-.onLoad <-
-    function(...)
-{
-    .bioconductor.sty <<- system.file(package = "BiocStyle",
-                                      "resources", "latex", "Bioconductor.sty")
-    .bioconductor.css <<- system.file(package = "BiocStyle",
-                                      "resources", "html", "bioconductor.css")
+# resolve paths once during package load
+.onLoad <- function(...) {
+    resources <<- system.file(package = "BiocStyle", "resources")
+    bioconductor.sty <<- file.path(resources, "tex", "Bioconductor.sty")
+    bioconductor.css <<- file.path(resources, "html", "bioconductor.css")
 }
-

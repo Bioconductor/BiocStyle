@@ -36,29 +36,31 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
-h1 {
+h1.title {
   font-size: 250%;
   font-weight: normal;
   color: #87b13f;
   line-height: 1.1em;
+  margin-top: 0px;
+  border-bottom: 0px;
 }
 
-h2 {
+h1 {
   font-size: 160%;
   font-weight: normal;
   line-height: 1.4em;
   border-bottom: 1px #1a81c2 solid;
 }
 
-h3 {
+h2 {
   font-size: 130%;  
 }
 
-h2, h3 {
+h1, h2, h3 {
   color: #1a81c2;
 }
 
-h4, h5, h6 {
+h3, h4, h5, h6 {
   font-size:115%;
 } /* not expecting to dive deeper than four levels on a single page */
 
@@ -131,6 +133,10 @@ hr {
    border-top-width: thin;
    border-top-style: dotted;
    border-top-color: #999999;
+}
+
+span.header-section-number {
+  padding-right: 1em;
 }
 
 @media print {

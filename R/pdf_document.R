@@ -4,13 +4,16 @@ pdf_document <- function(toc = TRUE,
                          includes,
                          ...) {
   
-  # get the locations of resource files located within the package
-  template <- system.file(package = "BiocStyle", "templates", "bioconductor.tex")
+  ## load the package to expose macros
+  require(BiocStyle, quietly = TRUE)
   
-  head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", .bioconductor.sty))
+  # get the locations of resource files located within the package
+  template <- file.path(resources, "tex", "template.tex")
+  
+  head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "", bioconductor.sty))
   
   if (use.unsrturl) {
-    bst <- file.path(system.file(package="BiocStyle", "sty"), "unsrturl")
+    bst <- file.path(resources, "tex", "unsrturl")
     head = c(head, sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
   }
   

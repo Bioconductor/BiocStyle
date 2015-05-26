@@ -38,12 +38,12 @@ markdown(css.files, self.contained = TRUE, links.target = TRUE)
 }
 
 \author{
-  Andrzej Oles, 2014
+  Andrzej Oles, 2014-2015
 }
 
 \examples{
 ## location of the .css file
-BiocStyle:::.bioconductor.css
+BiocStyle:::bioconductor.css
 }
 
 \keyword{ manip }

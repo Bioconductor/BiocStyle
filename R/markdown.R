@@ -127,3 +127,10 @@ doc_date <- function() {
   format(Sys.Date(), '%d %B %Y')
 }
 
+## 
+
+output_format <- function() {
+  output = rmarkdown:::metadata$output
+  if (is.list(output)) output = names(output)[[1L]]
+  output = regmatches(output, regexpr("html|pdf|word|md", output))[1L]
+}

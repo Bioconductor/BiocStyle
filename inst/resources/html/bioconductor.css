@@ -135,7 +135,7 @@ hr {
    border-top-color: #999999;
 }
 
-span.header-section-number {
+span.header-section-number, span.toc-section-number {
   padding-right: 1em;
 }
 

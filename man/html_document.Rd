@@ -3,6 +3,7 @@
 \alias{html_document}
 \alias{doc_date}
 \alias{pkg_ver}
+\alias{output_format}
 
 \title{Use Bioconductor style to format R Markdown HTML output}
 

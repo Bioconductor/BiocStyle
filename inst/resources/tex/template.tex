@@ -129,6 +129,10 @@ $endif$
     }
 }
 
+$for(header-includes)$
+$header-includes$
+$endfor$
+
 \setlength{\droptitle}{-2em}
 $if(title)$
   \title{$title$}
@@ -158,10 +162,6 @@ $else$
   \date{}
   \predate{}\postdate{}
 $endif$
-
-$for(header-includes)$
-$header-includes$
-$endfor$
 
 
 \begin{document}

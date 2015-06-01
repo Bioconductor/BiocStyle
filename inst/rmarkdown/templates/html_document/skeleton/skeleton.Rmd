@@ -36,7 +36,7 @@ To enable the _Bioconductor_ style in your markdown (`.Rmd`) vignettes you need 
         VignetteBuilder: knitr
         Suggests: BiocStyle, knitr, rmarkdown
 
-- Specify `BiocStyle::html_document` as the output format and add vignette metadata in the document metadata header:
+- Specify `BiocStyle::html_document` as the output format and add vignette metadata in the document header:
 
         ---
         title: "Vignette Title"

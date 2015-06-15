@@ -1,6 +1,8 @@
 test_maketitle <- function()
 {
-    fls <- dir("cases", pattern="maketitle_test.*.Rnw", full=TRUE)
+    dir <- system.file("unitTests", "cases", package="BiocStyle")
+    fls <- dir(dir, pattern="maketitle_test.*.Rnw", full=TRUE)
+
     fls <- normalizePath(fls)
     pwd <- setwd(tempdir())
     on.exit(setwd(pwd))

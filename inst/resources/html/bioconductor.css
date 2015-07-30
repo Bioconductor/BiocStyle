@@ -11,6 +11,15 @@ body {
   line-height: 20px;
 }
 
+/* Table of contents style */
+
+div#TOC li {
+    list-style:none;
+    background-image:none;
+    background-repeat:none;
+    background-position:0;
+}
+
 /* element spacing */
 
 p, pre { 

@@ -27,6 +27,19 @@ date = "`r doc_date()`"
 pkg = "`r pkg_ver('BiocStyle')`"
 ```
 
+# Prerequisites
+
+In order to build *.Rmd documents the `r CRANpkg("rmarkdown")` package is necessary, which relies on [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document. If you are working within a recent version of RStudio then both rmarkdown and pandoc should be already installed.
+
+If you are missing the `r CRANpkg("rmarkdown")` package then you can install it from CRAN using
+
+```{r rmarkdown, eval=FALSE}
+install.packages("rmarkdown")
+```
+
+In this case a recent version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.12.3) is also required. See the [pandoc installation instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for details on installing pandoc for your platform.
+
+
 # Authoring R markdown HTML package vignettes
 
 To enable the _Bioconductor_ style in your markdown (`.Rmd`) vignettes you need to:

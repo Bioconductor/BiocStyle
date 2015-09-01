@@ -80,6 +80,12 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 \VerbatimFootnotes
 $endif$
+% Allow background in results chunks
+\definecolor{shadecolor}{RGB}{240,240,240}
+\let\oldv\verbatim
+\let\oldendv\endverbatim
+\renewenvironment{verbatim}{\vspace{-.5\baselineskip}\begin{snugshade}\oldv}{\vspace{-1em}\vspace{-1\baselineskip}\oldendv\end{snugshade}}
+%
 $if(tables)$
 \usepackage{longtable,booktabs}
 $endif$
@@ -162,7 +168,6 @@ $else$
   \date{}
   \predate{}\postdate{}
 $endif$
-
 
 \begin{document}
 

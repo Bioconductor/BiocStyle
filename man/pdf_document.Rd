@@ -33,7 +33,7 @@ R Markdown output format to pass to \code{rmarkdown::render}.
 }
 
 \author{
-  Andrzej Oles, 2014
+  Andrzej Oleś <andrzej.oles@embl.de>, 2014-2015
 }
 
 \seealso{

@@ -38,7 +38,7 @@ markdown(css.files, self.contained = TRUE, links.target = TRUE)
 }
 
 \author{
-  Andrzej Oles, 2014-2015
+  Andrzej Oleś <andrzej.oles@embl.de>, 2014-2015
 }
 
 \examples{

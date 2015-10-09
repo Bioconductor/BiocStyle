@@ -55,7 +55,7 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
 
 }
 \author{
-  Martin Morgan \url{mtmorgan@fhcrc.org}, Andrzej Oles, Wolfgang Huber
+  Martin Morgan \url{mtmorgan@fhcrc.org}, Andrzej Oleś, Wolfgang Huber
 }
 
 \examples{

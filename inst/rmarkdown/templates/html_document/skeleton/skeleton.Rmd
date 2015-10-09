@@ -1,6 +1,6 @@
 ---
 title: "Bioconductor style for HTML documents"
-author: "Andrzej Oles, Wolfgang Huber, Martin Morgan"
+author: "Andrzej Oleś, Wolfgang Huber, Martin Morgan"
 date: "`r doc_date()`"
 package: "`r pkg_ver('BiocStyle')`"
 abstract: >
@@ -29,7 +29,7 @@ pkg = "`r pkg_ver('BiocStyle')`"
 
 # Prerequisites
 
-In order to build *.Rmd documents the `r CRANpkg("rmarkdown")` package is necessary, which relies on [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document. If you are working within a recent version of RStudio then both rmarkdown and pandoc should be already installed.
+In order to build .Rmd documents the `r CRANpkg("rmarkdown")` package is necessary, which relies on [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document. If you are working within a recent version of RStudio then both rmarkdown and pandoc should be already installed.
 
 If you are missing the `r CRANpkg("rmarkdown")` package then you can install it from CRAN using
 

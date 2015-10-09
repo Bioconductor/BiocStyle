@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.8.0
+------------------------
+  
+    o R Markdown templates for Bioconductor HTML and PDF documents
+    o Suggest 'rmarkdown' as the default engine for .Rmd documents
+    o Simplified use with 'rmarkdown' - no need to include a separate code chunk calling 'BiocStyle::markdown' anymore
+    o Functions facilitating the inclusion of document compilation date and package version in the .Rmd document header
+
 CHANGES IN VERSION 1.4.0
 ------------------------
 

@@ -98,7 +98,7 @@ and Citations} article in the online documentation.
 
 
 \author{
-  Andrzej Oles <andrzej.oles@embl.de>, 2014-2015
+  Andrzej Oleś <andrzej.oles@embl.de>, 2014-2015
 }
 
 \seealso{

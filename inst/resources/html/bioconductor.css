@@ -144,8 +144,13 @@ hr {
    border-top-color: #999999;
 }
 
-span.header-section-number, span.toc-section-number {
+span.header-section-number {
   padding-right: 1em;
+}
+
+span.toc-section-number::after {
+    content: "  ";
+    white-space: pre;
 }
 
 @media print {

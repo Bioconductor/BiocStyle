@@ -37,7 +37,7 @@ R Markdown output format to pass to \code{rmarkdown::render}.
 }
 
 \seealso{
-  \code{\link{html_document}}
+  \code{\link{html_document}}, \code{\link[BiocStyle]{md_document}}
 }
 
 \examples{

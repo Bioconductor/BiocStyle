@@ -1,12 +1,6 @@
 \name{markdown}
 
 \alias{markdown}
-\alias{Biocpkg}
-\alias{Biocannopkg}
-\alias{Biocexptpkg}
-\alias{CRANpkg}
-\alias{Rpackage}
-\alias{Githubpkg}
 
 \title{Use Bioconductor CSS style to format HTML vignettes}
 
@@ -23,7 +17,7 @@ markdown(css.files, self.contained = TRUE, links.target = TRUE)
 
   \item{css.files}{character vector containing the location of additional \code{.css} files.}
 
-  \item{self.contained}{logical(1), should the content of the CSS \code{stylesheet} files be beincluded into the html file or should they be saved as separte files.}
+  \item{self.contained}{logical(1), should the content of the CSS \code{stylesheet} files be included into the html file or should they be saved as separate files.}
   
   \item{links.target}{logical(1), should external links open in new browser tab/window.}
   

@@ -95,12 +95,8 @@ Software:
 %%
 Packages:
 \begin{itemize}
-  \exitem{Biocpkg}{IRanges}{for \Bioconductor{} software packages, including a
-  link to the release version landing page,}
-  \exitem{Biocannopkg}{org.Hs.eg.db}{for \Bioconductor{} annotation packages,
-  including a link to the release version landing page,}
-  \exitem{Biocexptpkg}{parathyroidSE}{for \Bioconductor{} experiment data
-  packages, including a link to the release version landing page,}
+  \exitem{Biocpkg}{IRanges}{for \Bioconductor{} software, annotation and experiment data packages, including a
+  link to the release landing page or if the package is only in devel, to the devel landing page.}
   \exitem{CRANpkg}{data.table}{for \R{} packages available on CRAN, including
   a link to the FHCRC CRAN mirror landing page,}
   \exitem{Githubpkg}{rstudio/rmarkdown}{for \R{} packages available on GitHub, including a link to the package repository,}

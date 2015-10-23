@@ -82,23 +82,18 @@ markdown <-
 }
 
 
-## macros definitions
-
-.release.repository <- "http://bioconductor.org/packages/release"
+## macro definitions
 
 Biocpkg <- function(pkg) {
-    fmt <- '[%s](%s/bioc/html/%s.html)'
-    Rpackage( sprintf(fmt, pkg, .release.repository, pkg) )
+    Rpackage( sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg) )
 }
 
 Biocannopkg <- function(pkg) {
-    fmt <- '[%s](%s/data/annotation/html/%s.html)'
-    Rpackage( sprintf(fmt, pkg, .release.repository, pkg) )
+    Biocpkg(pkg)
 }
 
 Biocexptpkg <- function(pkg) {
-    fmt <- '[%s](%s/data/experiment/html/%s.html)'
-    Rpackage( sprintf(fmt, pkg, .release.repository, pkg) )
+    Biocpkg(pkg)
 }
 
 CRANpkg <- function(pkg) {
@@ -111,16 +106,20 @@ Rpackage <- function(pkg) {
     sprintf('*%s*', pkg)
 }
 
-Githubpkg <- function(pkg) {
+Githubpkg <- function(repo, pkg) {
     github <- "https://github.com"
-    pkg = strsplit(pkg, split = "/", fixed = TRUE)[[1]]
-    Rpackage( sprintf('[%s](%s/%s/%s)', pkg[2], github, pkg[1], pkg[2]) )
+    ## extract package name
+    if (missing(pkg)) {
+      names = strsplit(repo, split = "/", fixed = TRUE)[[1L]]
+      pkg = names[length(names)]
+    }
+    Rpackage( sprintf('[%s](%s/%s)', pkg, github, repo) )
 }
 
 ## yaml header convenience functions
 
-pkg_ver <- function(name) {
-  paste(name, packageVersion(name))
+pkg_ver <- function(pkg) {
+  paste(pkg, packageVersion(pkg))
 }
 
 doc_date <- function() {

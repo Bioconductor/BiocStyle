@@ -1,9 +1,6 @@
 \name{html_document}
 
 \alias{html_document}
-\alias{doc_date}
-\alias{pkg_ver}
-\alias{output_format}
 
 \title{Use Bioconductor style to format R Markdown HTML output}
 
@@ -102,7 +99,7 @@ and Citations} article in the online documentation.
 }
 
 \seealso{
-  \code{\link[BiocStyle]{pdf_document}}
+  \code{\link[BiocStyle]{pdf_document}}, \code{\link[BiocStyle]{md_document}}
 }
 
 \examples{

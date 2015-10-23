@@ -66,7 +66,7 @@ The `vignette` section is required in order to instruct R how to build the vigne
   
 It is also possible to specify additional details such as:
 
-- document compilation `date` inserted using the function `doc_date`
+- document compilation `date` inserted using the helper function `doc_date`
 - `package` version specification added using `pkg_ver`
 - vignette `abstract`
     
@@ -144,15 +144,8 @@ macro <- function(name, pkg, description)
 `r Biocpkg("BiocStyle")` introduces the following macros useful when
 referring to _R_ packages:
 
-* `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software packages,
-  including a link to the release version landing page,")`.
-
-* `r macro("Biocannopkg", "org.Hs.eg.db", "for _Bioconductor_ annotation
-  packages, including a link to the release version landing page,")`.
-  
-* `r macro("Biocexptpkg", "parathyroidSE", "for _Bioconductor_
-  experiment data packages, including a link to the release version
-  landing page,")`.
+* `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software, annotation and experiment data packages,
+  including a link to the release landing page or if the package is only in devel, to the devel landing page,")`.
 
 * `r macro("CRANpkg", "data.table", "for _R_ packages available on
   CRAN, including a link to the FHCRC CRAN mirror landing page,")`.

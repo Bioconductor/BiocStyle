@@ -28,9 +28,13 @@ pdf_document <- function(toc = TRUE,
     includes$in_header = c(includes$in_header, inc)
   
   # call the base pdf_document function
-  rmarkdown::pdf_document(toc = toc,
-                          number_sections = number_sections,
-                          template = template,
-                          includes = includes,
-                          ...)
+  rmarkdown::output_format(knitr = rmarkdown::knitr_options(opts_chunk = list(collapse=TRUE)),
+                           pandoc = NULL,
+                           base_format = rmarkdown::pdf_document(
+                            toc = toc,
+                            number_sections = number_sections,
+                            template = template,
+                            includes = includes,
+                            ...)
+  )
 }

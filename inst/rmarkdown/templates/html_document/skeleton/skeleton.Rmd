@@ -19,10 +19,6 @@ code <- function(...) {
     cat(paste(..., sep = "\n"))
 }
 
-code2 <- function(...) {
-    cat(paste("```markdown", ..., "\n", "```", sep = "\n"))
-}
-
 date = "`r doc_date()`"
 pkg = "`r pkg_ver('BiocStyle')`"
 ```
@@ -67,7 +63,7 @@ The `vignette` section is required in order to instruct R how to build the vigne
 It is also possible to specify additional details such as:
 
 - document compilation `date` inserted using the helper function `doc_date`
-- `package` version specification added using `pkg_ver`
+- `package` version specification added by `pkg_ver`
 - vignette `abstract`
     
 as in the following example. Note the inclusion of an additional style sheet `custom.css` by specifying it in the document header.

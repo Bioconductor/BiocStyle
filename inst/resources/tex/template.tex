@@ -81,10 +81,10 @@ $if(verbatim-in-note)$
 \VerbatimFootnotes
 $endif$
 % Allow background in results chunks
+\usepackage{color,framed}
 \definecolor{shadecolor}{RGB}{240,240,240}
-\let\oldv\verbatim
-\let\oldendv\endverbatim
-\renewenvironment{verbatim}{\vspace{-.5\baselineskip}\begin{snugshade}\oldv}{\vspace{-1em}\vspace{-1\baselineskip}\oldendv\end{snugshade}}
+\let\oldverbatim\verbatim
+\renewenvironment{verbatim}{\begin{snugshade}\begin{oldverbatim}}{\end{oldverbatim}\end{snugshade}}
 %
 $if(tables)$
 \usepackage{longtable,booktabs}

@@ -1,0 +1,334 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Bioconductor}[2013/07/01 Bioconductor vignette style]
+% 
+\PassOptionsToPackage{usenames,dvipsnames}{color}
+\RequirePackage{color}
+\definecolor{BiocBlue}{RGB}{24,129,194}
+\definecolor{BiocGreen}{RGB}{135,177,63}
+\definecolor{BiocGray}{cmyk}{0,0,0,0.50}
+\definecolor{BiocMagenta}{rgb}{1, 0, 1}
+\definecolor{BiocRed}{rgb}{1, 0, 0}
+\definecolor{BiocBittersweet}{cmyk}{0,0.75,1,0.24}
+%
+\RequirePackage[%
+ pdfpagelabels,%
+ plainpages=false,%
+ pdfborder={0 0 0},%
+ bookmarks=true,%
+ bookmarksopen=true,%
+ bookmarksnumbered=true,%
+ colorlinks,%
+ breaklinks,%
+ linkcolor=BiocBlue,%
+ citecolor=BiocBlue,%
+ anchorcolor=BiocBlue,%
+ urlcolor=BiocBlue,%
+ citebordercolor={.7 .7 .7},%
+ linkbordercolor={.7 .7 .7},%
+ urlbordercolor={.7 .7 .7},%
+ raiselinks,%
+ pdfusetitle,%
+ pdftex]{hyperref}
+\urlstyle{same}  % don't use monospace font for urls
+\pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
+% Define page layout
+\RequirePackage{geometry}
+\newlength\widthdiff
+\setlength\widthdiff{-210mm}
+\advance\widthdiff\paperwidth
+\newlength\leftoffset
+\setlength\leftoffset{35mm}
+%\advance\leftoffset.5\widthdiff
+\newlength\hfskip
+\setlength\hfskip{15mm}
+\newlength\margin
+\setlength\margin{20mm}
+%
+\newlength\layoutw
+\setlength\layoutw{210mm}
+\newlength\layouth
+\setlength\layouth{11in}
+\newlength\layouthoff
+\newlength\layoutvoff
+\setlength\layouthoff\paperwidth
+\setlength\layoutvoff\paperheight
+\advance\layouthoff-\layoutw
+\advance\layoutvoff-\layouth
+\geometry{%
+% showframe,%
+% page layout equals common area of letter and A4
+ layoutsize={\layoutw,\layouth},%
+ layouthoffset=.5\layouthoff,%
+ centering=true,%
+ total={120mm,210mm},%
+ marginparsep=5mm,%
+ marginparwidth=30mm,%
+ left=35mm,%
+ right=55mm,%
+ %top=35mm,%
+ headheight=\hfskip,%
+ headsep=0mm,%
+ footskip=\hfskip%
+}
+\newlength{\overhang}
+\setlength{\overhang}{15mm}
+%% Use Latin Modern Sans Serif font
+\renewcommand\familydefault\sfdefault
+\renewcommand\sfdefault{lmss}
+%% Beramono font for TT font
+\RequirePackage[scaled=0.8]{beramono}
+\RequirePackage[T1]{fontenc}
+%
+\RequirePackage{titlesec, etoolbox}
+% Sections
+\titleformat{\section}
+{\LARGE\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+  {\hspace{-\overhang}\makebox[\overhang][l]{\thesection}}{0in}
+%{\expandafter\ifstrequal\expandafter{\thesection}{}{\hspace{-1.5cm}}{}}
+{}
+[\vspace{-2.5ex}\hspace{-\overhang}\titlerule]
+% Subsection
+\titleformat{\subsection}
+{\Large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+{\hspace{-\overhang}\makebox[\overhang][l]{\thesubsection}}{0in}{}
+% Subsubsection
+\titleformat{\subsubsection}
+{\large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+{\hspace{-\overhang}\makebox[\overhang][l]{\thesubsubsection}}{0in}{}
+% Flush left titles that are not numbered
+\let\@contentsname\contentsname
+\renewcommand{\contentsname}{\hspace{-\overhang}\@contentsname}
+\let\@refname\refname
+\renewcommand{\refname}{\hspace{-\overhang}\@refname}
+% \RequirePackage{sectsty}
+% \sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
+% \subsectionfont{\sffamily\bfseries\color{BiocBlue}}
+% \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
+%% Code and output chunks
+\RequirePackage{framed}
+\fboxsep=0mm
+\RequirePackage{ifthen}
+\definecolor{shadecolor}{RGB}{240,240,240}
+\newlength{\voverhang}
+\setlength\voverhang{\overhang}
+%% The implementation of the following environment is based on snugshade* from the package framed
+\newenvironment{myshaded}{%
+  \definecolor{shadecolor}{RGB}{240,240,240}
+  \def\FrameCommand##1{\fboxsep=5mm%
+%  \ifthenelse{\lengthtest{\@totalleftmargin=0mm}}%
+%   {\setlength\voverhang{\overhang}}{\setlength\voverhang{\fboxsep}}
+   \hskip-\voverhang \hskip\@totalleftmargin
+   \colorbox{shadecolor}{\hskip\voverhang \hskip-\fboxsep ##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+  \MakeFramed {\advance\hsize\fboxsep \advance\hsize-\width
+    \@totalleftmargin\z@ \linewidth\hsize
+    \advance\labelsep\fboxsep
+    \@setminipage}%
+ }{\par\unskip\@minipagefalse\endMakeFramed}
+%% Code chunks styling
+% Sweave
+\newenvironment{Schunk}{\begin{myshaded}}{\end{myshaded}}
+% knitr
+\ifdefined\kframe\renewenvironment{kframe}{\begin{myshaded}}{\end{myshaded}}\fi
+%% Title
+\let\@bioctitle\@empty
+\let\@oldtitle\title
+\renewcommand{\title}[1]{\def\@bioctitle{#1}\@oldtitle{#1}}
+\newcommand{\bioctitle}[2][]{\@oldtitle{#2}%
+  \def\tmp{#1}\ifx\tmp\@empty\def\@bioctitle{#2}\else\def\@bioctitle{#1}\fi}
+%% Page layout
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+%\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\fontfamily{phv}\selectfont\large\@bioctitle}}
+\fancyhfoffset[L]{\overhang}
+\fancyhfoffset[R]{35mm}
+\renewcommand{\headrule}{}
+\fancyfoot[R]{\fontfamily{phv}\selectfont\bfseries\thepage}
+%
+\RequirePackage{enumitem}
+\setlist[itemize]{label=\color{BiocBlue}\textbullet}
+%
+\RequirePackage{parskip}
+%% Alter some LaTeX defaults for better treatment of floats
+%% See p.105 of "TeX Unbound" for suggested values
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand\topfraction{0.9}
+\renewcommand\bottomfraction{0.5}
+\renewcommand\textfraction{0.1}
+\renewcommand\floatpagefraction{0.9}
+\renewcommand\dbltopfraction{0.9}
+\renewcommand\dblfloatpagefraction{0.8}
+%
+%% Title page
+\renewcommand{\maketitle}{%
+%\begin{titlepage}
+\thispagestyle{empty}
+\begin{adjustwidth}{-\overhang}{0mm}
+ {\huge\fontfamily{phv}\selectfont\bfseries\color{BiocBlue}\@title\unskip\strut\par}
+\end{adjustwidth}
+{\@author\unskip\strut\par}
+{\Large\bfseries\@date\unskip\strut\par}
+%\end{titlepage}
+}
+%% Support author affiliations
+\RequirePackage[noblocks]{authblk}
+\renewcommand\Authfont{\Large\bfseries\itshape}
+\renewcommand\Affilfont{\normalsize\mdseries\upshape}
+%% Abstract
+\renewenvironment{abstract}{{\fontfamily{phv}\selectfont\bfseries\hskip-\overhang\abstractname\unskip\strut\par}}{}
+%%
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\file}[1]{'#1'}
+%
+\newcommand{\software}[1]{\textsl{#1}}
+\newcommand\R{\software{R}}
+%
+\newcommand\Bioconductor{\software{Bioconductor}}
+\newcommand{\Rpackage}[1]{\textsl{#1}}
+\newcommand\Biocpkg[1]{%
+  {\href{http://bioconductor.org/packages/#1}%
+    {\Rpackage{#1}}}}
+\newcommand\Biocannopkg[1]{\Biocpkg{#1}}
+\newcommand\Biocexptpkg[1]{\Biocpkg{#1}}
+\newcommand\CRANpkg[1]{%
+  {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
+    {\Rpackage{#1}}}}
+\newcommand\Githubpkg[1]{\GithubSplit#1\relax}
+\def\GithubSplit#1/#2\relax{{\href{https://github.com/#1/#2}%
+    {\Rpackage{#2}}}}
+%
+\RequirePackage{soul} %inline code highligting
+\sethlcolor{shadecolor}
+%
+\newcommand{\Rcode}[1]{\hl{\texttt{#1}}}
+\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Robject}[1]{\Rcode{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+%
+\newcommand{\bioccomment}[1]{\textsl{\textcolor{BiocGray}{comment: #1}}}
+\newcommand{\warning}[1]{\textsl{\textcolor{BiocMagenta}{warning: #1}}}
+\newcommand{\fixme}[1]{\textsl{\textcolor{BiocBittersweet}{fixme: #1}}}
+%
+\newcommand{\prefix}[1]{#1}
+\newcommand{\incfig}[5][tbp]{%
+  \begin{figure}[#1]%
+  \begin{center}%
+  \includegraphics[width=#3]{\prefix{#2}}%
+  \caption[#4]{\label{#2}\textbf{#4} #5}%
+  \end{center}%
+  \end{figure}%
+}
+%%
+% The placeins package provides the \FloatBarrier command.  This forces
+% LaTeX to place all of the floats before proceeding.  We'll use this to
+% keep the float (figure and table) numbers in sequence.
+\RequirePackage[section]{placeins}
+%
+\newcommand\package[2]{{\fontfamily{phv}\selectfont\bfseries\hskip-\overhang #1 version:} #2\unskip\strut\par}
+% Author block
+\RequirePackage[noblocks]{authblk}
+% Footnotes on margin
+\RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
+\RequirePackage[side, ragged, flushmargin]{footmisc}
+%
+%% FLOATS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% set figure dimensions
+\RequirePackage{graphicx}
+\makeatletter
+\def\figwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\figheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\figwidth,height=\figheight,keepaspectratio}
+%
+\def\fps@figure{htbp}
+\def\fps@table{htbp}
+%
+\RequirePackage[strict]{changepage}
+%
+\renewenvironment{table}%
+ {\@float{table}\begin{adjustwidth}{20mm}{-35mm}}
+ {\end{adjustwidth}\end@float}
+%
+\renewenvironment{figure}[1][]%
+{\@float{figure}[#1]\begin{adjustwidth}{55mm}{-35mm}}%
+{\end{adjustwidth}\end@float}
+%
+\renewenvironment{figure*}%
+{\@float{figure}\begin{adjustwidth}{20mm}{-35mm}}%
+{\end{adjustwidth}\end@float}
+%
+\newlength\capoffset
+\newenvironment{smallfigure}%
+{\setlength\capoffset{-35mm}%
+ \@float{figure}%
+ \begin{adjustwidth}{55mm}{0mm}}%
+{\end{adjustwidth}%
+ \end@float%
+ \setlength\capoffset{0mm}}
+\makeatother
+% \newenvironment{figure*}
+%                {\@dblfloat{figure}}
+%                {\end@dblfloat}
+% \newcounter{table}
+% \renewcommand\thetable{\@arabic\c@table}
+%
+%% Captions
+%
+\def\bphv{\fontfamily{phv}\selectfont\bfseries}
+\RequirePackage{caption}
+\DeclareCaptionFont{bphv}{\bphv}
+\captionsetup{%
+ font=footnotesize,%
+ labelfont=bphv,%
+% labelsep=newline,%
+ justification=RaggedRight,%
+ singlelinecheck=false,%
+}
+%% make first sentence of caption bold
+\RequirePackage{xstring}
+\makeatletter
+\newcommand\formatlabel[1]{%
+    \noexpandarg
+    \IfSubStr{#1}{.}{%
+      \StrBefore{#1}{.}[\firstcaption]%
+      \StrBehind{#1}{.}[\secondcaption]%
+      {\bphv\firstcaption}\newline\secondcaption}{%
+      #1}%
+}
+\AtBeginDocument{%
+%   \newcommand*{\org@caption}{}%
+%   \let\org@caption\@caption
+%   \def\@caption#1[#2]#3{%
+%     \org@caption{#1}[{#2}]{\formatlabel{#3}}%
+%   }%
+\newcommand\formatcaption[2]{{\bphv\color{BiocBlue}#1}\newline#2}
+  \newcommand*{\orgcaption}{}%
+  \let\orgcaption\caption
+  \def\caption{\@ifnextchar[{\@withcap}{\@withoutcap}}
+  \def\@withcap[#1]#2{\orgcaption[#1]{\formatcaption{#1}{#2}}}
+  \def\@withoutcap#1{%
+    \noexpandarg
+      \IfSubStr{#1}{.}{%
+        \StrBefore{#1}{.}[\firstcaption]%
+        \StrBehind{#1}{.}[\secondcaption]%
+      }{%
+      \def\firstcaption{#1}%
+      \def\secondcaption{}%
+      }%
+    \begin{adjustwidth}{0mm}{\capoffset}%
+    \orgcaption[\firstcaption]{\formatcaption{\firstcaption}{\secondcaption}}%
+    \end{adjustwidth}
+  }
+}   
+\makeatother
+%
+\endinput

@@ -198,7 +198,7 @@ v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @
 
-\incfig{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
+\incfig[b]{LatexStyle-figureexample}{0.25\textwidth}{A curve.}
   {The code that creates this figure is shown in the code chunk.}
 as shown in Figure~\ref{LatexStyle-figureexample}.  When the option
 \Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by

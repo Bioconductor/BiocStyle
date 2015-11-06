@@ -1,5 +1,5 @@
 latex2 <-
-    function(..., width=69, short.fignames=FALSE, fig.path,
+    function(..., width=68, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE)
 {
     options(..., width=width)
@@ -124,8 +124,10 @@ latex2 <-
 #         }
         )
         
-        
-        
+        ## code highlighting
+        opts_knit$set(out.format = "latex")
+        thm <- system.file("themes", "default.css", package = "BiocStyle")
+        knit_theme$set(thm)
         
     }
     

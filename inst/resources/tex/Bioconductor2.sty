@@ -108,11 +108,13 @@
 \RequirePackage{framed}
 \fboxsep=0mm
 \RequirePackage{ifthen}
+%\definecolor{shadecolor}{RGB}{255,240,224}
 \definecolor{shadecolor}{RGB}{240,240,240}
 \newlength{\voverhang}
 \setlength\voverhang{\overhang}
 %% The implementation of the following environment is based on snugshade* from the package framed
 \newenvironment{myshaded}{%
+%  \definecolor{shadecolor}{RGB}{255,240,224}
   \definecolor{shadecolor}{RGB}{240,240,240}
   \def\FrameCommand##1{\fboxsep=5mm%
 %  \ifthenelse{\lengthtest{\@totalleftmargin=0mm}}%
@@ -142,7 +144,7 @@
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 %\fancyhead[LE,RO]{\thepage}
-\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\fontfamily{phv}\selectfont\large\@bioctitle}}
+\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\fontfamily{phv}\selectfont\bfseries\@bioctitle}}
 \fancyhfoffset[L]{\overhang}
 \fancyhfoffset[R]{35mm}
 \renewcommand{\headrule}{}
@@ -173,7 +175,7 @@
  {\huge\fontfamily{phv}\selectfont\bfseries\color{BiocBlue}\@title\unskip\strut\par}
 \end{adjustwidth}
 {\@author\unskip\strut\par}
-{\Large\bfseries\@date\unskip\strut\par}
+{\large\bfseries\@date\unskip\strut\par}
 %\end{titlepage}
 }
 %% Support author affiliations
@@ -206,8 +208,9 @@
 \RequirePackage{soul} %inline code highligting
 \sethlcolor{shadecolor}
 %
+\definecolor{warningcolor}{RGB}{240, 128, 32}
 \newcommand{\Rcode}[1]{\hl{\texttt{#1}}}
-\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Rfunction}[1]{{\color{warningcolor}\bfseries\Rcode{#1}}}
 \newcommand{\Robject}[1]{\Rcode{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 %
@@ -254,12 +257,50 @@
 %
 \RequirePackage[strict]{changepage}
 %
-\renewenvironment{table}%
- {\@float{table}\begin{adjustwidth}{20mm}{-35mm}}
- {\end{adjustwidth}\end@float}
 %
-\renewenvironment{figure}[1][]%
-{\@float{figure}[#1]\begin{adjustwidth}{55mm}{-35mm}}%
+% Define float environments
+%
+% \newcommand\regularfloat[1]{%
+% \renewenvironment{#1}[1][\fps@#1]%
+%  {\edef\@tempa{\noexpand\@float{#1}[##1]}
+%  \@tempa\begin{adjustwidth}{55mm}{-35mm}}
+%  {\end{adjustwidth}\end@float}
+% }
+% %
+% \newcommand\widefloat[1]{%
+% \renewenvironment{#1*}[1][htbp]%
+%  {\@float{#1}[##1]\begin{adjustwidth}{20mm}{-35mm}}
+%  {\end{adjustwidth}\end@float}
+% }
+% %
+% \newlength\capoffset
+% \setlength\capoffset{0mm}
+% \newcommand\smallfloat[1]{%
+% \newenvironment{small#1}[1][htbp]%
+%  {\setlength\capoffset{-35mm}\@float{#1}[#1]\begin{adjustwidth}{55mm}{0mm}}
+%  {\end{adjustwidth}\end@float\setlength\capoffset{0mm}}
+% }
+% %
+% \regularfloat{figure}
+% \smallfloat{figure}
+% \widefloat{figure}
+% %
+% %
+% \regularfloat{table}
+% \smallfloat{table}
+% \widefloat{table}
+% \renewenvironment{table}%
+%  {\@float{table}\begin{adjustwidth}{20mm}{-35mm}}
+%  {\end{adjustwidth}\end@float}
+% %
+\renewenvironment{table}[1][\fps@table]%
+{\edef\@tempa{\noexpand\@float{table}[#1]}
+\@tempa\begin{adjustwidth}{55mm}{-35mm}}%
+{\end{adjustwidth}\end@float}
+%
+\renewenvironment{figure}[1][\fps@figure]%
+{\edef\@tempa{\noexpand\@float{figure}[#1]}
+\@tempa\begin{adjustwidth}{55mm}{-35mm}}%
 {\end{adjustwidth}\end@float}
 %
 \renewenvironment{figure*}%
@@ -275,11 +316,6 @@
  \end@float%
  \setlength\capoffset{0mm}}
 \makeatother
-% \newenvironment{figure*}
-%                {\@dblfloat{figure}}
-%                {\end@dblfloat}
-% \newcounter{table}
-% \renewcommand\thetable{\@arabic\c@table}
 %
 %% Captions
 %
@@ -295,21 +331,27 @@
 }
 %% make first sentence of caption bold
 \RequirePackage{xstring}
+%
+% Regular expression extracting the first sentence
+% \RequirePackage{l3regex}
+% \ExplSyntaxOn
+% \tl_new:N \l_demo_tl
+% \cs_new:Npn \demo #1 {
+%     \tl_set:Nn \l_demo_tl {#1}
+%     \regex_replace_once:nnN { (.*?)[\.\;\:](.*) } { \c{adjustedcaption}\cB\{ \1 \cE\}\cB\{ \2 \cE\} } \l_demo_tl
+%     \tl_use:N \l_demo_tl
+% }
+% \ExplSyntaxOff
+%
 \makeatletter
-\newcommand\formatlabel[1]{%
-    \noexpandarg
-    \IfSubStr{#1}{.}{%
-      \StrBefore{#1}{.}[\firstcaption]%
-      \StrBehind{#1}{.}[\secondcaption]%
-      {\bphv\firstcaption}\newline\secondcaption}{%
-      #1}%
-}
 \AtBeginDocument{%
 %   \newcommand*{\org@caption}{}%
 %   \let\org@caption\@caption
 %   \def\@caption#1[#2]#3{%
 %     \org@caption{#1}[{#2}]{\formatlabel{#3}}%
 %   }%
+
+%
 \newcommand\formatcaption[2]{{\bphv\color{BiocBlue}#1}\newline#2}
   \newcommand*{\orgcaption}{}%
   \let\orgcaption\caption
@@ -328,7 +370,7 @@
     \orgcaption[\firstcaption]{\formatcaption{\firstcaption}{\secondcaption}}%
     \end{adjustwidth}
   }
-}   
+}
 \makeatother
 %
 \endinput

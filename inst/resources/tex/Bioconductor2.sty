@@ -83,40 +83,46 @@
 % Sections
 \titleformat{\section}
 {\LARGE\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-  {\hspace{-\overhang}\makebox[\overhang][l]{\thesection}}{0in}
+  {\makebox[\overhang][l]{\thesection}}{0in}
 %{\expandafter\ifstrequal\expandafter{\thesection}{}{\hspace{-1.5cm}}{}}
 {}
-[\vspace{-2.5ex}\hspace{-\overhang}\titlerule]
+[\vspace{-.2ex}\titlerule]
 % Subsection
 \titleformat{\subsection}
 {\Large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-{\hspace{-\overhang}\makebox[\overhang][l]{\thesubsection}}{0in}{}
+{\makebox[\overhang][l]{\thesubsection}}{0in}{}
 % Subsubsection
 \titleformat{\subsubsection}
 {\large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-{\hspace{-\overhang}\makebox[\overhang][l]{\thesubsubsection}}{0in}{}
+{\makebox[\overhang][l]{\thesubsubsection}}{0in}{}
+%
+\titlespacing{\section}{-\overhang}{*3.5}{*2.5}
+\titlespacing{\subsection}{-\overhang}{*3.25}{*1.5}
+\titlespacing{\subsubsection}{-\overhang}{*3.25}{*1.5}
+%
 % Flush left titles that are not numbered
-\let\@contentsname\contentsname
-\renewcommand{\contentsname}{\hspace{-\overhang}\@contentsname}
-\let\@refname\refname
-\renewcommand{\refname}{\hspace{-\overhang}\@refname}
+%\let\@contentsname\contentsname
+%\renewcommand{\contentsname}{\hspace{-\overhang}\@contentsname}
+%\let\@refname\refname
+%\renewcommand{\refname}{\hspace{-\overhang}\@refname}
 % \RequirePackage{sectsty}
 % \sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
 % \subsectionfont{\sffamily\bfseries\color{BiocBlue}}
 % \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
 %% Code and output chunks
 \RequirePackage{framed}
-\fboxsep=0mm
+%\fboxsep=0mm
 \RequirePackage{ifthen}
 %\definecolor{shadecolor}{RGB}{255,240,224}
 \definecolor{shadecolor}{RGB}{240,240,240}
 \newlength{\voverhang}
 \setlength\voverhang{\overhang}
 %% The implementation of the following environment is based on snugshade* from the package framed
+\OuterFrameSep=0mm
 \newenvironment{myshaded}{%
 %  \definecolor{shadecolor}{RGB}{255,240,224}
-  \definecolor{shadecolor}{RGB}{240,240,240}
-  \def\FrameCommand##1{\fboxsep=5mm%
+  \definecolor{shadecolor}{RGB}{240,240,240}%
+  \def\FrameCommand##1{\fboxsep=1em%
 %  \ifthenelse{\lengthtest{\@totalleftmargin=0mm}}%
 %   {\setlength\voverhang{\overhang}}{\setlength\voverhang{\fboxsep}}
    \hskip-\voverhang \hskip\@totalleftmargin
@@ -295,26 +301,30 @@
 % %
 \renewenvironment{table}[1][\fps@table]%
 {\edef\@tempa{\noexpand\@float{table}[#1]}
-\@tempa\begin{adjustwidth}{55mm}{-35mm}}%
+\@tempa\begin{adjustwidth}{20mm}{}}%
 {\end{adjustwidth}\end@float}
 %
 \renewenvironment{figure}[1][\fps@figure]%
-{\edef\@tempa{\noexpand\@float{figure}[#1]}
-\@tempa\begin{adjustwidth}{55mm}{-35mm}}%
-{\end{adjustwidth}\end@float}
+{\setlength\capoffset{-35mm}%
+\edef\@tempa{\noexpand\@float{figure}[#1]}
+\@tempa\begin{adjustwidth}{20mm}{}}%
+{\end{adjustwidth}\end@float%
+ \setlength\capoffset{0mm}
+}
 %
-\renewenvironment{figure*}%
+\renewenvironment{figure*}[1][\fps@figure]%
 {\@float{figure}\begin{adjustwidth}{20mm}{-35mm}}%
 {\end{adjustwidth}\end@float}
 %
 \newlength\capoffset
 \newenvironment{smallfigure}%
-{\setlength\capoffset{-35mm}%
+{\setlength\capoffset{-70mm}%
  \@float{figure}%
- \begin{adjustwidth}{55mm}{0mm}}%
+ \begin{adjustwidth}{20mm}{35mm}}%
 {\end{adjustwidth}%
  \end@float%
- \setlength\capoffset{0mm}}
+ \setlength\capoffset{0mm}
+}
 \makeatother
 %
 %% Captions
@@ -370,7 +380,78 @@
     \orgcaption[\firstcaption]{\formatcaption{\firstcaption}{\secondcaption}}%
     \end{adjustwidth}
   }
+% start newpage after TOC
+% \let\tableofcontentsorg\tableofcontents
+% \def\tableofcontents{\tableofcontentsorg\clearpage}
+%
 }
 \makeatother
+%
+% TOC
+%
+% styling
+%
+\RequirePackage{titletoc}
+%
+\def\sectionfont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+\def\pagefont{\normalsize\fontfamily{phv}\selectfont\mdseries\color{black}}
+%
+\newlength{\secindent}
+\setlength{\secindent}{10mm}
+\newlength{\rightextend}
+\setlength{\rightextend}{20mm}
+%
+%\contentsmargin{0mm}
+%
+% \titlecontents{section}[0mm]%
+% {\Large\sectionfont}%
+% {\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage}%
+\titlecontents{section}[\secindent]%
+{\Large\sectionfont}%
+{\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
+[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}]
+%
+\titlecontents{subsection}[2\secindent]%
+{\large\sectionfont}%
+{\contentslabel{\secindent}}{}{\pagefont\titlerule*[12pt]{. }\contentspage\hspace*{-\rightextend}}
+%
+\titlecontents{subsubsection}[3\secindent]%
+{\normalfont\sectionfont}%
+{\contentslabel{\secindent}}{}{\pagefont\titlerule*[12pt]{. }\contentspage\hspace*{-\rightextend}}
+%
+% \RequirePackage{tocloft}
+% \setlength\cftsecindent{-\overhang}
+% \setlength\cftsecnumwidth{\overhang}
+% \renewcommand{\cftsecfont}{\LARGE\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+% \newcommand{\sectionline}{%
+%  \nointerlineskip \vspace{\baselineskip}%
+%  \hspace{\fill}\rule{0.5\linewidth}{.7pt}\hspace{\fill}%
+%  \par\nointerlineskip \vspace{\baselineskip}
+% }
+% \renewcommand{\cftsecafterpnum}{\newline\mbox{}\hspace{-\overhang}\hrulefill\par}
+% %
+% \setlength\cftsubsecindent{-\overhang}
+% \setlength\cftsubsecnumwidth{\overhang}
+% \renewcommand{\cftsubsecfont}{\Large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+% %
+% \setlength\cftsubsubsecindent{-\overhang}
+% \setlength\cftsubsubsecnumwidth{\overhang}
+% \renewcommand{\cftsubsubsecfont}{\large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+% %
+% Equation numbering
+%
+\usepackage[leqno]{mathtools}
+\newtagform{brackets}[\setlength{\fboxsep}{1pt}\fontfamily{phv}\selectfont\bfseries\small\color{white}\fcolorbox{BiocBlue}{BiocBlue}]{}{}
+\usetagform{brackets}
+\let\eqreforg\eqref
+\renewcommand{\eqref}[1]{\hypersetup{linkcolor=white}\eqreforg{#1}\hypersetup{linkcolor=BiocBlue}}
+%
+% References
+%\renewcommand*{\bibfont}{\raggedright}
+\makeatletter
+\renewcommand{\@biblabel}[1]{[#1]\hfill}
+\makeatother
+\let\thebibliographyorg\thebibliography
+\def\thebibliography{\raggedright\thebibliographyorg}
 %
 \endinput

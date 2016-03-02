@@ -14,15 +14,6 @@ output:
   BiocStyle::html_document
 ---
 
-```{r code, echo = FALSE}
-code <- function(...) {
-    cat(paste(..., sep = "\n"))
-}
-
-date = "`r doc_date()`"
-pkg = "`r pkg_ver('BiocStyle')`"
-```
-
 # Prerequisites
 
 In order to build .Rmd documents the `r CRANpkg("rmarkdown")` package is necessary, which relies on [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document. If you are working within a recent version of RStudio then both rmarkdown and pandoc should be already installed.
@@ -68,11 +59,17 @@ It is also possible to specify additional details such as:
     
 as in the following example. Note the inclusion of an additional style sheet `custom.css` by specifying it in the document header.
 
+```{r code, echo = FALSE}
+## The following redefinitions are only for printing the verbatim header below
+doc_date = function() "`r doc_date()`"
+pkg_ver = function(name) sprintf("`r pkg_ver('%s')`", name)
+```
+
     ---
     title: "Vignette Title"
     author: "Vignette Author"
-    date: "`r date`"
-    package: "`r pkg`"
+    date: "`r doc_date()`"
+    package: "`r pkg_ver('BiocStyle')`"
     abstract: >
       Vignette Abstract
     vignette: >
@@ -110,10 +107,8 @@ To use the `r CRANpkg('markdown')` vignette builder engine:
 - Add the following code chunk at the beginning of your `.Rmd`
   vignettes
 
-        ```{r, echo = FALSE , results = 'asis'}
-        code("```{r style, echo = FALSE, results = 'asis'}",
-             "BiocStyle::markdown()",
-             "```")
+        ```{r style, echo = FALSE, results = 'asis'}`r ''`
+        BiocStyle::markdown()
         ```
 
 The way of attaching CSS files when using
@@ -122,10 +117,8 @@ In the former case additional style sheets can be
 used by providing them to the `BiocStyle::markdown` function.
 To include `custom.css` file use
 
-    ```{r, echo = FALSE, results = 'asis'}
-    code("```{r style, echo = FALSE, results = 'asis'}",
-         "BiocStyle::markdown(css.files = c('custom.css'))",
-         "```")
+    ```{r style, echo = FALSE, results = 'asis'}`r ''`
+    BiocStyle::markdown(css.files = c('custom.css'))
     ```
 
 

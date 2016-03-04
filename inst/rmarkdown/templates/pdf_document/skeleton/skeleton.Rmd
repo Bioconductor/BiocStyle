@@ -11,14 +11,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output: 
-  BiocStyle::pdf_document:
-    keep_tex: true
+  BiocStyle::pdf_document
 ---
-
-```{r code, echo = FALSE}
-date = "`r doc_date()`"
-pkg = "`r pkg_ver('BiocStyle')`"
-```
 
 # Authoring R markdown PDF package vignettes
 
@@ -52,11 +46,17 @@ It is also possible to specify additional details such as:
     
 as in the following example.
 
+```{r code, echo = FALSE}
+## The following redefinitions are only for printing the verbatim header below
+doc_date = function() "`r doc_date()`"
+pkg_ver = function(name) sprintf("`r pkg_ver('%s')`", name)
+```
+
     ---
     title: "Vignette Title"
     author: "Vignette Author"
-    date: "`r date`"
-    package: "`r pkg`"
+    date: "`r doc_date()`"
+    package: "`r pkg_ver('BiocStyle')`"
     abstract: >
       Vignette Abstract
     vignette: >

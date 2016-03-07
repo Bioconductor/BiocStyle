@@ -80,20 +80,24 @@
 \RequirePackage[T1]{fontenc}
 %
 \RequirePackage{titlesec, etoolbox}
-% Sections
+% 
+\def\sectionfont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+% Section
 \titleformat{\section}
-{\LARGE\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-  {\makebox[\overhang][l]{\thesection}}{0in}
-%{\expandafter\ifstrequal\expandafter{\thesection}{}{\hspace{-1.5cm}}{}}
-{}
+{\LARGE\sectionfont}
+{\makebox[\overhang][l]{\thesection}}{0in}{}
 [\vspace{-.2ex}\titlerule]
+% Section, numberless
+\titleformat{name=\section,numberless}
+{\LARGE\sectionfont}
+{}{0in}{}
 % Subsection
 \titleformat{\subsection}
-{\Large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+{\Large\sectionfont}
 {\makebox[\overhang][l]{\thesubsection}}{0in}{}
 % Subsubsection
 \titleformat{\subsubsection}
-{\large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+{\large\sectionfont}
 {\makebox[\overhang][l]{\thesubsubsection}}{0in}{}
 %
 \titlespacing{\section}{-\overhang}{*3.5}{*2.5}
@@ -393,11 +397,8 @@
 %
 \RequirePackage{titletoc}
 %
-\def\sectionfont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
 \def\pagefont{\normalsize\fontfamily{phv}\selectfont\mdseries\color{black}}
 %
-\newlength{\secindent}
-\setlength{\secindent}{10mm}
 \newlength{\rightextend}
 \setlength{\rightextend}{20mm}
 %
@@ -406,38 +407,19 @@
 % \titlecontents{section}[0mm]%
 % {\Large\sectionfont}%
 % {\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage}%
-\titlecontents{section}[\secindent]%
-{\Large\sectionfont}%
-{\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
-[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}]
+\titlecontents{section}[10mm]%
+{\addvspace{2.5ex}\Large\sectionfont}%
+{\contentslabel{10mm}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
+[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}\addvspace{1.0ex}]
 %
-\titlecontents{subsection}[2\secindent]%
-{\large\sectionfont}%
-{\contentslabel{\secindent}}{}{\pagefont\titlerule*[12pt]{. }\contentspage\hspace*{-\rightextend}}
+\titlecontents{subsection}[22mm]%
+{\addvspace{1.0ex}\large\sectionfont}%
+{\contentslabel{12mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
 %
-\titlecontents{subsubsection}[3\secindent]%
+\titlecontents{subsubsection}[35mm]%
 {\normalfont\sectionfont}%
-{\contentslabel{\secindent}}{}{\pagefont\titlerule*[12pt]{. }\contentspage\hspace*{-\rightextend}}
+{\contentslabel{13mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
 %
-% \RequirePackage{tocloft}
-% \setlength\cftsecindent{-\overhang}
-% \setlength\cftsecnumwidth{\overhang}
-% \renewcommand{\cftsecfont}{\LARGE\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-% \newcommand{\sectionline}{%
-%  \nointerlineskip \vspace{\baselineskip}%
-%  \hspace{\fill}\rule{0.5\linewidth}{.7pt}\hspace{\fill}%
-%  \par\nointerlineskip \vspace{\baselineskip}
-% }
-% \renewcommand{\cftsecafterpnum}{\newline\mbox{}\hspace{-\overhang}\hrulefill\par}
-% %
-% \setlength\cftsubsecindent{-\overhang}
-% \setlength\cftsubsecnumwidth{\overhang}
-% \renewcommand{\cftsubsecfont}{\Large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-% %
-% \setlength\cftsubsubsecindent{-\overhang}
-% \setlength\cftsubsubsecnumwidth{\overhang}
-% \renewcommand{\cftsubsubsecfont}{\large\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
-% %
 % Equation numbering
 %
 \usepackage[leqno]{mathtools}

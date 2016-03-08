@@ -79,26 +79,23 @@
 \RequirePackage[scaled=0.8]{beramono}
 \RequirePackage[T1]{fontenc}
 %
-\RequirePackage{titlesec, etoolbox}
+\RequirePackage[newlinetospace]{titlesec}
+\RequirePackage{etoolbox}
 % 
-\def\sectionfont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+\def\titlefont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
 % Section
 \titleformat{\section}
-{\LARGE\sectionfont}
+{\LARGE\titlefont}
 {\makebox[\overhang][l]{\thesection}}{0in}{}
 [\vspace{-.2ex}\titlerule]
 % Section, numberless
 \titleformat{name=\section,numberless}
-{\LARGE\sectionfont}
+{\LARGE\titlefont}
 {}{0in}{}
-% Subsection
-\titleformat{\subsection}
-{\Large\sectionfont}
-{\makebox[\overhang][l]{\thesubsection}}{0in}{}
-% Subsubsection
-\titleformat{\subsubsection}
-{\large\sectionfont}
-{\makebox[\overhang][l]{\thesubsubsection}}{0in}{}
+% Subsection and Subsubsection
+\titlelabel{\makebox[\overhang][l]{\thetitle}}
+\titleformat*{\subsection}{\Large\titlefont}
+\titleformat*{\subsubsection}{\large\titlefont}
 %
 \titlespacing{\section}{-\overhang}{*3.5}{*2.5}
 \titlespacing{\subsection}{-\overhang}{*3.25}{*1.5}
@@ -110,9 +107,9 @@
 %\let\@refname\refname
 %\renewcommand{\refname}{\hspace{-\overhang}\@refname}
 % \RequirePackage{sectsty}
-% \sectionfont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
-% \subsectionfont{\sffamily\bfseries\color{BiocBlue}}
-% \subsubsectionfont{\sffamily\bfseries\color{BiocBlue}}
+% \titlefont{\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
+% \subtitlefont{\sffamily\bfseries\color{BiocBlue}}
+% \subsubtitlefont{\sffamily\bfseries\color{BiocBlue}}
 %% Code and output chunks
 \RequirePackage{framed}
 %\fboxsep=0mm
@@ -405,19 +402,19 @@
 %\contentsmargin{0mm}
 %
 % \titlecontents{section}[0mm]%
-% {\Large\sectionfont}%
+% {\Large\titlefont}%
 % {\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage}%
 \titlecontents{section}[10mm]%
-{\addvspace{2.5ex}\Large\sectionfont}%
+{\addvspace{2.5ex}\Large\titlefont}%
 {\contentslabel{10mm}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
 [\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}\addvspace{1.0ex}]
 %
 \titlecontents{subsection}[22mm]%
-{\addvspace{1.0ex}\large\sectionfont}%
+{\addvspace{1.0ex}\large\titlefont}%
 {\contentslabel{12mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsubsection}[35mm]%
-{\normalfont\sectionfont}%
+{\normalfont\titlefont}%
 {\contentslabel{13mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 % Equation numbering

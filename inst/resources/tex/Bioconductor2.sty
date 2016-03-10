@@ -72,6 +72,12 @@
 }
 \newlength{\overhang}
 \setlength{\overhang}{15mm}
+\newlength{\rightoffset} % right offset of the document body
+\setlength{\rightoffset}{35mm}
+\newlength{\capoffset} % right offset of the caption relative to the width of the float
+% capoffset is reset for each float environment
+\newlength{\fltoffset} % left offset of floats relative to paragraph text
+\setlength{\fltoffset}{20mm} 
 %% Use Latin Modern Sans Serif font
 \renewcommand\familydefault\sfdefault
 \renewcommand\sfdefault{lmss}
@@ -81,8 +87,11 @@
 %
 \RequirePackage[newlinetospace]{titlesec}
 \RequirePackage{etoolbox}
-% 
-\def\titlefont{\fontfamily{phv}\selectfont\mdseries\color{BiocBlue}}
+%% Font definitions
+\def\mdhelvet{\fontfamily{phv}\selectfont\mdseries}
+\def\bfhelvet{\fontfamily{phv}\selectfont\bfseries}
+%
+\def\titlefont{\mdhelvet\color{BiocBlue}}
 % Section
 \titleformat{\section}
 {\LARGE\titlefont}
@@ -151,11 +160,11 @@
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 %\fancyhead[LE,RO]{\thepage}
-\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\fontfamily{phv}\selectfont\bfseries\@bioctitle}}
+\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
 \fancyhfoffset[L]{\overhang}
-\fancyhfoffset[R]{35mm}
+\fancyhfoffset[R]{\rightoffset}
 \renewcommand{\headrule}{}
-\fancyfoot[R]{\fontfamily{phv}\selectfont\bfseries\thepage}
+\fancyfoot[R]{\bfhelvet\thepage}
 %
 \RequirePackage{enumitem}
 \setlist[itemize]{label=\color{BiocBlue}\textbullet}
@@ -179,10 +188,13 @@
 %\begin{titlepage}
 \thispagestyle{empty}
 \begin{adjustwidth}{-\overhang}{0mm}
- {\huge\fontfamily{phv}\selectfont\bfseries\color{BiocBlue}\@title\unskip\strut\par}
+ {\huge\bfhelvet\color{BiocBlue}\@title\unskip\strut\par}
 \end{adjustwidth}
+\addvspace{3.5ex plus 0.5ex minus 0.25ex}
 {\@author\unskip\strut\par}
+\addvspace{2.5ex plus 0.5ex minus 0.25ex}
 {\large\bfseries\@date\unskip\strut\par}
+\addvspace{1.5ex plus 0.25ex minus 0.15ex}
 %\end{titlepage}
 }
 %% Support author affiliations
@@ -190,7 +202,9 @@
 \renewcommand\Authfont{\Large\bfseries\itshape}
 \renewcommand\Affilfont{\normalsize\mdseries\upshape}
 %% Abstract
-\renewenvironment{abstract}{{\fontfamily{phv}\selectfont\bfseries\hskip-\overhang\abstractname\unskip\strut\par}}{}
+\renewenvironment{abstract}%
+{{\bfhelvet\hskip-\overhang\abstractname\unskip\strut\par}}%
+{\vspace{1.5ex plus 0.25ex minus 0.15ex}}
 %%
 \newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \newcommand{\file}[1]{'#1'}
@@ -240,7 +254,7 @@
 % keep the float (figure and table) numbers in sequence.
 \RequirePackage[section]{placeins}
 %
-\newcommand\package[2]{{\fontfamily{phv}\selectfont\bfseries\hskip-\overhang #1 version:} #2\unskip\strut\par}
+\newcommand\package[2]{{\bfhelvet\hskip-\overhang #1 version:} #2\unskip\strut\par}
 % Author block
 \RequirePackage[noblocks]{authblk}
 % Footnotes on margin
@@ -264,79 +278,54 @@
 %
 \RequirePackage[strict]{changepage}
 %
+% Uses the approach http://stackoverflow.com/questions/1565988/making-a-small-modification-to-a-latex-environment
 %
-% Define float environments
-%
-% \newcommand\regularfloat[1]{%
-% \renewenvironment{#1}[1][\fps@#1]%
-%  {\edef\@tempa{\noexpand\@float{#1}[##1]}
-%  \@tempa\begin{adjustwidth}{55mm}{-35mm}}
-%  {\end{adjustwidth}\end@float}
-% }
-% %
-% \newcommand\widefloat[1]{%
-% \renewenvironment{#1*}[1][htbp]%
-%  {\@float{#1}[##1]\begin{adjustwidth}{20mm}{-35mm}}
-%  {\end{adjustwidth}\end@float}
-% }
-% %
-% \newlength\capoffset
-% \setlength\capoffset{0mm}
-% \newcommand\smallfloat[1]{%
-% \newenvironment{small#1}[1][htbp]%
-%  {\setlength\capoffset{-35mm}\@float{#1}[#1]\begin{adjustwidth}{55mm}{0mm}}
-%  {\end{adjustwidth}\end@float\setlength\capoffset{0mm}}
-% }
-% %
-% \regularfloat{figure}
-% \smallfloat{figure}
-% \widefloat{figure}
-% %
-% %
-% \regularfloat{table}
-% \smallfloat{table}
-% \widefloat{table}
-% \renewenvironment{table}%
-%  {\@float{table}\begin{adjustwidth}{20mm}{-35mm}}
-%  {\end{adjustwidth}\end@float}
-% %
-\renewenvironment{table}[1][\fps@table]%
-{\edef\@tempa{\noexpand\@float{table}[#1]}
-\@tempa\begin{adjustwidth}{20mm}{}}%
+\newenvironment{@biocfloat}[4][]%[position]{type}{capoffset}{rightoffset}
+{\setlength\capoffset{#3}%
+\edef\@tempa{\noexpand\@float{#2}[#1]}
+\@tempa\begin{adjustwidth}{\fltoffset}{#4}}%
 {\end{adjustwidth}\end@float}
 %
-\renewenvironment{figure}[1][\fps@figure]%
-{\setlength\capoffset{-35mm}%
-\edef\@tempa{\noexpand\@float{figure}[#1]}
-\@tempa\begin{adjustwidth}{20mm}{}}%
-{\end{adjustwidth}\end@float%
- \setlength\capoffset{0mm}
-}
+\newenvironment{@biocfloat@regular}[2][]%[position]{type}
+{\begin{@biocfloat}[#1]{#2}{-\rightoffset}{0in}}
+{\end{@biocfloat}}
 %
-\renewenvironment{figure*}[1][\fps@figure]%
-{\@float{figure}\begin{adjustwidth}{20mm}{-35mm}}%
-{\end{adjustwidth}\end@float}
+\newenvironment{@biocfloat@wide}[2][]%[position]{type}
+{\begin{@biocfloat}[#1]{#2}{0in}{-\rightoffset}}
+{\end{@biocfloat}}
 %
-\newlength\capoffset
-\newenvironment{smallfigure}%
-{\setlength\capoffset{-70mm}%
- \@float{figure}%
- \begin{adjustwidth}{20mm}{35mm}}%
-{\end{adjustwidth}%
- \end@float%
- \setlength\capoffset{0mm}
-}
+\newenvironment{@biocfloat@small}[2][]%[position]{type}
+{\begin{@biocfloat}[#1]{#2}{-\rightoffset}{\rightoffset}}
+{\end{@biocfloat}}
+%
+\renewenvironment{table}[1][\fps@table]
+{\begin{@biocfloat@regular}[#1]{table}}
+{\end{@biocfloat@regular}}
+%
+\renewenvironment{table*}[1][\fps@table]
+{\begin{@biocfloat@wide}[#1]{table}}
+{\end{@biocfloat@wide}}
+%
+\renewenvironment{figure}[1][\fps@figure]
+{\begin{@biocfloat@regular}[#1]{figure}}
+{\end{@biocfloat@regular}}
+%
+\renewenvironment{figure*}[1][\fps@figure]
+{\begin{@biocfloat@wide}[#1]{figure}}
+{\end{@biocfloat@wide}}
+%
+\newenvironment{smallfigure}[1][\fps@figure]
+{\begin{@biocfloat@small}[#1]{figure}}
+{\end{@biocfloat@small}}
 \makeatother
 %
 %% Captions
 %
-\def\bphv{\fontfamily{phv}\selectfont\bfseries}
 \RequirePackage{caption}
-\DeclareCaptionFont{bphv}{\bphv}
+\DeclareCaptionFont{bfhelvet}{\bfhelvet}
 \captionsetup{%
  font=footnotesize,%
- labelfont=bphv,%
-% labelsep=newline,%
+ labelfont=bfhelvet,%
  justification=RaggedRight,%
  singlelinecheck=false,%
 }
@@ -355,15 +344,7 @@
 % \ExplSyntaxOff
 %
 \makeatletter
-\AtBeginDocument{%
-%   \newcommand*{\org@caption}{}%
-%   \let\org@caption\@caption
-%   \def\@caption#1[#2]#3{%
-%     \org@caption{#1}[{#2}]{\formatlabel{#3}}%
-%   }%
-
-%
-\newcommand\formatcaption[2]{{\bphv\color{BiocBlue}#1}\newline#2}
+\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1}\newline#2}
   \newcommand*{\orgcaption}{}%
   \let\orgcaption\caption
   \def\caption{\@ifnextchar[{\@withcap}{\@withoutcap}}
@@ -381,12 +362,13 @@
     \orgcaption[\firstcaption]{\formatcaption{\firstcaption}{\secondcaption}}%
     \end{adjustwidth}
   }
+\makeatother
 % start newpage after TOC
 % \let\tableofcontentsorg\tableofcontents
 % \def\tableofcontents{\tableofcontentsorg\clearpage}
 %
-}
-\makeatother
+%}
+
 %
 % TOC
 %
@@ -394,7 +376,7 @@
 %
 \RequirePackage{titletoc}
 %
-\def\pagefont{\normalsize\fontfamily{phv}\selectfont\mdseries\color{black}}
+\def\pagefont{\normalsize\mdhelvet\color{black}}
 %
 \newlength{\rightextend}
 \setlength{\rightextend}{20mm}
@@ -418,15 +400,15 @@
 {\contentslabel{13mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 % Equation numbering
-%
+% 
 \usepackage[leqno]{mathtools}
-\newtagform{brackets}[\setlength{\fboxsep}{1pt}\fontfamily{phv}\selectfont\bfseries\small\color{white}\fcolorbox{BiocBlue}{BiocBlue}]{}{}
+\newtagform{brackets}[\setlength{\fboxsep}{1pt}\bfhelvet\small\color{white}\fcolorbox{BiocBlue}{BiocBlue}]{}{}
 \usetagform{brackets}
 \let\eqreforg\eqref
 \renewcommand{\eqref}[1]{\hypersetup{linkcolor=white}\eqreforg{#1}\hypersetup{linkcolor=BiocBlue}}
 %
 % References
-%\renewcommand*{\bibfont}{\raggedright}
+%
 \makeatletter
 \renewcommand{\@biblabel}[1]{[#1]\hfill}
 \makeatother

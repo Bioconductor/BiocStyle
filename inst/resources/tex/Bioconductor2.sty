@@ -9,6 +9,7 @@
 \definecolor{BiocMagenta}{rgb}{1, 0, 1}
 \definecolor{BiocRed}{rgb}{1, 0, 0}
 \definecolor{BiocBittersweet}{cmyk}{0,0.75,1,0.24}
+\definecolor{codecolor}{RGB}{64,64,64}
 %
 \RequirePackage[%
  pdfpagelabels,%
@@ -123,18 +124,13 @@
 \RequirePackage{framed}
 %\fboxsep=0mm
 \RequirePackage{ifthen}
-%\definecolor{shadecolor}{RGB}{255,240,224}
 \definecolor{shadecolor}{RGB}{240,240,240}
 \newlength{\voverhang}
 \setlength\voverhang{\overhang}
 %% The implementation of the following environment is based on snugshade* from the package framed
 \OuterFrameSep=0mm
 \newenvironment{myshaded}{%
-%  \definecolor{shadecolor}{RGB}{255,240,224}
-  \definecolor{shadecolor}{RGB}{240,240,240}%
   \def\FrameCommand##1{\fboxsep=1em%
-%  \ifthenelse{\lengthtest{\@totalleftmargin=0mm}}%
-%   {\setlength\voverhang{\overhang}}{\setlength\voverhang{\fboxsep}}
    \hskip-\voverhang \hskip\@totalleftmargin
    \colorbox{shadecolor}{\hskip\voverhang \hskip-\fboxsep ##1}%
       % There is no \@totalrightmargin, so:
@@ -228,10 +224,30 @@
 %
 \RequirePackage{soul} %inline code highligting
 \sethlcolor{shadecolor}
+% fine-tune inline code highlighting
+\makeatletter
+\def\SOUL@hlpreamble{%
+ \setul{}{2.05ex}% default is 2.5ex
+ \SOUL@stpreamble
+ \dimen@\SOUL@ulthickness
+ \dimen@i=-.575ex% default is -.5ex
+ \advance\dimen@i-.5\dimen@
+ \edef\SOUL@uldepth{\the\dimen@i}%
+ \let\SOUL@ulcolor\SOUL@hlcolor
+ \SOUL@ulpreamble
+}
+\makeatother
 %
-\definecolor{warningcolor}{RGB}{240, 128, 32}
-\newcommand{\Rcode}[1]{\hl{\texttt{#1}}}
-\newcommand{\Rfunction}[1]{{\color{warningcolor}\bfseries\Rcode{#1}}}
+% override knitr color definitions
+%
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{0, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\definecolor{functioncolor}{RGB}{224, 128, 32}
+%
+\renewcommand{\texttt}[2][codecolor]{\textcolor{#1}{\hl{\ttfamily#2}}}
+\newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\textbf{\texttt[functioncolor]{#1}}}
 \newcommand{\Robject}[1]{\Rcode{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 %
@@ -254,7 +270,7 @@
 % keep the float (figure and table) numbers in sequence.
 \RequirePackage[section]{placeins}
 %
-\newcommand\package[2]{{\bfhelvet\hskip-\overhang #1 version:} #2\unskip\strut\par}
+\newcommand\package[1]{{\bfhelvet\hskip-\overhang Package version:} #1\unskip\strut\par}
 % Author block
 \RequirePackage[noblocks]{authblk}
 % Footnotes on margin
@@ -363,12 +379,6 @@
     \end{adjustwidth}
   }
 \makeatother
-% start newpage after TOC
-% \let\tableofcontentsorg\tableofcontents
-% \def\tableofcontents{\tableofcontentsorg\clearpage}
-%
-%}
-
 %
 % TOC
 %
@@ -379,9 +389,10 @@
 \def\pagefont{\normalsize\mdhelvet\color{black}}
 %
 \newlength{\rightextend}
-\setlength{\rightextend}{20mm}
+%\setlength{\rightextend}{20mm}
+\setlength{\rightextend}{0mm}
 %
-%\contentsmargin{0mm}
+%\contentsmargin[5mm]{5mm}
 %
 % \titlecontents{section}[0mm]%
 % {\Large\titlefont}%
@@ -393,11 +404,11 @@
 %
 \titlecontents{subsection}[22mm]%
 {\addvspace{1.0ex}\large\titlefont}%
-{\contentslabel{12mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
+{\contentslabel{12mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsubsection}[35mm]%
 {\normalfont\titlefont}%
-{\contentslabel{13mm}}{}{\pagefont\titlerule*[10pt]{.}\contentspage\hspace*{-\rightextend}}
+{\contentslabel{13mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 % Equation numbering
 % 

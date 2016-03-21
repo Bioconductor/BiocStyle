@@ -3,15 +3,96 @@ pdf_document2 <- function(toc = TRUE,
                          use.unsrturl = TRUE,
                          includes,
                          keep_tex = FALSE,
+                         toc_newpage = FALSE,
+                         width = 68,
                          ...) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  # get the locations of resource files located within the package
-  template <- file.path(resources, "tex", "template2.tex")
+  options(..., width=width)
+  
+  ## get and modify the default pandoc template
+  
+  # choose the rmarkdown template depending on pandoc version
+  version <- rmarkdown::pandoc_version()
+  
+  template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
+                               pattern = "\\.tex$")
+  template_versions <- sub("default-?([1-9.]*).tex", "\\1", template_files)
+  template_versions <- numeric_version(template_versions, strict = FALSE)
+  template_versions <- sort(template_versions, decreasing = TRUE)
+  
+  idx <- match(TRUE, version >= template_versions)
+  
+  template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
+  
+  # customize the template
+  lines <- readLines(system.file("rmd", "latex", template, package = "rmarkdown"))
+  
+  template <- file.path(tempdir(), template)
+  
+  substituteLines = function (lines, from, to, insert = NULL, replace = TRUE, from.offset = 0L, to.offset = 0L, ...) {
+    from = grep(from, lines, fixed=TRUE)
+    # exit if nothing found
+    if (length(from)==0)
+      return(lines)
+    
+    if (missing(to)) {
+      to = from
+    } else {
+      to = grep(to, lines, fixed=TRUE)
+    }
+      
+    # exit if nothing found
+    if (length(to)==0)
+      return(lines)
+    
+    from = from + from.offset
+    to = to + to.offset
+    
+    if (isTRUE(replace)) { # substitute lines from-to
+      c(lines[1:(from-1L)], insert, lines[(to+1L):length(lines)])
+    } else { # append after to
+      c(lines[1:to], insert, lines[(to+1L):length(lines)])
+    }
+  }
+  
+  # remove redundand hyperref definitions
+  lines <- substituteLines(lines, "\\usepackage[unicode=true]{hyperref}", "\\urlstyle{same}", from.offset = -5L)
+  lines <- substituteLines(lines, "\\usepackage{hyperref}", "\\urlstyle{same}") # >= 1.15.2
+  
+  # do not set links in TOC to black
+  lines <- substituteLines(lines, "\\hypersetup{linkcolor=black}")
+  lines <- substituteLines(lines, "\\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}") # >= 1.14
+  
+  # add package version number
+  lines <- substituteLines(lines, "\\end{abstract}", replace = FALSE,
+                          insert = c("",
+                                     "$if(package)$",
+                                     "\\package{$package$}",
+                                     "$endif$"))
+  
+  # remove highlighting-macros
+  lines <- substituteLines(lines, "$highlighting-macros$", from.offset = -1L, to.offset = 1L)
+  
+  ## output TOC on a separate page
+  lines <- substituteLines(lines, "\\tableofcontents", insert = c("$if(toc-newpage)$",
+                                                                  "\\newpage",
+                                                                  "$endif$",
+                                                                  "\\tableofcontents",
+                                                                  "\\newpage"))
+  
+  writeLines(lines, template)
   
   head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "2", bioconductor.sty))
+  
+  ## code chunks and code highlighting
+  thm <- system.file("themes", "default.css", package = "BiocStyle")
+  head = c(head,
+           "% code highlighting",
+           knitr:::theme_to_header_latex(thm)$highlight,
+           readLines(file.path(resources, "tex", "highlighting-macros.def")))
   
   if (use.unsrturl) {
     bst <- file.path(resources, "tex", "unsrturl")
@@ -21,6 +102,7 @@ pdf_document2 <- function(toc = TRUE,
   # dump to a header file which will be included in the template
   header = tempfile("", fileext = ".tex")
   writeLines(head, header)
+  
   inc = rmarkdown::includes(in_header = header)
   
   if ( missing(includes) )
@@ -28,6 +110,11 @@ pdf_document2 <- function(toc = TRUE,
   else
     includes$in_header = c(includes$in_header, inc)
 
+  
+  # pandoc options
+  pandoc_args = NULL
+  
+  if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
   
   # call the base pdf_document function
   rmarkdown::output_format(knitr = rmarkdown::knitr_options(opts_chunk = list(collapse=TRUE)),
@@ -39,6 +126,7 @@ pdf_document2 <- function(toc = TRUE,
                             template = template,
                             includes = includes,
                             keep_tex = keep_tex,
+                            pandoc_args = pandoc_args,
                             ...)
   )
 }

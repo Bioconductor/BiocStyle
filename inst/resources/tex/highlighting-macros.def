@@ -1,0 +1,26 @@
+%
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+%
+\newenvironment{Shaded}{\begin{myshaded}}{\end{myshaded}}
+% set background for result chunks
+\let\oldverbatim\verbatim
+\renewenvironment{verbatim}{\color{codecolor}\begin{myshaded}\begin{oldverbatim}}{\end{oldverbatim}\end{myshaded}}
+%
+\newcommand{\KeywordTok}[1]{\hlkwd{#1}}
+\newcommand{\DataTypeTok}[1]{\hlkwc{#1}}
+\newcommand{\DecValTok}[1]{\hlnum{#1}}
+\newcommand{\BaseNTok}[1]{\hlnum{#1}}
+\newcommand{\FloatTok}[1]{\hlnum{#1}}
+\newcommand{\CharTok}[1]{\hlstr{#1}}
+\newcommand{\StringTok}[1]{\hlstr{#1}}
+\newcommand{\CommentTok}[1]{\hlcom{#1}}
+\newcommand{\OtherTok}[1]{{#1}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{\hlstd{#1}}
+%

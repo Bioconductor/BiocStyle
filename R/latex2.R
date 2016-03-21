@@ -129,6 +129,8 @@ latex2 <-
         thm <- system.file("themes", "default.css", package = "BiocStyle")
         knit_theme$set(thm)
         
+        # suppress \definecolor{shadecolor} in knitrout environment
+        knitr::opts_chunk$set(background = NA) 
     }
     
     ## assume Sweave

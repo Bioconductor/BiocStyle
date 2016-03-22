@@ -75,10 +75,10 @@
 \setlength{\overhang}{15mm}
 \newlength{\rightoffset} % right offset of the document body
 \setlength{\rightoffset}{35mm}
-\newlength{\capoffset} % right offset of the caption relative to the width of the float
-% capoffset is reset for each float environment
 \newlength{\fltoffset} % left offset of floats relative to paragraph text
 \setlength{\fltoffset}{20mm} 
+\newlength{\capoffset} % right offset of the caption to compensate different float widths
+\setlength{\capoffset}{\fltoffset}
 %% Use Latin Modern Sans Serif font
 \renewcommand\familydefault\sfdefault
 \renewcommand\sfdefault{lmss}
@@ -87,7 +87,6 @@
 \RequirePackage[T1]{fontenc}
 %
 \RequirePackage[newlinetospace]{titlesec}
-\RequirePackage{etoolbox}
 %% Font definitions
 \def\mdhelvet{\fontfamily{phv}\selectfont\mdseries}
 \def\bfhelvet{\fontfamily{phv}\selectfont\bfseries}
@@ -122,8 +121,6 @@
 % \subsubtitlefont{\sffamily\bfseries\color{BiocBlue}}
 %% Code and output chunks
 \RequirePackage{framed}
-%\fboxsep=0mm
-\RequirePackage{ifthen}
 \definecolor{shadecolor}{RGB}{240,240,240}
 \newlength{\voverhang}
 \setlength\voverhang{\overhang}
@@ -155,7 +152,6 @@
 \RequirePackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-%\fancyhead[LE,RO]{\thepage}
 \fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
 \fancyhfoffset[L]{\overhang}
 \fancyhfoffset[R]{\rightoffset}
@@ -294,24 +290,29 @@
 %
 \RequirePackage[strict]{changepage}
 %
-% Uses the approach http://stackoverflow.com/questions/1565988/making-a-small-modification-to-a-latex-environment
+% Uses the approach from http://stackoverflow.com/a/1569922/2792099
 %
 \newenvironment{@biocfloat}[4][]%[position]{type}{capoffset}{rightoffset}
-{\setlength\capoffset{#3}%
-\edef\@tempa{\noexpand\@float{#2}[#1]}
-\@tempa\begin{adjustwidth}{\fltoffset}{#4}}%
+{%
+\edef\@tempa{\noexpand\@float{#2}[#1]}%
+\@tempa%
+\addtolength{\capoffset}{#3}%
+\addtolength{\textwidth}{-\fltoffset}%
+\addtolength{\textwidth}{-#4}%
+\captionsetup{margin={0mm,\capoffset}}%
+\begin{adjustwidth}{\fltoffset}{#4}}%
 {\end{adjustwidth}\end@float}
 %
 \newenvironment{@biocfloat@regular}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{-\rightoffset}{0in}}
+{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{0in}}
 {\end{@biocfloat}}
 %
 \newenvironment{@biocfloat@wide}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{0in}{-\rightoffset}}
+{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{-\rightoffset}}
 {\end{@biocfloat}}
 %
 \newenvironment{@biocfloat@small}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{-\rightoffset}{\rightoffset}}
+{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{\rightoffset}}
 {\end{@biocfloat}}
 %
 \renewenvironment{table}[1][\fps@table]
@@ -345,39 +346,30 @@
  justification=RaggedRight,%
  singlelinecheck=false,%
 }
-%% make first sentence of caption bold
+% %% make first sentence of caption bold
 \RequirePackage{xstring}
-%
-% Regular expression extracting the first sentence
-% \RequirePackage{l3regex}
-% \ExplSyntaxOn
-% \tl_new:N \l_demo_tl
-% \cs_new:Npn \demo #1 {
-%     \tl_set:Nn \l_demo_tl {#1}
-%     \regex_replace_once:nnN { (.*?)[\.\;\:](.*) } { \c{adjustedcaption}\cB\{ \1 \cE\}\cB\{ \2 \cE\} } \l_demo_tl
-%     \tl_use:N \l_demo_tl
-% }
-% \ExplSyntaxOff
-%
 \makeatletter
 \newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1}\newline#2}
-  \newcommand*{\orgcaption}{}%
-  \let\orgcaption\caption
-  \def\caption{\@ifnextchar[{\@withcap}{\@withoutcap}}
-  \def\@withcap[#1]#2{\orgcaption[#1]{\formatcaption{#1}{#2}}}
-  \def\@withoutcap#1{%
-    \noexpandarg
-      \IfSubStr{#1}{.}{%
-        \StrBefore{#1}{.}[\firstcaption]%
-        \StrBehind{#1}{.}[\secondcaption]%
-      }{%
-      \def\firstcaption{#1}%
-      \def\secondcaption{}%
-      }%
-    \begin{adjustwidth}{0mm}{\capoffset}%
-    \orgcaption[\firstcaption]{\formatcaption{\firstcaption}{\secondcaption}}%
-    \end{adjustwidth}
-  }
+%
+% Redefine the caption environment following the suggestion in http://tex.stackexchange.com/a/20544
+%
+\let\captionorg\caption
+\renewcommand*{\caption}[2][]{%
+ \def\captiontitle{#1}%
+ \ifx\captiontitle\@empty%
+  \noexpandarg%
+  \IfSubStr{#2}{.}{%
+   \StrBefore{#2}{.}[\captiontitle]%
+   \StrBehind{#2}{.}[\captionbody]%
+  }{%
+   \def\captiontitle{#2}%
+   \def\captionbody{}%
+  }%
+ \else%
+  \def\captionbody{#2}%
+ \fi%
+ \captionorg[\captiontitle]{\formatcaption{\captiontitle}{\captionbody}}%
+}
 \makeatother
 %
 % TOC
@@ -392,15 +384,11 @@
 %\setlength{\rightextend}{20mm}
 \setlength{\rightextend}{0mm}
 %
-%\contentsmargin[5mm]{5mm}
-%
-% \titlecontents{section}[0mm]%
-% {\Large\titlefont}%
-% {\contentslabel{\secindent}}{}{\hfill\pagefont\contentspage}%
 \titlecontents{section}[10mm]%
 {\addvspace{2.5ex}\Large\titlefont}%
-{\contentslabel{10mm}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
-[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}\addvspace{1.0ex}]
+%{\contentslabel{10mm}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
+%[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}\addvspace{1.0ex}]
+{\contentslabel{10mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsection}[22mm]%
 {\addvspace{1.0ex}\large\titlefont}%

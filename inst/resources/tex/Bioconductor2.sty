@@ -1,6 +1,13 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{Bioconductor}[2013/07/01 Bioconductor vignette style]
-% 
+%
+\RequirePackage{ifthen}
+\newboolean{BiocStyle@titlecaps}
+\setboolean{BiocStyle@titlecaps}{true}
+%
+\DeclareOption{notitlecaps}{\setboolean{BiocStyle@titlecaps}{false}}
+\ProcessOptions
+%
 \PassOptionsToPackage{usenames,dvipsnames}{color}
 \RequirePackage{color}
 \definecolor{BiocBlue}{RGB}{24,129,194}
@@ -76,9 +83,7 @@
 \newlength{\rightoffset} % right offset of the document body
 \setlength{\rightoffset}{35mm}
 \newlength{\fltoffset} % left offset of floats relative to paragraph text
-\setlength{\fltoffset}{20mm} 
-\newlength{\capoffset} % right offset of the caption to compensate different float widths
-\setlength{\capoffset}{\fltoffset}
+\setlength{\fltoffset}{20mm}
 %% Use Latin Modern Sans Serif font
 \renewcommand\familydefault\sfdefault
 \renewcommand\sfdefault{lmss}
@@ -250,16 +255,6 @@
 \newcommand{\bioccomment}[1]{\textsl{\textcolor{BiocGray}{comment: #1}}}
 \newcommand{\warning}[1]{\textsl{\textcolor{BiocMagenta}{warning: #1}}}
 \newcommand{\fixme}[1]{\textsl{\textcolor{BiocBittersweet}{fixme: #1}}}
-%
-\newcommand{\prefix}[1]{#1}
-\newcommand{\incfig}[5][tbp]{%
-  \begin{figure}[#1]%
-  \begin{center}%
-  \includegraphics[width=#3]{\prefix{#2}}%
-  \caption[#4]{\label{#2}\textbf{#4} #5}%
-  \end{center}%
-  \end{figure}%
-}
 %%
 % The placeins package provides the \FloatBarrier command.  This forces
 % LaTeX to place all of the floats before proceeding.  We'll use this to
@@ -292,27 +287,26 @@
 %
 % Uses the approach from http://stackoverflow.com/a/1569922/2792099
 %
-\newenvironment{@biocfloat}[4][]%[position]{type}{capoffset}{rightoffset}
+\newenvironment{@biocfloat}[6][]%[1:position]{2:type}{3:fltoffsetleft}{4:fltoffsetright}{5:capoffsetleft}{6:capoffsetright}
 {%
 \edef\@tempa{\noexpand\@float{#2}[#1]}%
 \@tempa%
-\addtolength{\capoffset}{#3}%
-\addtolength{\textwidth}{-\fltoffset}%
+\captionsetup{margin={#5,#6}}%
+\addtolength{\textwidth}{-#3}%
 \addtolength{\textwidth}{-#4}%
-\captionsetup{margin={0mm,\capoffset}}%
-\begin{adjustwidth}{\fltoffset}{#4}}%
+\begin{adjustwidth}{#3}{#4}}%
 {\end{adjustwidth}\end@float}
 %
 \newenvironment{@biocfloat@regular}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{0in}}
-{\end{@biocfloat}}
-%
-\newenvironment{@biocfloat@wide}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{-\rightoffset}}
+{\begin{@biocfloat}[#1]{#2}{\fltoffset}{0mm}{0mm}{0mm}}
 {\end{@biocfloat}}
 %
 \newenvironment{@biocfloat@small}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{-\fltoffset}{\rightoffset}}
+{\begin{@biocfloat}[#1]{#2}{\fltoffset}{\rightoffset}{0mm}{0mm}}
+{\end{@biocfloat}}
+%
+\newenvironment{@biocfloat@wide}[2][]%[position]{type}
+{\begin{@biocfloat}[#1]{#2}{0mm}{-\fltoffset}{\fltoffset}{-\fltoffset}}
 {\end{@biocfloat}}
 %
 \renewenvironment{table}[1][\fps@table]
@@ -334,6 +328,16 @@
 \newenvironment{smallfigure}[1][\fps@figure]
 {\begin{@biocfloat@small}[#1]{figure}}
 {\end{@biocfloat@small}}
+%
+% incfig macro
+%
+\newcommand{\prefix}[1]{#1}
+\newcommand{\incfig}[5][tbp]{%[1:placement]{2:filename}{3:width}{4:title}{5:caption}
+ \begin{figure}[#1]%
+ \includegraphics[width=#3]{\prefix{#2}}%
+ \caption[#4]{\label{#2}#5}%
+ \end{figure}%
+}
 \makeatother
 %
 %% Captions
@@ -347,12 +351,13 @@
  singlelinecheck=false,%
 }
 % %% make first sentence of caption bold
-\RequirePackage{xstring}
-\makeatletter
-\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1}\newline#2}
 %
 % Redefine the caption environment following the suggestion in http://tex.stackexchange.com/a/20544
 %
+\makeatletter
+\ifthenelse{\boolean{BiocStyle@titlecaps}}{%
+\RequirePackage{xstring}
+\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1}\newline#2}
 \let\captionorg\caption
 \renewcommand*{\caption}[2][]{%
  \def\captiontitle{#1}%
@@ -369,7 +374,7 @@
   \def\captionbody{#2}%
  \fi%
  \captionorg[\captiontitle]{\formatcaption{\captiontitle}{\captionbody}}%
-}
+}}{}%
 \makeatother
 %
 % TOC

@@ -1,10 +1,20 @@
+loadBioconductorStyleFile <- function(titlecaps) {
+  ## set LaTeX options
+  opts = NULL
+  if (!isTRUE(titlecaps))
+    opts = c(opts, "notitlecaps")
+  sprintf("\\RequirePackage[%s]{%s}",
+        paste(opts, collapse = ","),
+        sub(".sty$", "2", bioconductor.sty))
+}
+
 latex2 <-
-    function(..., width=68, short.fignames=FALSE, fig.path,
+    function(..., width=68, titlecaps = TRUE, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE)
 {
     options(..., width=width)
     cat(
-      sprintf("\\RequirePackage{%s}", sub(".sty$", "2", bioconductor.sty)),
+      loadBioconductorStyleFile(titlecaps = titlecaps),
       if (use.unsrturl) {
         bst <- file.path(resources, "tex", "unsrturl")
         sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}", bst)

@@ -4,6 +4,7 @@ pdf_document2 <- function(toc = TRUE,
                          includes,
                          keep_tex = FALSE,
                          toc_newpage = FALSE,
+                         titlecaps = TRUE,
                          width = 68,
                          ...) {
   
@@ -85,7 +86,7 @@ pdf_document2 <- function(toc = TRUE,
   
   writeLines(lines, template)
   
-  head = sprintf("\\RequirePackage{%s}\n", sub(".sty$", "2", bioconductor.sty))
+  head = loadBioconductorStyleFile(titlecaps = titlecaps)
   
   ## code chunks and code highlighting
   thm <- system.file("themes", "default.css", package = "BiocStyle")

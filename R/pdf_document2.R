@@ -126,8 +126,6 @@ pdf_document2 <- function(toc = TRUE,
     opts_chunk = list(collapse=TRUE),
     knit_hooks = list(
       plot = function(x, options = list()) {
-        if (options$fig.env==)
-        
         # adjust width for plots which are not inserted as floats
         if (!length(options$fig.cap) || is.na(options$fig.cap)) {
           paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',

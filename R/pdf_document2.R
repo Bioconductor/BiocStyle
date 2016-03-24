@@ -1,7 +1,11 @@
 pdf_document2 <- function(toc = TRUE,
                          number_sections = TRUE,
+                         fig_width = 7.5,
+                         fig_height = 5.0,
+                         fig_caption = TRUE,
                          use.unsrturl = TRUE,
                          includes,
+                         keep_md = FALSE,
                          keep_tex = FALSE,
                          toc_newpage = FALSE,
                          titlecaps = TRUE,
@@ -117,13 +121,35 @@ pdf_document2 <- function(toc = TRUE,
   
   if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
   
+  # knitr options
+  knitr = rmarkdown::knitr_options(
+    opts_chunk = list(collapse=TRUE),
+    knit_hooks = list(
+      plot = function(x, options = list()) {
+        if (options$fig.env==)
+        
+        # adjust width for plots which are not inserted as floats
+        if (!length(options$fig.cap) || is.na(options$fig.cap)) {
+          paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',
+                 knitr::hook_plot_tex(x, options),
+                '\\end{adjustwidth}')
+        } else {
+          knitr::hook_plot_md(x, options)
+        }
+      })
+  )
+  
   # call the base pdf_document function
-  rmarkdown::output_format(knitr = rmarkdown::knitr_options(opts_chunk = list(collapse=TRUE)),
+  rmarkdown::output_format(knitr = knitr,
                            pandoc = NULL,
+                           keep_md = keep_md,
                            clean_supporting = !keep_tex,
                            base_format = rmarkdown::pdf_document(
                             toc = toc,
                             number_sections = number_sections,
+                            fig_width = fig_width,
+                            fig_height = fig_height,
+                            fig_caption = fig_caption,
                             template = template,
                             includes = includes,
                             keep_tex = keep_tex,

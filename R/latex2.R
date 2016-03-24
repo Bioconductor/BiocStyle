@@ -10,8 +10,7 @@ loadBioconductorStyleFile <- function(titlecaps) {
 
 latex2 <-
     function(..., width=68, titlecaps = TRUE, short.fignames=FALSE, fig.path,
-             error=FALSE, use.unsrturl=TRUE)
-{
+             error=FALSE, use.unsrturl=TRUE) {
     options(..., width=width)
     cat(
       loadBioconductorStyleFile(titlecaps = titlecaps),
@@ -41,97 +40,75 @@ latex2 <-
         }
         
         if ( isTRUE(short.fignames) ) setPrefix(fig.path)
-        
+      
         ## set knitr options
         knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
         knitr::opts_chunk$set(fig.path=fig.path, error=error, crop=TRUE)
         
-        # reset figure dimensions to detect user input values
-        knitr::opts_chunk$set(fig.width=NULL, fig.height=NULL)
+        # reset figure dimensions to detect values set by user
+        knitr::opts_chunk$set(fig.width=NA, fig.height=NA)
+        
+        opts_hooks$set(
+          # options fig.small and fig.wide have precedance over fig.env
+          fig.small = function(options) {
+            if (isTRUE(options$fig.small)) {
+              options$fig.env = "smallfigure"
+            }
+            options
+          },
+          fig.wide = function(options) {
+            if (isTRUE(options$fig.wide)) {
+              options$fig.env = "figure*"
+            }
+            options
+          },
+          # set default plot dimensions if user provided no values
+          fig.width = function(options) {
+            if (is.na(options$fig.width)) {
+              options$fig.width = switch(options$fig.env,
+                                         "smallfigure" = 5,
+                                         "figure*" = 10,
+                                         "figure" = 7.5,
+                                         7) # knitr default
+            }
+            options
+          },
+          fig.height = function(options) { 
+            if ( is.na(options$fig.height) ){
+              options$fig.height = 5
+            }
+            options
+          }
+        )
         
         # set hooks for special plot output
         knitr::knit_hooks$set(
           plot = function(x, options = list()) {
-          
-            # determine caption (if any)
-            caption <- ifelse(is.null(options$fig.cap), 
-                              "",
-                              paste(" \\caption{", options$fig.cap, "}\n", sep = ""))
+            adjustwidth = NULL
             
-            # determine figure type
-            if (isTRUE(options$fig.small)) 
-              figtype <- "smallfigure"
-            else if (isTRUE(options$fig.wide))
-              figtype <- "figure*"
-            else
-              figtype <- "figure"
+            # adjust width for plots inserted not as floats
+            if (!length(options$fig.cap) || is.na(options$fig.cap)) {
+              adjustwidth = c('\\begin{adjustwidth}{\\fltoffset}{0mm}',
+                              '\\end{adjustwidth}')
+            }
             
-            # return the latex
-            paste0("\\end{kframe}\n", 
-                  sprintf('\\begin{%s}\n \\includegraphics{%s}\n%s\\end{%s}\n', figtype, x, caption, figtype),
-                  "\\begin{kframe}")
+            # call the default knitr hook as defined in render_latex()
+            paste0('\\end{kframe}',
+                   adjustwidth[1L],
+                   knitr::hook_plot_tex(x, options),
+                   adjustwidth[2L],
+                   '\\begin{kframe}')
           },
-        crop = hook_pdfcrop,
-        ## hook for setting device dimensions
-        eval = function(before, options) {
-                    if (before) {
-                      ## set defaults in case no values provided
-                      #cat("before\n")
-                      if ( is.null(options$fig.width) && is.null(options$fig.height) ) {
-                        ## use symmetric horizontal vs. vertical margins
-                        #do.call("par", list(mar=c(4,4,0.5,0.5)), envir = sys.frame(-3))
-                        
-                        if ( isTRUE(options$fig.small) ) {
-                          options$fig.width = 5
-                          options$fig.height = 5
-                        }
-                        else if (isTRUE(options$fig.wide)) {
-                          options$fig.width = 10
-                          options$fig.height = 5
-                        }
-                        else {
-                          options$fig.width = 7.5
-                          options$fig.height = 5
-                        }
-                        env = sys.frame(-3)
-                        assign("options", options, envir = env)
-                       
-#                         eval(expression({
-#                           ## switch off the device previously opened
-#                           #dev.off()
-#                           ## open a new device
-#                           if (chunk_device(options$fig.width[1L], options$fig.height[1L], options$fig.keep != 'none',
-#                                                            options$dev, options$dev.args, options$dpi)) {
-#                             # preserve par() settings from the last code chunk
-#                               if (keep.pars <- opts_knit$get('global.par'))
-#                                 par(opts_knit$get('global.pars'))
-#                               showtext(options$fig.showtext)  # showtext support
-#                               dv = dev.cur()
-#                               on.exit({
-#                                 if (keep.pars) opts_knit$set(global.pars = par(no.readonly = TRUE))
-#                                 dev.off(dv)
-#                               }, add = TRUE)
-#                           }
-#                           }), env)
-#                         
-                        par(mar=c(4,4,0.5,0.5))
-                      }
-                    }
-                  }
-#         fig.wide = function(before, options, envir) {
-#           if (before) {
-#             browser()
-#             opts = options
-#             opts$fig.width=10
-#             opts$fig.height=5
-#             #opts_current$set(fig.width=5, fig.height=10)
-#             #assign("options", opts, envir = parent.frame(3)) 
-#             assign("options", opts, envir = sys.frame(-3))
-#             #cat(paste("before", opts_current$get("fig.width")))
-#           } else{
-#             cat(paste("after", opts_current$get("fig.width")))
-#           }
-#         }
+          
+          ## remove figure margins with pdfcrop
+          crop = hook_pdfcrop,
+          
+          ## proper aspect ratio of plots
+          eval = function(before, options) {
+            if (before) {
+              #par(mar=c(4,4,0.5,0.5))
+            }
+          }
         )
         
         ## code highlighting
@@ -149,7 +126,7 @@ latex2 <-
       cat("\\usepackage[noae]{Sweave}")
     }
     
-    }
+}
 
 pkg_ver2 <- function(pkg) {
   paste(pkg, packageVersion(pkg), sep="}{")

@@ -48,7 +48,7 @@ latex2 <-
         # reset figure dimensions to detect values set by user
         knitr::opts_chunk$set(fig.width=NA, fig.height=NA)
         
-        opts_hooks$set(
+        knitr::opts_hooks$set(
           # options fig.small and fig.wide have precedance over fig.env
           fig.small = function(options) {
             if (isTRUE(options$fig.small)) {
@@ -101,7 +101,7 @@ latex2 <-
           },
           
           ## remove figure margins with pdfcrop
-          crop = hook_pdfcrop,
+          crop = knitr::hook_pdfcrop,
           
           ## proper aspect ratio of plots
           eval = function(before, options) {
@@ -112,9 +112,9 @@ latex2 <-
         )
         
         ## code highlighting
-        opts_knit$set(out.format = "latex")
+        knitr::opts_knit$set(out.format = "latex")
         thm <- system.file("themes", "default.css", package = "BiocStyle")
-        knit_theme$set(thm)
+        knitr::knit_theme$set(thm)
         
         # suppress \definecolor{shadecolor} in knitrout environment
         knitr::opts_chunk$set(background = NA) 
@@ -126,8 +126,4 @@ latex2 <-
       cat("\\usepackage[noae]{Sweave}")
     }
     
-}
-
-pkg_ver2 <- function(pkg) {
-  paste(pkg, packageVersion(pkg), sep="}{")
 }

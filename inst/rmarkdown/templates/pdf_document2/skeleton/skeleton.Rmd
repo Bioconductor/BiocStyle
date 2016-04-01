@@ -1,0 +1,111 @@
+---
+title: Bioconductor style for PDF documents
+author:
+  - name: Andrzej Oleś
+    email: andrzej.oles@embl.de
+  - name: Wolfgang Huber
+    affiliation: European Molecular Biology Laboratory, Heidelberg
+  - name: Martin Morgan
+    affiliation: Roswell Park Cancer Institute, Bufallo
+date: "`r doc_date()`"
+package: "`r pkg_ver('BiocStyle')`"
+abstract: >
+  Instructions on enabling _Bioconductor_ style 
+  in your _R_ markdown vignettes.
+vignette: >
+  %\VignetteIndexEntry{Bioconductor style for PDF documents}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output: 
+  BiocStyle::pdf_document2
+---
+
+# Authoring R markdown PDF package vignettes
+
+To enable the _Bioconductor_ style in your markdown (`.Rmd`) vignettes you need to:
+
+- Edit to the `DESCRIPTION` file by adding
+
+        VignetteBuilder: knitr
+        Suggests: BiocStyle, knitr, rmarkdown
+
+- Specify `BiocStyle::pdf_document` as the output format and add vignette metadata in the document header:
+
+        ---
+        title: "Vignette Title"
+        author: "Vignette Author"
+        output: 
+          BiocStyle::pdf_document
+        vignette: >
+          %\VignetteIndexEntry{Vignette Title}
+          %\VignetteEngine{knitr::rmarkdown}
+          %\VignetteEncoding{UTF-8}  
+        ---
+
+The `vignette` section is required in order to instruct R how to build the vignette. Note that the `\VignetteIndexEntry` should match the `title` of your vignette.
+  
+It is also possible to specify additional details such as:
+
+- document compilation `date` inserted using the function `doc_date`
+- `package` version specification added by `pkg_ver`
+- vignette `abstract`
+    
+as in the following example.
+
+```{r code, echo = FALSE}
+## The following redefinitions are only for printing the verbatim header below
+doc_date = function() "`r doc_date()`"
+pkg_ver = function(name) sprintf("`r pkg_ver('%s')`", name)
+```
+
+    ---
+    title: "Vignette Title"
+    author: "Vignette Author"
+    date: "`r doc_date()`"
+    package: "`r pkg_ver('BiocStyle')`"
+    abstract: >
+      Vignette Abstract
+    vignette: >
+      %\VignetteIndexEntry{Vignette Title}
+      %\VignetteEngine{knitr::rmarkdown}
+      %\VignetteEncoding{UTF-8}
+    output: 
+      BiocStyle::pdf_document
+    ---
+
+# Style macros
+
+```{r macro, echo=FALSE}
+macro <- function(name, pkg, description)
+    sprintf('`` `r %s("%s")` `` %s %s', name, pkg,
+            description, do.call(name, list(pkg)))
+```
+
+`r Biocpkg("BiocStyle")` introduces the following macros useful when
+referring to _R_ packages:
+
+* `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software, annotation and experiment data packages,
+  including a link to the release landing page or if the package is only in devel, to the devel landing page,")`.
+
+* `r macro("CRANpkg", "data.table", "for _R_ packages available on
+  CRAN, including a link to the FHCRC CRAN mirror landing page,")`.
+
+* `r macro("Githubpkg", "rstudio/rmarkdown", "for _R_ packages
+  available on GitHub, including a link to the package repository,")`.
+
+* `r macro("Rpackage", "MyPkg", "for _R_ packages that are _not_
+  available on _Bioconductor_, CRAN or GitHub;")`.
+
+
+# Session info
+
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
+
+[R]: http://r-project.org
+[RStudio]: http://www.rstudio.com/

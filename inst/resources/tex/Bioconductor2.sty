@@ -203,7 +203,7 @@
 {{\bfhelvet\hskip-\overhang\abstractname\unskip\strut\par}}%
 {\vspace{1.5ex plus 0.25ex minus 0.15ex}}
 %%
-\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\ttfamily#1}}
 \newcommand{\file}[1]{'#1'}
 %
 \newcommand{\software}[1]{\textsl{#1}}
@@ -262,8 +262,6 @@
 \RequirePackage[section]{placeins}
 %
 \newcommand\package[1]{{\bfhelvet\hskip-\overhang Package version:} #1\unskip\strut\par}
-% Author block
-\RequirePackage[noblocks]{authblk}
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin]{footmisc}

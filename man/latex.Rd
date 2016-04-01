@@ -1,5 +1,8 @@
 \name{latex}
+
 \alias{latex}
+\alias{latex2}
+
 \title{Use Bioconductor styles to format LaTeX vignettes}
 \description{
 

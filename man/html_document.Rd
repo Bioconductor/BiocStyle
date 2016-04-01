@@ -1,6 +1,7 @@
 \name{html_document}
 
 \alias{html_document}
+\alias{html_document2}
 
 \title{Use Bioconductor style to format R Markdown HTML output}
 

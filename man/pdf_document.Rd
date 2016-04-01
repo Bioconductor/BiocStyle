@@ -1,6 +1,7 @@
 \name{pdf_document}
 
 \alias{pdf_document}
+\alias{pdf_document2}
 
 \title{Use Bioconductor style to format R Markdown PDF output}
 

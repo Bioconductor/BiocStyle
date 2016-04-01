@@ -123,7 +123,7 @@ latex2 <-
     ## assume Sweave
     else {
       if ( isTRUE(short.fignames) ) setPrefix("\\jobname-")
-      cat("\\usepackage[noae]{Sweave}")
+      cat("\\usepackage[noae, nogin]{Sweave}")
     }
     
 }

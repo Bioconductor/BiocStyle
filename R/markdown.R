@@ -128,6 +128,10 @@ doc_date <- function() {
 
 ## 
 
+output = function () {
+  knitr::opts_knit$get("rmarkdown.pandoc.to")
+}
+
 output_format <- function() {
   output = rmarkdown::metadata$output
   if (is.list(output)) output = names(output)[[1L]]

@@ -56,5 +56,3 @@ CRANpkg("data.table")
 Githubpkg("rstudio/rmarkdown")
 
 }
-
-\keyword{ manip }

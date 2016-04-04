@@ -2,7 +2,6 @@
 
 \alias{doc_date}
 \alias{pkg_ver}
-\alias{output_format}
 
 \title{Specify Rmarkdown document metadata}
 

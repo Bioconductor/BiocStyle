@@ -6,3 +6,4 @@ export(html_document, pdf_document, md_document)
 # BiocStyle v.2
 export(latex2)
 export(html_document2, pdf_document2)
+export(output)

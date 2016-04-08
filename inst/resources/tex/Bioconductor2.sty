@@ -285,21 +285,7 @@
 %
 % Uses the approach from http://stackoverflow.com/a/1569922/2792099
 %
-% Save original LaTeX float environment
-\let\@tufte@orig@float\@float
-\let\@tufte@orig@endfloat\end@float
-%
-\AtBeginDocument{%
-  \@ifpackageloaded{float}{%
-    % Save the redefined float environment (instead of the LaTeX float environment)
-    \let\@tufte@orig@float\@float
-    \let\@tufte@orig@endfloat\end@float
-  }{%
-    % Nothing to do
-  }
-}
-%
-\newenvironment{@biocfloat}[6][ht]%[1:position]{2:type}{3:fltoffsetleft}{4:fltoffsetright}{5:capoffsetleft}{6:capoffsetright}
+\newenvironment{@biocfloat}[6][]%[1:position]{2:type}{3:fltoffsetleft}{4:fltoffsetright}{5:capoffsetleft}{6:capoffsetright}
 {%
 \edef\@tempa{\noexpand\@float{#2}[#1]}%
 \@tempa%

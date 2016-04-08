@@ -1,3 +1,5 @@
+importFrom(utils, packageVersion)
+
 export(latex)
 export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg, Rpackage, Githubpkg)
 export(doc_date, pkg_ver)

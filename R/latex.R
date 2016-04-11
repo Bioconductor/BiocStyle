@@ -1,4 +1,4 @@
-latex2 <-
+latex <-
     function(..., width=90, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE)
 {

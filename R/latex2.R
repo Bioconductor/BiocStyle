@@ -8,7 +8,7 @@ loadBioconductorStyleFile <- function(titlecaps) {
         sub(".sty$", "2", bioconductor.sty))
 }
 
-latex <-
+latex2 <-
     function(..., width=68, titlecaps = TRUE, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE) {
     options(..., width=width)

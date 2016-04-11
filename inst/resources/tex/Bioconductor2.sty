@@ -201,7 +201,7 @@
 %% Abstract
 \renewenvironment{abstract}%
 {{\bfhelvet\hskip-\overhang\abstractname\unskip\strut\par}}%
-{\vspace{1.5ex plus 0.25ex minus 0.15ex}}
+{\par}
 %%
 \newcommand{\email}[1]{\href{mailto:#1}{\ttfamily#1}}
 \newcommand{\file}[1]{'#1'}
@@ -261,7 +261,7 @@
 % keep the float (figure and table) numbers in sequence.
 \RequirePackage[section]{placeins}
 %
-\newcommand\package[1]{{\bfhelvet\hskip-\overhang Package version:} #1\unskip\strut\par}
+\newcommand\packageVersion[1]{\par{\bfhelvet\hskip-\overhang Package version:} #1\unskip\strut\par}
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin]{footmisc}
@@ -276,7 +276,11 @@
 % Scale images if necessary, so that they will not overflow the page
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\figwidth,height=\figheight,keepaspectratio}
+\AtBeginDocument{
+ \@ifpackageloaded{pdfpages}{}{%
+  \setkeys{Gin}{width=\figwidth,height=\figheight,keepaspectratio}
+ }
+}
 %
 \def\fps@figure{htbp}
 \def\fps@table{htbp}

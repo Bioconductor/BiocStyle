@@ -8,7 +8,7 @@ loadBioconductorStyleFile <- function(titlecaps) {
         sub(".sty$", "2", bioconductor.sty))
 }
 
-latex2 <-
+latex <-
     function(..., width=68, titlecaps = TRUE, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE) {
     options(..., width=width)
@@ -25,10 +25,9 @@ latex2 <-
     
     ## check whether called from knitr
     fs = sapply(sys.calls(), function(x) as.character(x)[1])
-    id = pmatch("knit", fs, nomatch=0)
     
     ## knitr
-    if ( id > 0 && exists("opts_chunk")) {
+    if (any(grepl("knit", fs, fixed = TRUE))) {
         if (missing(fig.path)) { 
             fig.path = knitr::opts_chunk$get("fig.path", default=TRUE)
             ## ## resolve document file name for figure name prefixing

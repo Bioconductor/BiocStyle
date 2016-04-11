@@ -329,8 +329,18 @@
 %
 % incfig macro
 %
+% Make the last argument optional by combining the ideas from 
+% http://tex.stackexchange.com/a/30561/102422 and
+% http://tex.stackexchange.com/a/118150/102422
+\newcommand{\incfig}[4][\fps@figure]{%
+ \def\incfig@args{{#1}{#2}{#3}{#4}}%
+ \incfig@
+}
+\newcommand{\incfig@}{%
+ \@ifnextchar\bgroup{\expandafter\incfig@org\incfig@args}{\expandafter\incfig@org\incfig@args{}}
+}
 \newcommand{\prefix}[1]{#1}
-\newcommand{\incfig}[5][tbp]{%[1:placement]{2:filename}{3:width}{4:title}{5:caption}
+\newcommand{\incfig@org}[5]{%[1:placement]{2:filename}{3:width}{4:title}{5:caption}
  \begin{figure}[#1]%
  \includegraphics[width=#3]{\prefix{#2}}%
  \caption[#4]{\label{#2}#5}%

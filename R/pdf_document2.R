@@ -77,14 +77,14 @@ pdf_document2 <- function(toc = TRUE,
   # add author affiliations
   lines <- substituteLines(lines, "\\author{$for(author)$$author$$sep$ \\\\ $endfor$}",
                            insert = c("$for(author)$",
-                                      "$if(author.name)$  \\author{$author.name$}$else$  \\author{$author$}$endif$",
+                                      "$if(author.name)$  \\author{$author.name$$if(author.email)$\\thanks{\\ttfamily$author.email$}$endif$}$else$  \\author{$author$}$endif$",
                                       "$if(author.affiliation)$  \\affil{$author.affiliation$}$endif$$endfor$"))
   
   # add package version number
   lines <- substituteLines(lines, "\\end{abstract}", replace = FALSE,
                            insert = c("",
                                       "$if(package)$",
-                                      "\\package{$package$}",
+                                      "\\packageVersion{$package$}",
                                       "$endif$"))
   
   # remove highlighting-macros

@@ -181,6 +181,24 @@
 \renewcommand\dblfloatpagefraction{0.8}
 %
 %% Title page
+% use parnotes to typeset email addresses
+\RequirePackage{parnotes}
+\renewcommand{\parnotefmt}[1]{#1}
+\renewcommand{\parnotemarkfmt}[1]{\textsuperscript{\normalfont\footnotesize\fnsymbol{#1}}}
+\renewcommand{\parnotevskip}{0in}
+% redefine the following command in order to get rid of space after symbol 
+\long\def\PN@parnote@real#1{%
+    \global\advance\c@PN@t\@ne
+    \g@addto@macro\PN@text{%
+        \global\advance\c@PN@n\@ne
+        \parnotemarkfmt{PN@n}\nolinebreak#1% removed \thinspace from this line
+            \unless\ifnum\c@PN@n=\c@PN@t
+                \parnoteintercmd
+            \fi
+        }%
+    \unskip\parnotemarkfmt{PN@t}%
+}
+\renewcommand{\thanks}[1]{\,\parnote{#1}\!}
 \renewcommand{\maketitle}{%
 %\begin{titlepage}
 \thispagestyle{empty}
@@ -189,6 +207,7 @@
 \end{adjustwidth}
 \addvspace{3.5ex plus 0.5ex minus 0.25ex}
 {\@author\unskip\strut\par}
+\parnotes
 \addvspace{2.5ex plus 0.5ex minus 0.25ex}
 {\large\bfseries\@date\unskip\strut\par}
 \addvspace{1.5ex plus 0.25ex minus 0.15ex}
@@ -198,6 +217,9 @@
 \RequirePackage[noblocks]{authblk}
 \renewcommand\Authfont{\Large\bfseries\itshape}
 \renewcommand\Affilfont{\normalsize\mdseries\upshape}
+\makeatletter
+\renewcommand\AB@authnote[1]{\,\textsuperscript{\normalfont\footnotesize#1}}
+\makeatother
 %% Abstract
 \renewenvironment{abstract}%
 {{\bfhelvet\hskip-\overhang\abstractname\unskip\strut\par}}%
@@ -412,7 +434,7 @@
 {\contentslabel{12mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsubsection}[35mm]%
-{\normalfont\titlefont}%
+{\normalsize\titlefont}%
 {\contentslabel{13mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 % Equation numbering

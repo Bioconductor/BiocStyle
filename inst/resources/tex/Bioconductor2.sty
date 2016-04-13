@@ -25,6 +25,7 @@
  bookmarks=true,%
  bookmarksopen=true,%
  bookmarksnumbered=true,%
+ hyperfootnotes=false,%
  colorlinks,%
  breaklinks,%
  linkcolor=BiocBlue,%
@@ -270,7 +271,7 @@
 %
 \renewcommand{\texttt}[2][codecolor]{\textcolor{#1}{\hl{\ttfamily#2}}}
 \newcommand{\Rcode}[1]{\texttt{#1}}
-\newcommand{\Rfunction}[1]{\textbf{\texttt[functioncolor]{#1}}}
+\newcommand{\Rfunction}[1]{\texttt[functioncolor]{#1}}
 \newcommand{\Robject}[1]{\Rcode{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 %
@@ -391,7 +392,7 @@
 \makeatletter
 \ifthenelse{\boolean{BiocStyle@titlecaps}}{%
 \RequirePackage{xstring}
-\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1}\newline#2}
+\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1.} #2}
 \let\captionorg\caption
 \renewcommand*{\caption}[2][]{%
  \def\captiontitle{#1}%

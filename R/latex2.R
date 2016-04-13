@@ -9,9 +9,8 @@ loadBioconductorStyleFile <- function(titlecaps) {
 }
 
 latex2 <-
-    function(..., width=68, titlecaps = TRUE, short.fignames=FALSE, fig.path,
+    function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
              error=FALSE, use.unsrturl=TRUE) {
-    options(..., width=width)
     cat(
       loadBioconductorStyleFile(titlecaps = titlecaps),
       if (use.unsrturl) {
@@ -25,27 +24,29 @@ latex2 <-
     
     ## check whether called from knitr
     fs = sapply(sys.calls(), function(x) as.character(x)[1])
+    knitr = any(grepl("knit", fs, fixed = TRUE))
     
     ## knitr
-    if (any(grepl("knit", fs, fixed = TRUE))) {
-        if (missing(fig.path)) { 
-            fig.path = knitr::opts_chunk$get("fig.path", default=TRUE)
-            ## ## resolve document file name for figure name prefixing
-            ## filepath = sys.frame(id)$input
-            ## filename = unlist(strsplit(basename(filepath),
-            ##   split=".", fixed=TRUE))
-            ## filename = paste(filename[-length(filename)], collapse=".")
-            ## fig.path = paste(filename, "-", sep="")
+    if (knitr) {
+        if (missing(fig.path)) {
+          fig.path = knitr::opts_chunk$get("fig.path", default=TRUE)
+        } else {
+          knitr::opts_chunk$set(fig.path=fig.path)
         }
         
         if ( isTRUE(short.fignames) ) setPrefix(fig.path)
       
         ## set knitr options
         knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
-        knitr::opts_chunk$set(fig.path=fig.path, error=error, crop=TRUE)
         
-        # reset figure dimensions to detect values set by user
-        knitr::opts_chunk$set(fig.width=NA, fig.height=NA)
+        knitr::opts_chunk$set(
+          error = error,
+          fig.scap = NA, # disable default short caption extraction
+          crop = TRUE,
+          out.format = "latex", # important for code highlighting
+          background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
+          fig.width = NA, # reset figure dimensions to detect values set by user
+          fig.height = NA)
         
         knitr::opts_hooks$set(
           # options fig.small and fig.wide have precedance over fig.env
@@ -111,12 +112,8 @@ latex2 <-
         )
         
         ## code highlighting
-        knitr::opts_knit$set(out.format = "latex")
         thm <- system.file("themes", "default.css", package = "BiocStyle")
         knitr::knit_theme$set(thm)
-        
-        # suppress \definecolor{shadecolor} in knitrout environment
-        knitr::opts_chunk$set(background = NA) 
     }
     
     ## assume Sweave
@@ -125,4 +122,38 @@ latex2 <-
       cat("\\usepackage[noae, nogin]{Sweave}")
     }
     
+    ## line width of output code chunks
+    if (missing(width)) {
+      width = 70L
+      
+      # try to resolve the optimal width based on document font size setting
+      src = if (knitr) {
+        knitr::current_input()
+      } else {
+        tryCatch(dynGet("file"), error = function(e) NULL) # TODO: might need to be more specific here
+      }
+      
+      if (!is.null(src)) {
+        fontsize = tryCatch({
+          lines = readLines(src)
+          documentclass = grep("^[:blank:]*\\\\documentclass", lines, value = TRUE)[1L]
+          sub(".+(1[0-2]pt).+","\\1", documentclass)
+        }, error = function(e) NULL)
+        
+        if (!is.null(fontsize)) {
+          width = switch(fontsize, width,
+                         "12pt" = 58L,
+                         "11pt" = 64L,
+                         "10pt" = 70L)
+        }
+      }
+      
+      if (knitr) {
+        comment = knitr::opts_chunk$get("comment")
+        if (!is.na(comment))
+          width = width - nchar(comment)
+      }
+    }
+    
+    options(..., width = width)
 }

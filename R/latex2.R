@@ -148,11 +148,9 @@ latex2 <-
         }
       }
       
-      if (knitr) {
-        comment = knitr::opts_chunk$get("comment")
-        if (!is.na(comment))
-          width = width - nchar(comment)
-      }
+      # knitr output is usually commented out
+      if (knitr)
+        width = width - knitr:::comment_length(knitr::opts_chunk$get("comment"))
     }
     
     options(..., width = width)

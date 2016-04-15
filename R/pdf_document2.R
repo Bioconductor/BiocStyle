@@ -9,7 +9,6 @@ pdf_document2 <- function(toc = TRUE,
                           keep_tex = FALSE,
                           toc_newpage = FALSE,
                           titlecaps = TRUE,
-                          width = 68,
                           ...) {
   
   ## load the package to expose macros
@@ -132,17 +131,32 @@ pdf_document2 <- function(toc = TRUE,
   
   # knitr options
   knitr = rmarkdown::knitr_options(
-    opts_knit = list(width = width),
-    opts_chunk = list(collapse=TRUE),
+    opts_knit = list(width = .width()),
+    opts_chunk = list(collapse=TRUE, fig.scap=NA, fig.env=NULL),
     knit_hooks = list(
       plot = function(x, options = list()) {
-        # adjust width for plots which are not inserted as floats
-        if (!length(options$fig.cap) || is.na(options$fig.cap)) {
-          paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',
-                 knitr::hook_plot_tex(x, options),
-                 '\\end{adjustwidth}')
-        } else {
-          knitr::hook_plot_md(x, options)
+        if (isTRUE(options$fig.small)) {
+          options$fig.env = "smallfigure"
+          options$fig.width = 5
+        }
+        
+        if (isTRUE(options$fig.wide)) {
+          options$fig.env = "figure*"
+          options$fig.width = 10
+        }
+        
+        if (!is.null(options$fig.env)) {
+          knitr::hook_plot_tex(x, options)
+        }
+        else {
+          # adjust width for plots which are not wrapped in floats
+          if (!length(options$fig.cap) || is.na(options$fig.cap)) {
+            paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',
+                   knitr::hook_plot_tex(x, options),
+                   '\\end{adjustwidth}')
+          } else {
+            knitr::hook_plot_md(x, options)
+          }
         }
       })
   )

@@ -8,9 +8,8 @@ loadBioconductorStyleFile <- function(titlecaps) {
         sub(".sty$", "2", bioconductor.sty))
 }
 
-latex2 <-
-    function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
-             error=FALSE, use.unsrturl=TRUE) {
+latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
+                   use.unsrturl=TRUE) {
     cat(
       loadBioconductorStyleFile(titlecaps = titlecaps),
       if (use.unsrturl) {
@@ -39,47 +38,9 @@ latex2 <-
         ## set knitr options
         knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
         
-        knitr::opts_chunk$set(
-          error = error,
-          fig.scap = NA, # disable default short caption extraction
-          crop = TRUE,
-          out.format = "latex", # important for code highlighting
-          background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
-          fig.width = NA, # reset figure dimensions to detect values set by user
-          fig.height = NA)
+        opts_chunk.set()
         
-        knitr::opts_hooks$set(
-          # options fig.small and fig.wide have precedance over fig.env
-          fig.small = function(options) {
-            if (isTRUE(options$fig.small)) {
-              options$fig.env = "smallfigure"
-            }
-            options
-          },
-          fig.wide = function(options) {
-            if (isTRUE(options$fig.wide)) {
-              options$fig.env = "figure*"
-            }
-            options
-          },
-          # set default plot dimensions if user provided no values
-          fig.width = function(options) {
-            if (is.na(options$fig.width)) {
-              options$fig.width = switch(options$fig.env,
-                                         "smallfigure" = 5,
-                                         "figure*" = 10,
-                                         "figure" = 7.5,
-                                         7) # knitr default
-            }
-            options
-          },
-          fig.height = function(options) { 
-            if ( is.na(options$fig.height) ){
-              options$fig.height = 5
-            }
-            options
-          }
-        )
+        opts_hooks.set()
         
         # set hooks for special plot output
         knitr::knit_hooks$set(
@@ -114,6 +75,9 @@ latex2 <-
         ## code highlighting
         thm <- system.file("themes", "default.css", package = "BiocStyle")
         knitr::knit_theme$set(thm)
+        
+        ## reset header$framed which by default includes the content of knitr.sty
+        knitr::set_header(framed = "\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX")
     }
     
     ## assume Sweave
@@ -124,7 +88,7 @@ latex2 <-
     
     ## line width of output code chunks
     if (missing(width)) {
-      width = 70L
+      fontsize = NULL
       
       # try to resolve the optimal width based on document font size setting
       src = if (knitr) {
@@ -139,19 +103,71 @@ latex2 <-
           documentclass = grep("^[:blank:]*\\\\documentclass", lines, value = TRUE)[1L]
           sub(".+(1[0-2]pt).+","\\1", documentclass)
         }, error = function(e) NULL)
-        
-        if (!is.null(fontsize)) {
-          width = switch(fontsize, width,
-                         "12pt" = 58L,
-                         "11pt" = 64L,
-                         "10pt" = 70L)
-        }
       }
       
-      # knitr output is usually commented out
-      if (knitr)
-        width = width - knitr:::comment_length(knitr::opts_chunk$get("comment"))
+      width = .width(fontsize, knitr)
     }
     
     options(..., width = width)
+    }
+
+.width = function(fontsize = "10pt", knitr = TRUE, default = 70L) {
+  w = if (is.null(fontsize)) 
+    default
+  else
+    switch(fontsize, default,
+           "12pt" = 58L,
+           "11pt" = 64L,
+           "10pt" = 70L)
+  
+  # knitr output is usually commented out
+  if (knitr)
+    w = w - knitr:::comment_length(knitr::opts_chunk$get("comment"))
+  
+  w
+}
+
+opts_chunk.set = function() {
+  knitr::opts_chunk$set(
+    error = FALSE,
+    fig.scap = NA, # disable default short caption extraction
+    crop = TRUE,
+    background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
+    fig.width = NA, # reset figure dimensions to detect values set by user
+    fig.height = NA)
+}
+
+opts_hooks.set = function() {
+  knitr::opts_hooks$set(
+    # options fig.small and fig.wide have precedance over fig.env
+    fig.small = function(options) {
+      if (isTRUE(options$fig.small)) {
+        options$fig.env = "smallfigure"
+      }
+      options
+    },
+    fig.wide = function(options) {
+      if (isTRUE(options$fig.wide)) {
+        options$fig.env = "figure*"
+      }
+      options
+    },
+    # set default plot dimensions if user provided no values
+    fig.width = function(options) {
+      if (is.na(options$fig.width)) {
+        options$fig.width = switch(options$fig.env,
+                                   "smallfigure" = 5,
+                                   "figure*" = 10,
+                                   "figure" = 7.5,
+                                   7) # knitr default
+      }
+      options
+    },
+    fig.height = function(options) { 
+      if ( is.na(options$fig.height) ){
+        options$fig.height = 5
+      }
+      options
+    }
+  )
 }

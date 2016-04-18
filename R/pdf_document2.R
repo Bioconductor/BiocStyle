@@ -1,7 +1,7 @@
 pdf_document2 <- function(toc = TRUE,
                           number_sections = TRUE,
-                          fig_width = 7.5,
-                          fig_height = 5.0,
+                          fig_width = NA,
+                          fig_height = NA,
                           fig_caption = TRUE,
                           use.unsrturl = TRUE,
                           includes,
@@ -130,57 +130,37 @@ pdf_document2 <- function(toc = TRUE,
   if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
   
   # knitr options
-  knitr = rmarkdown::knitr_options(
+  knitr = list(
     opts_knit = list(width = .width()),
-    opts_chunk = list(collapse=TRUE, fig.scap=NA, fig.env=NULL),
+    opts_chunk = list(collapse=TRUE, fig.scap=NA),
     knit_hooks = list(
       plot = function(x, options = list()) {
-        if (isTRUE(options$fig.small)) {
-          options$fig.env = "smallfigure"
-          options$fig.width = 5
-        }
+        adjustwidth = NULL
         
-        if (isTRUE(options$fig.wide)) {
-          options$fig.env = "figure*"
-          options$fig.width = 10
-        }
-        
-        if (!is.null(options$fig.env)) {
-          knitr::hook_plot_tex(x, options)
-        }
-        else {
-          # adjust width for plots which are not wrapped in floats
-          if (!length(options$fig.cap) || is.na(options$fig.cap)) {
-            paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',
-                   knitr::hook_plot_tex(x, options),
-                   '\\end{adjustwidth}')
-          } else {
-            knitr::hook_plot_md(x, options)
-          }
-        }
-      })
-  )
-  
-  # pandoc options
-  pandoc_args = NULL
-  
-  if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
-  
-  # knitr options
-  knitr = rmarkdown::knitr_options(
-    opts_chunk = list(collapse=TRUE),
-    knit_hooks = list(
-      plot = function(x, options = list()) {
-        # adjust width for plots which are not inserted as floats
+        # adjust width for plots inserted not as floats
         if (!length(options$fig.cap) || is.na(options$fig.cap)) {
-          paste0('\\begin{adjustwidth}{\\fltoffset}{0mm}',
-                 knitr::hook_plot_tex(x, options),
-                '\\end{adjustwidth}')
-        } else {
+          adjustwidth = c('\\begin{adjustwidth}{\\fltoffset}{0mm}',
+                          '\\end{adjustwidth}')
+        }
+        
+        if (options$fig.env=="figure" && is.null(adjustwidth)) {
           knitr::hook_plot_md(x, options)
         }
-      })
+        else {
+          paste0(adjustwidth[1L],
+                 knitr::hook_plot_tex(x, options),
+                 adjustwidth[2L])
+        }
+      }),
+    opts_hooks = .opts_hooks,
+    opts_template = NULL
   )
+  
+  # LEGACY CODE: when rmarkdown 0.9.6 is released add dependency in DESCRIPTION and remove the following lines
+  if( packageVersion("rmarkdown") < package_version("0.9.6") ) {
+    if (is.na(fig_width)) fig_width = 7.5
+    if (is.na(fig_height)) fig_height = 5.0
+  }
   
   # call the base pdf_document function
   rmarkdown::output_format(knitr = knitr,

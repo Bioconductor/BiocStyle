@@ -38,9 +38,9 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
         ## set knitr options
         knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
         
-        opts_chunk.set()
+        knitr::opts_chunk$set(.opts_chunk)
         
-        opts_hooks.set()
+        knitr::opts_hooks$set(.opts_hooks)
         
         # set hooks for special plot output
         knitr::knit_hooks$set(
@@ -127,47 +127,43 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
   w
 }
 
-opts_chunk.set = function() {
-  knitr::opts_chunk$set(
-    error = FALSE,
-    fig.scap = NA, # disable default short caption extraction
-    crop = TRUE,
-    background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
-    fig.width = NA, # reset figure dimensions to detect values set by user
-    fig.height = NA)
-}
+.opts_chunk = list(
+  error = FALSE,
+  fig.scap = NA, # disable default short caption extraction
+  crop = TRUE,
+  background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
+  fig.width = NA, # reset figure dimensions to detect values set by user
+  fig.height = NA
+)
 
-opts_hooks.set = function() {
-  knitr::opts_hooks$set(
-    # options fig.small and fig.wide have precedance over fig.env
-    fig.small = function(options) {
-      if (isTRUE(options$fig.small)) {
-        options$fig.env = "smallfigure"
-      }
-      options
-    },
-    fig.wide = function(options) {
-      if (isTRUE(options$fig.wide)) {
-        options$fig.env = "figure*"
-      }
-      options
-    },
-    # set default plot dimensions if user provided no values
-    fig.width = function(options) {
-      if (is.na(options$fig.width)) {
-        options$fig.width = switch(options$fig.env,
-                                   "smallfigure" = 5,
-                                   "figure*" = 10,
-                                   "figure" = 7.5,
-                                   7) # knitr default
-      }
-      options
-    },
-    fig.height = function(options) { 
-      if ( is.na(options$fig.height) ){
-        options$fig.height = 5
-      }
-      options
+.opts_hooks = list(
+  # options fig.small and fig.wide have precedance over fig.env
+  fig.small = function(options) {
+    if (isTRUE(options$fig.small)) {
+      options$fig.env = "smallfigure"
     }
-  )
-}
+    options
+  },
+  fig.wide = function(options) {
+    if (isTRUE(options$fig.wide)) {
+      options$fig.env = "figure*"
+    }
+    options
+  },
+  # set default plot dimensions if user provided no values
+  fig.width = function(options) {
+    if (is.na(options$fig.width)) {
+      options$fig.width = switch(options$fig.env, 7, # fallback to knitr defaults
+                                 "smallfigure" = 5,
+                                 "figure*" = 10,
+                                 "figure" = 7.5)
+    }
+    options
+  },
+  fig.height = function(options) { 
+    if ( is.na(options$fig.height) ){
+      options$fig.height = 5
+    }
+    options
+  }
+)

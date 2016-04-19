@@ -370,7 +370,7 @@
 \newcommand{\incfig@org}[5]{%[1:placement]{2:filename}{3:width}{4:title}{5:caption}
  \begin{figure}[#1]%
  \includegraphics[width=#3]{\prefix{#2}}%
- \caption[#4]{\label{#2}#5}%
+ \caption[#4]{\label{#2}#4. #5}%
  \end{figure}%
 }
 \makeatother
@@ -387,29 +387,33 @@
 }
 % %% make first sentence of caption bold
 %
-% Redefine the caption environment following the suggestion in http://tex.stackexchange.com/a/20544
-%
+% Redefine the caption environment following the suggestion in http://tex.stackexchange.com/a/242214/102422
+% 
 \makeatletter
 \ifthenelse{\boolean{BiocStyle@titlecaps}}{%
 \RequirePackage{xstring}
-\newcommand\formatcaption[2]{{\bfhelvet\color{BiocBlue}#1.} #2}
-\let\captionorg\caption
-\renewcommand*{\caption}[2][]{%
- \def\captiontitle{#1}%
- \ifx\captiontitle\@empty%
-  \noexpandarg%
-  \IfSubStr{#2}{.}{%
-   \StrBefore{#2}{.}[\captiontitle]%
-   \StrBehind{#2}{.}[\captionbody]%
-  }{%
-   \def\captiontitle{#2}%
-   \def\captionbody{}%
-  }%
- \else%
-  \def\captionbody{#2}%
- \fi%
- \captionorg[\captiontitle]{\formatcaption{\captiontitle}{\captionbody}}%
-}}{}%
+\newcommand\formatlabel[1]{%
+ \noexpandarg%
+ \IfSubStr{#1}{.}{%
+  \StrBefore{#1}{.}[\@captiontitle]%
+  \def\captiontitle{\@captiontitle.}%
+  \StrBehind{#1}{.}[\captionbody]%
+ }{%
+  \def\captiontitle{#1}%
+  \def\captionbody{}%
+ }%
+ {{\bfhelvet\color{BiocBlue}\captiontitle} \captionbody}
+}
+\AtBeginDocument{%
+ \let\org@caption\@caption
+ \def\@caption#1[#2]#3{%  
+  \org@caption{#1}[{#2}]{\formatlabel{#3}}%
+ }%
+}
+% disable for subfloats
+\DeclareCaptionTextFormat{nocaptiontitle}{\renewcommand\formatlabel[1]{##1}#1}
+\captionsetup[sub]{textformat=nocaptiontitle}
+}{}%
 \makeatother
 %
 % TOC

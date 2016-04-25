@@ -85,6 +85,8 @@
 \setlength{\rightoffset}{35mm}
 \newlength{\fltoffset} % left offset of floats relative to paragraph text
 \setlength{\fltoffset}{20mm}
+\newlength{\capoffset} % right offset of captions relative to float's body
+\setlength{\capoffset}{-\fltoffset}
 %% Use Latin Modern Sans Serif font
 \renewcommand\familydefault\sfdefault
 \renewcommand\sfdefault{lmss}
@@ -316,9 +318,9 @@
 {%
 \edef\@tempa{\noexpand\@float{#2}[#1]}%
 \@tempa%
-\captionsetup{margin={#5,#6}}%
-\addtolength{\textwidth}{-#3}%
-\addtolength{\textwidth}{-#4}%
+\addtolength{\capoffset}{#6}
+\captionsetup{margin={#5,\capoffset}}%
+\addtolength{\textwidth}{-#3}\addtolength{\textwidth}{-#4}%
 \begin{adjustwidth}{#3}{#4}}%
 {\end{adjustwidth}\end@float}
 %
@@ -327,11 +329,11 @@
 {\end{@biocfloat}}
 %
 \newenvironment{@biocfloat@small}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{\fltoffset}{\rightoffset}{0mm}{0mm}}
+{\begin{@biocfloat}[#1]{#2}{\fltoffset}{\rightoffset}{0mm}{-\rightoffset}}
 {\end{@biocfloat}}
 %
 \newenvironment{@biocfloat@wide}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{0mm}{-\fltoffset}{\fltoffset}{-\fltoffset}}
+{\begin{@biocfloat}[#1]{#2}{0mm}{-\fltoffset}{\fltoffset}{\fltoffset}}
 {\end{@biocfloat}}
 %
 \renewenvironment{table}[1][\fps@table]
@@ -410,9 +412,14 @@
   \org@caption{#1}[{#2}]{\formatlabel{#3}}%
  }%
 }
-% disable for subfloats
+% subfloat captions
 \DeclareCaptionTextFormat{nocaptiontitle}{\renewcommand\formatlabel[1]{##1}#1}
-\captionsetup[sub]{textformat=nocaptiontitle}
+\captionsetup[subfloat]{%
+% needed by subcaption package
+  font=footnotesize,%
+  textformat=nocaptiontitle,%
+% needed by subfigure package
+  margin=0mm}
 }{}%
 \makeatother
 %
@@ -422,24 +429,22 @@
 %
 \RequirePackage{titletoc}
 %
-\def\pagefont{\normalsize\mdhelvet\color{black}}
+\def\pagefont{\small\mdhelvet\color{black}}
 %
 \newlength{\rightextend}
 %\setlength{\rightextend}{20mm}
 \setlength{\rightextend}{0mm}
 %
 \titlecontents{section}[10mm]%
-{\addvspace{2.5ex}\Large\titlefont}%
-%{\contentslabel{10mm}}{}{\hfill\pagefont\contentspage\hspace*{-\rightextend}}
-%[\addvspace{-.3ex}\titleline{\hspace*{0mm}\titlerule\hspace*{-\rightextend}}\addvspace{.3ex}\addvspace{1.0ex}]
+{\addvspace{.85\baselineskip}\large\titlefont}%
 {\contentslabel{10mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsection}[22mm]%
-{\addvspace{1.0ex}\large\titlefont}%
+{\addvspace{.35\baselineskip}\normalsize\titlefont}%
 {\contentslabel{12mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 \titlecontents{subsubsection}[35mm]%
-{\normalsize\titlefont}%
+{\small\titlefont}%
 {\contentslabel{13mm}}{}{\pagefont\titlerule*[9pt]{.}\contentspage\hspace*{-\rightextend}}
 %
 % Equation numbering

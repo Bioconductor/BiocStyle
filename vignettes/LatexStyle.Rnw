@@ -4,9 +4,8 @@
 
 \documentclass{article}
 
-%usepackage{Sweave}
 <<style, eval=TRUE, echo=FALSE, results=tex>>=
-BiocStyle::latex2()
+BiocStyle::latex()
 @ 
 
 \newcommand{\exitem}[3]{%

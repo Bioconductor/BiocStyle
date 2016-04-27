@@ -26,6 +26,8 @@ BiocStyle::latex2()
 
 \maketitle
 
+\packageVersion{\Sexpr{BiocStyle::pkg_ver("BiocStyle")}}
+
 \tableofcontents
 
 \newpage
@@ -53,7 +55,7 @@ command, preferably right after the \verb+\documentclass+ definition) of your \t
     @ 
 \end{verbatim}
 
-See \Rcode{?latex} for additional options. It is not necessary to include
+See \Rcode{?latex2} for additional options. It is not necessary to include
 \verb+\usepackage{Sweave}+ in your document preamble, as it is already inserted by \BiocStyle.
 See Appendix~\ref{sec:pkgs} for a list of other automatically attached \LaTeX\ packages.
 
@@ -75,7 +77,7 @@ and this to the preamble:
     @ 
 \end{verbatim}
 
-See \Rcode{?latex} for additional options, and Appendix~\ref{sec:pkgs} for a list of automatically attached \LaTeX\ packages.
+See \Rcode{?latex2} for additional options, and Appendix~\ref{sec:pkgs} for a list of automatically attached \LaTeX\ packages.
 
 \subsubsection{R markdown}
 
@@ -300,38 +302,104 @@ General:
 
 The line length \Rcode{option("width")} is automatically adjusted
 depending on the document's font size setting. Therefore, it shouldn't be necessary to set it manually.
-If for some reason you wish to alter it, use the \Rcode{width} argument in the call to  \Rfunction{latex2}, e.g.
-
-<<width, eval=FALSE>>=
-    BiocStyle::latex2(width=70)
-@
-
+If for some reason you wish to alter it, use the \Rcode{width} argument in the call to \Rfunction{BiocStyle::latex2()}.
 
 %---------------------------------------------------------
 \subsection{Figures}\label{incfig}
 %---------------------------------------------------------
 
-\BiocStyle\ defines 3 types of figure environments, which differ in size, 
-default aspect ratio, and horizontal placement on the the page.
+<<fig, echo=FALSE, fig=TRUE, include=FALSE, width=7.5, height=5>>=
+par(mar=c(4,4,0.5,0.5))
+plot(cars)
+<<widefig, echo=FALSE, fig=TRUE, include=FALSE, width=10, height=5>>=
+par(mar=c(4,4,0.5,0.5))
+plot(cars)
+<<smallfig, echo=FALSE, fig=TRUE, include=FALSE, width=5, height=5>>=
+par(mar=c(4,4,0.5,0.5))
+plot(cars)
+@
+
+\BiocStyle\ provides 3 types of float environments which differ in size, 
+default aspect ratio, and horizontal placement on the the page. See the table
+below for details, and Figures \ref{fig:figure}, \ref{fig:wide} and \ref{fig:small} 
+for an example output.
 
 \begin{table*}
 \begin{tabular}{l|l|l|l|l}
 environment & description & output width & device dimensions & aspect ratio\\
 %\hrule
-\latex{figure} & regular figure & 10mm & 7.5in x 5.0in & 1.5:1\\
-\latex{figure*} & wide figure & 120mm & 10.0in x 5.0in & 2:1\\
+\latex{figure} & regular figure & 100mm & 7.5in x 5.0in & 1.5:1\\
+\latex{figure*} & wide figure & 140mm & 10.0in x 5.0in & 2:1\\
 \latex{smallfigure} & small figure & 65mm & 5.0in x 5.0in & 1:1 \\
 \end{tabular}
 %\caption{ \Latex\ figure environments}
 \end{table*}
 
+The figure environment produces regular figures which are about 0.8 paragraph width and are right-aligned to the margin.
+Use the \verb+figure*+ environment to make use of the whole available width by producing figures which are about 1.2 paragraph wide 
+and extend on the right margin. The \verb+smallfigure+ environment is meant for possibly rectangular plots, which are about half width of the paragraph and centered with respect to it. The default placement specifier for \BiocStyle\ floats is \verb+htbp+, which typically inserts the outputs in the place where they are defined.
+
+\begin{figure}
+  \includegraphics{\jobname-fig}
+  \caption{\label{fig:figure}Regular figure. A figure rendered with the \latex{\textbackslash{}figure} environment.}
+\end{figure}
+
+\begin{figure*}
+  \includegraphics{\jobname-widefig}
+  \caption{\label{fig:wide}Wide figure. A figure rendered with the \latex{\textbackslash{}figure*} environment.}
+\end{figure*}
+
+\begin{smallfigure}
+  \includegraphics{\jobname-smallfig}
+  \caption{\label{fig:small}Small figure. A figure rendered with the \latex{\textbackslash{}smallfigure} environment.}
+\end{smallfigure}
+
 In \knitr\ and \rmarkdown\ the output environment for a graphics-producing code
 chunk can be specified in the \Rcode{fig.env} chunk option, e.g. set 
-\Rcode{fig.env='smallfigure'} to get \verb+\begin{smallfigure}+.
+\Rcode{fig.env='smallfigure'} to get \verb+\begin{smallfigure}+. 
+It is also possible to specify the wide and small figure
+environments by setting the \Rcode{fig.wide} or \Rcode{fig.small} option to \Rcode{TRUE}.
+The following two \knitr\ code chunks 
+
+\begin{verbatim}
+    <<smallfig, fig.cap="Small figure.", fig.env="smallfigure">>=
+    plot(cars)
+    @
+\end{verbatim}
+
+\begin{verbatim}
+    <<smallfig, fig.cap="Small figure.", fig.small=TRUE>>=
+    plot(cars)
+    @
+\end{verbatim}
+
+are equivalent and produce the same plot enclosed 
+in a \verb+smallfigure+ environment.
+
+To use the figure environments in Sweave, use explicit \LaTeX\ code which inserts
+the figure in combination  with the Sweave option \verb+include=FALSE+. 
+For example, the plot in Figure~\ref{fig:wide} was produced with the following code
+
+\begin{verbatim}
+    \begin{figure*}
+      \includegraphics[width=\maxwidth]{\jobname-widefig}
+      \caption{Wide figure. Figure caption.}\label{fig:sfig}
+    \end{figure*}
+\end{verbatim}
+
+Figure captions are set with 
+
+This feature can be disabled be setting the argument \Rcode{titlecaps = FALSE} in the call to \Rfunction{BiocStyle::latex2()}.
+
+
 
 Besides the usual \LaTeX{} capabilities (\verb+figure+ environment and
 \verb+\includegraphics+ command), \file{Bioconductor.sty} defines a
-macro \verb+\incfig[placement]{filename}{width}{shorttitle}{extendedcaption}+,
+macro 
+
+\verb+    \incfig[placement]{filename}{width}{title}{caption}+
+
+
 which expects four arguments:
 \begin{description}%[font=\texttt]
 \item[filename] The name of the figure file, also used as the label by
@@ -344,9 +412,9 @@ which expects four arguments:
   \Rpackage{knitr}: figure files are named \file{<chunkname>-i} where \emph{i}
   is the number of the plot generated in the chunk. 
 \item[width] Figure width.
-\item[shorttitle] A short description, used in the list of figures and
+\item[title] A short title, used in the list of figures and
   printed in bold as the first part of the caption.
-\item[extendedcaption] Continuation of the figure caption.
+\item[caption] Extended description of the figure.
 \end{description}
 The optional \textbf{placement} specifier controls where the figure is placed
 on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list
@@ -360,9 +428,9 @@ For \verb+incfig+ with Sweave, use
     v = seq(0, 60i, length=1000)
     plot(abs(v)*exp(v), type="l", col="Royalblue")
     @
-    \incfig{LatexStyle-figureexample}{0.5\textwidth}{A curve.}
+    \incfig{LatexStyle2-figureexample}{0.5\textwidth}{A curve.}
       {The code that creates this figure is shown in the code chunk.}
-    as shown in Figure~\ref{LatexStyle-figureexample}.
+    as shown in Figure~\ref{LatexStyle2-figureexample}.
 \end{verbatim}
 This results in
 <<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
@@ -370,9 +438,9 @@ v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @
 
-\incfig{LatexStyle-figureexample}{0.5\textwidth}{A curve.}
+\incfig{LatexStyle2-figureexample}{0.5\textwidth}{A curve.}
   {The code that creates this figure is shown in the code chunk.}
-as shown in Figure~\ref{LatexStyle-figureexample}.  When the option
+as shown in Figure~\ref{LatexStyle2-figureexample}.  When the option
 \Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by
 \verb+\incfig+ and \verb+\ref+ do not contain any prefix and are
 identical to the corresponding code chunk labels (plus figure number in case of
@@ -385,7 +453,7 @@ example would be \verb+\incfig{figureexample}{...}{...}{...}+ and
 For \verb+\incfig+ with \Rpackage{knitr}, use the option
 \Rcode{fig.show='hide'} rather than \Rcode{include=FALSE}. The
 \Rpackage{knitr}-equivalent code for
-Figure~\ref{LatexStyle-figureexample} is:
+Figure~\ref{LatexStyle2-figureexample} is:
 \begin{verbatim}
     <<figureexample, fig.show='hide', fig.width=4.2, fig.height=4.6>>=
     v = seq(0, 60i, length=1000)
@@ -401,7 +469,7 @@ prefix when inserting and referring to figures, e.g.:
       {The code that creates this figure is shown in the code chunk.}
 \end{verbatim}
 A custom prefix for figure file names can be passed to
-\Rfunction{latex} using the \Rcode{fig.path} option. When
+\Rfunction{latex2} using the \Rcode{fig.path} option. When
 \Rcode{short.fignames=TRUE}, figures can be referred to directly by
 code chunk labels, as described earlier in this section.
 
@@ -409,7 +477,7 @@ code chunk labels, as described earlier in this section.
 \section{Bibliography}
 %---------------------------------------------------------
 
-\Rcode{BiocStyle::latex()} has default argument
+\Rfunction{BiocStyle::latex2()} has default argument
 \Rcode{use.unsrturl=TRUE} to automatically format bibliographies using
 \software{natbib}'s unsrturl style. There is no need to explicitly
 include \software{natbib}, and it is an error to use a

@@ -1,17 +1,17 @@
-\name{latex}
+\name{latex2}
 
-\alias{latex}
+\alias{latex2}
 
 \title{Use Bioconductor styles to format LaTeX vignettes}
 \description{
 
   This function inserts code into a document preamble to provide a
-  consistent style to Bioconductor vignettes
+  consistent style to Bioconductor vignettes.
 
 }
 \usage{
-latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
-      use.unsrturl=TRUE)
+latex2(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
+       use.unsrturl=TRUE)
 }
 \arguments{
 
@@ -19,6 +19,8 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
 
   \item{width}{integer(1), maximum number of columns on a line used in
     printing. See \code{\link{options}}.}
+    
+  \item{titlecaps}{logical(1), emphasize the first sentence of float captions}
 
   \item{short.fignames}{logical(1), indicates whether \code{\\incfig}
     figures should be inserted and referred to using short names equal to
@@ -28,19 +30,13 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
     names when used with \code{knitr}; has no effect when compiled with
     \code{Sweave}. For details see \code{\link[knitr]{opts_chunk}}.}
 
-  \item{error}{logical(1), behavior of \code{knitr} when errors occur in
-    vignette code chunks, has no effect when compiled with
-    \code{Sweave}. The default (\code{FALSE}) means that errors stop
-    vignette processing, which is appropriate when packages are being
-    built and checked. For details see \code{\link[knitr]{opts_chunk}}.}
-    
   \item{use.unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
     style will be used (\code{\\bibliographystyle} command \emph{not}
     required).}
 
 }
 \details{
-  Use is described in the \sQuote{Bioconductor LaTeX Style} vignette.
+  Use is described in the \sQuote{Bioconductor LaTeX Style 2.0} vignette.
   
   By default the 'unsrturl' bibliography style is used, which
   automatically creates links to URL, DOIs, etc. Use a different
@@ -57,12 +53,12 @@ latex(..., width=90, short.fignames=FALSE, fig.path, error=FALSE,
 
 }
 \author{
-  Martin Morgan \url{mtmorgan@fhcrc.org}, Andrzej Oleś, Wolfgang Huber
+   Andrzej Oleś, Martin Morgan, Wolfgang Huber
 }
 
 \examples{
 ## location of the .sty file
-BiocStyle:::bioconductor.sty
+BiocStyle:::bioconductor2.sty
 }
 
 \keyword{ manip }

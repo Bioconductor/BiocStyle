@@ -26,7 +26,19 @@ BiocStyle::latex2()
 
 \maketitle
 
+\begin{abstract}
+This vignette describes the use of the new Bioconductor style for \LaTeX-based documentation.
+It focuses on authoring \Sweave\cite{Leisch2002} and \knitr\cite{Xie2014} vignettes which are typeset as markup .Rnw files.
+The same \LaTeX\ style is used by \rmarkdown\ .Rmd files which are rendered to PDF output format. 
+For R markdown-specific syntax see the \emph{Bioconductor R markdown style} package vignette.
+
+Report issues on \url{https://github.com/Bioconductor/BiocStyle/issues}
+
+\end{abstract}
+
 \packageVersion{\Sexpr{BiocStyle::pkg_ver("BiocStyle")}}
+
+\newpage
 
 \tableofcontents
 
@@ -39,7 +51,8 @@ BiocStyle::latex2()
 \BiocStyle\ provides a standard formatting style for documents which are rendered
 to PDF output format. It consists of a \LaTeX\ style definition which
 can be used with either plain \Sweave, \knitr, or R markdown documents. 
-Follow the instructions below on how to enable \BiocStyle\ depending on your document input format.
+Enable \BiocStyle\ in your document by following the instructions below 
+depending on the input format.
 
 \subsubsection{Sweave}
 
@@ -59,7 +72,7 @@ See \Rcode{?latex2} for additional options. It is not necessary to include
 \verb+\usepackage{Sweave}+ in your document preamble, as it is already inserted by \BiocStyle.
 See Appendix~\ref{sec:pkgs} for a list of other automatically attached \LaTeX\ packages.
 
-\subsubsection{\knitr{}}
+\subsubsection{\knitr{}}\label{sec:knitr} 
 
 To use with \CRANpkg{knitr}, add the following to the \file{DESCRIPTION} file:
 \begin{verbatim}
@@ -147,9 +160,11 @@ remedied (as on the \Bioconductor{} build system) with a final run of
     R CMD pdflatex vignette.tex
 \end{verbatim}
 
-\section{Structuring your document}
+\section{Structuring the document}
 
-\subsection{Title, author, and running headers}
+\subsection{Title page}
+
+\subsubsection{Title and running headers}
 
 Create a title and running headers by defining the \verb+\bioctitle+
 and \verb+\author+ commands in the preamble
@@ -161,6 +176,9 @@ and \verb+\author+ commands in the preamble
 \end{verbatim}
 and use \verb+\maketitle+ at the start of the document to output the title and author information.
 
+
+\subsubsection{Authors and affiliations}
+
 As illustrated above, email addresses can be entered
 with the \verb+\email+ command which creates a hyperlinked email address
 typeset in monospace font. Author affiliations can be specified with the \verb+\affil+ command
@@ -170,9 +188,7 @@ See the following examples for typical use cases.
 Important: most of the methods described below will only work once \BiocStyle\ has been loaded;
 therefore, specify authors \emph{after} the code chunk calling \Rcode{BiocStyle::latex2()}.
 
-\subsubsection{Single author}
-
-This is not different from the standard \LaTeX\ syntax. Use the \verb+\author+
+In case you want to specify ony a singe author, this is not different from the standard \LaTeX\ syntax. Use the \verb+\author+
 command to enter the author and affiliation information separated by a new line.
 You can enter the email in another new line after after the affiliation, or use
 the \verb+\thanks+ command.
@@ -181,9 +197,7 @@ the \verb+\thanks+ command.
     \author{Vignette Author\thanks{\email{authors@email.com}} \\ Affiliation}
 \end{verbatim}
 
-\subsubsection{Multiple authors}
-
-You can specify the author and affiliation information in different manners depending on 
+In case of multiple authors, you can specify the author and affiliation information in different manners depending on 
 the number of affiliations. In the basic case, when you don't provide authors'
 affiliation, or all the authors share the same affiliation, you can stick to regular \LaTeX\ syntax and have
 
@@ -221,7 +235,7 @@ footnote markers as optional arguments to the \verb+\auth+ and \verb+affil+ comm
 \end{verbatim}
 
 
-\subsection{Abstract, package version, and table of contents}
+\subsubsection{Abstract, package version, and table of contents}
 
 Abstract can be entered using the standard \verb+abstract+ environment:
 
@@ -240,7 +254,7 @@ this information automatically and in a properly formatted manner (substitute
 
 Use \verb+\tableofcontents+ to include a hyperlinked table of contents (TOC), and
 \verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for
-structuring your vignette. Usually, it's a good idea to start the first section
+structuring your vignette.  It's a good practice to start the first section
 on a new page by calling \verb+\newpage+ after the TOC:
 
 \begin{verbatim}
@@ -328,9 +342,9 @@ for an example output.
 \begin{tabular}{l|l|l|l|l}
 environment & description & output width & device dimensions & aspect ratio\\
 %\hrule
-\latex{figure} & regular figure & 100mm & 7.5in x 5.0in & 1.5:1\\
-\latex{figure*} & wide figure & 140mm & 10.0in x 5.0in & 2:1\\
-\latex{smallfigure} & small figure & 65mm & 5.0in x 5.0in & 1:1 \\
+\latex{figure} & regular figure & 100mm & 7.5in x 5.0in & 1.5\\
+\latex{figure*} & wide figure & 140mm & 10.0in x 5.0in & 2.0\\
+\latex{smallfigure} & small figure & 65mm & 5.0in x 5.0in & 1.0 \\
 \end{tabular}
 %\caption{ \Latex\ figure environments}
 \end{table*}
@@ -389,9 +403,9 @@ For example, the plot in Figure~\ref{fig:wide} was produced with the following c
 
 Figure captions are set with 
 
-This feature can be disabled be setting the argument \Rcode{titlecaps = FALSE} in the call to \Rfunction{BiocStyle::latex2()}.
+This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex2()}.
 
-
+When \knitr\ is used plots are cropped so that blank margins around them are removed to make better use of the space in the output document, otherwise one often has to struggle with \Rcode{par} to set appropriate margins. This can be switched off by setting the chunk option \Rcode{knitr::opts\_chunk\$set(crop = NULL)}.
 
 Besides the usual \LaTeX{} capabilities (\verb+figure+ environment and
 \verb+\includegraphics+ command), \file{Bioconductor.sty} defines a
@@ -473,8 +487,16 @@ A custom prefix for figure file names can be passed to
 \Rcode{short.fignames=TRUE}, figures can be referred to directly by
 code chunk labels, as described earlier in this section.
 
+\subsection{Equations}
+
+When referencing equations, e.g.~\eqref{equation}, use \verb+\eqref+ to ensure proper label formatting.
+
+\begin{equation}\label{equation}
+  \sin^2 \theta + \cos^2 \theta \equiv 1
+\end{equation}
+
 %---------------------------------------------------------
-\section{Bibliography}
+\subsection{Bibliography}
 %---------------------------------------------------------
 
 \Rfunction{BiocStyle::latex2()} has default argument
@@ -482,7 +504,7 @@ code chunk labels, as described earlier in this section.
 \software{natbib}'s unsrturl style. There is no need to explicitly
 include \software{natbib}, and it is an error to use a
 \verb+\bibliographystyle+ command. The \software{unsrturl.bst} format,
-e.g., \cite{Gentleman:2004, 10.1371/journal.pcbi.1003118}, supports
+e.g., \cite{Leisch2002, Gentleman:2004}, supports
 hyperlinks to DOI and PubMed IDs but not \verb+\citet+ or
 \verb+\citep+.
 
@@ -523,12 +545,13 @@ latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 \subsection{Use with \LaTeX\ package \latex{float}}
 
 The current implementation of \BiocStyle\ is not compatible with the \LaTeX\ package \latex{float}.
-Please refrain from using \latex{float}, as including \verb+\usepackage{float}+ in your document's preamble will most probably result in an error during compilation.
+Please refrain from using \latex{float}, in particular the \verb+[H]+ placement specifier.
 
 \subsection{Compatibility with the \Rpackage{xtable} R package}
 
 \BiocStyle\ does not support tables produced by the R package \CRANpkg{xtable} in plain \Sweave\ documents.
-This limitation does not apply to \knitr\ documents. If you would like to 
+This limitation does not apply to documents compiled with \knitr. If you would like to 
 use \Rpackage{xtable} in your \BiocStyle-enabled document, please consider using \knitr\ instead of \Sweave.
+See Section~\ref{sec:knitr} for details on using BiocStyle with \knitr. 
 
 \end{document}

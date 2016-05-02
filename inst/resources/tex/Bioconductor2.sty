@@ -229,7 +229,7 @@
 {\par}
 %%
 \newcommand{\email}[1]{\href{mailto:#1}{\ttfamily#1}}
-\newcommand{\file}[1]{'#1'}
+\newcommand{\file}[1]{`#1'}
 %
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
@@ -277,9 +277,9 @@
 \newcommand{\Robject}[1]{\Rcode{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 %
-\newcommand{\bioccomment}[1]{\textsl{\textcolor{BiocGray}{comment: #1}}}
-\newcommand{\warning}[1]{\textsl{\textcolor{BiocMagenta}{warning: #1}}}
-\newcommand{\fixme}[1]{\textsl{\textcolor{BiocBittersweet}{fixme: #1}}}
+\newcommand{\bioccomment}[2][comment]{\textsl{\textcolor{BiocGray}{#1: #2}}}
+\newcommand{\warning}[2][warning]{\textsl{\textcolor{BiocMagenta}{#1: #2}}}
+\newcommand{\fixme}[2][fixme]{\textsl{\textcolor{BiocBittersweet}{#1: #2}}}
 %%
 % The placeins package provides the \FloatBarrier command.  This forces
 % LaTeX to place all of the floats before proceeding.  We'll use this to
@@ -372,7 +372,7 @@
 \newcommand{\incfig@org}[5]{%[1:placement]{2:filename}{3:width}{4:title}{5:caption}
  \begin{figure}[#1]%
  \includegraphics[width=#3]{\prefix{#2}}%
- \caption[#4]{\label{#2}#4. #5}%
+ \caption[#4]{\label{#2}#4 #5}%
  \end{figure}%
 }
 \makeatother

@@ -26,7 +26,11 @@ BiocStyle::latex2()
 }
 
 \title{\Bioconductor\ \LaTeX\ Style 2.0}
-\author{Andrzej Ole\'s, Martin Morgan, Wolfgang Huber}
+\author[1]{Andrzej Ole\'s}
+\author[2]{Martin Morgan}
+\author[1]{Wolfgang \mbox{Huber}}
+\affil[1]{European Molecular Biology Laboratory, Heidelberg, Germany}
+\affil[2]{Roswell Park Cancer Institute, Buffalo, NY}
 
 \begin{document}
 
@@ -39,12 +43,11 @@ The vignette focuses on the use with documents typeset as markup .Rnw files and
 processed using \Sweave\cite{Leisch2002} or \knitr\cite{Xie2014}.
 The same style is also applied to \R\ markdown .Rmd files which are rendered to PDF output format. 
 %For markdown-specific syntax see the \emph{Bioconductor \R\ markdown style} package vignette.
-
-Report issues on \url{https://github.com/Bioconductor/BiocStyle/issues}
-
 \end{abstract}
 
 \packageVersion{\Sexpr{BiocStyle::pkg_ver("BiocStyle")}}
+
+Report issues on \url{https://github.com/Bioconductor/BiocStyle/issues}
 
 \newpage
 
@@ -129,7 +132,7 @@ To enable \BiocStyle\ in your \R\ markdown vignette you need to:
   
 \end{enumerate}
   
-The \verb+vignette+ section is required in order to instruct \R\ how to build the vignette. Note that the \verb+\VignetteIndexEntry+ should match the \verb+title+ of your vignette.
+The \verb+vignette+ section is required in order to instruct \R\ how to build the vignette. Note that \verb+\VignetteIndexEntry+ should match the \verb+title+ of your vignette.
   
 See the \emph{Bioconductor \R\ markdown style} package vignette\footnote{in preparation} for
 more details on authoring markdown documents with \BiocStyle.
@@ -152,7 +155,7 @@ When using \knitr, the command to process the vignette is
 \begin{verbatim}
     R CMD Sweave --engine=knitr::knitr --pdf vignette.Rnw
 \end{verbatim}
-For \R\ markdown vignettes, set the engine to \verb+knitr::rmarkdown+:
+For \R\ markdown vignettes, set the engine to \verb+knitr::rmarkdown+.
 \begin{verbatim}
     R CMD Sweave --engine=knitr::rmarkdown --pdf vignette.Rmd
 \end{verbatim}
@@ -172,8 +175,8 @@ remedied (as on the \Bioconductor{} build system) with a final run of
 
 \subsection{Title page}
 
-\warning[Important]{most of the methods described below will only work once \BiocStyle\ has been loaded;
-therefore, specify title and authors \emph{after} the code chunk calling \Rfunction{BiocStyle::latex2()}.}
+\warning[Important]{most of the methods described here only work once \BiocStyle\ is \linebreak loaded;
+therefore, specify title and authors \emph{after} the code chunk calling \linebreak\Rfunction{BiocStyle::latex2()}.}
 
 \subsubsection{Title and running headers}
 
@@ -185,22 +188,22 @@ and \verb+\author+ in the preamble
     %% or... \title{Title used for both header and title page} 
     \author{Vignette Author\thanks{\email{user@domain.com}}}
 \end{verbatim}
-and use \verb+\maketitle+ at the start of the document to output the title and author information.
+and use \verb+\maketitle+ at the beginning of the document to output the title and author information.
 
 \subsubsection{Authors and affiliations}
 
 As illustrated above, use the \verb+\email+ command to enter hyperlinked email addresses
 typeset in monospace font. Multiple author affiliations can be specified with the help of
-the \LaTeX\ package \latex{authblk}, which is automatically loaded by \BiocStyle.
+the \LaTeX\ package \latex{authblk} which is automatically loaded by \BiocStyle.
 See the following examples for typical use cases. 
 
-If you want to specify just a single author, use standard \LaTeX\ syntax
+If your vignette has just a single author, use standard \LaTeX\ syntax
 to enter the author and affiliation information separated by a new line.
 You can provide the email address in \verb+\thanks+, or in another new line 
 after the affiliation.
 
 \begin{verbatim}
-    \author{Vignette Author\thanks{\email{authors@email.com}}\\
+    \author{Vignette Author\thanks{\email{user@domain.com}}\\
             Author's Affiliation}
 \end{verbatim}
 
@@ -209,17 +212,17 @@ the number of affiliations. In the basic case, when you don't provide authors'
 affiliation, or all the authors share the same affiliation, you can just use the regular \verb+\author+ command:
 
 \begin{verbatim}
-\author{
-  First Author\thanks{\email{first@author.com}},
-  Second Author\thanks{\email{second@author.com}}\\
-  Shared Affiliation
-}
+    \author{
+      First Author\thanks{\email{first@author.com}},
+      Second Author\thanks{\email{second@author.com}}\\
+      Shared Affiliation
+    }
 \end{verbatim}
 
-To provide different affiliations, some of which are potentially being shared, 
+To provide different affiliations, some of which are potentially shared, 
 enter each author separately and use \verb+\affil+
 to specify affiliation. The authors will appear all in one (possibly continued) line
-with automatic footnotes, and the affiliations are displayed in separate lines below.
+with automatic footnotes, and the affiliations are displayed in separate lines below.\footnote{as on this vignette's title page}
 
 \begin{verbatim}
     \author{First Author}
@@ -231,7 +234,7 @@ with automatic footnotes, and the affiliations are displayed in separate lines b
 
 In the case when some authors have more than one affiliation, or the authors with 
 a shared affiliation do not come one after another, you need to manually define
-footnote markers as optional arguments to the \verb+\author+ and \verb+\affil+ commands, as in the following example.
+footnote markers as optional arguments to \verb+\author+ and \verb+\affil+ commands, as in the following example.
 
 \begin{verbatim}
     \author[1,2]{First Author\thanks{\email{user@domain.com}}}
@@ -253,7 +256,7 @@ Abstract can be entered using the standard \verb+abstract+ environment:
 \end{verbatim}
 
 It is recommended to include information on the specific 
-package version which the vignette describes. The following line\footnote{substitute 
+package version described in the vignette. The following line\footnote{substitute 
 \latex{packageName} by the name of your package} inserts
 this information automatically and in a properly formatted manner.
 
@@ -261,7 +264,7 @@ this information automatically and in a properly formatted manner.
 
 Use \verb+\tableofcontents+ to include a hyperlinked table of contents (TOC), and
 \verb+\section+, \verb+\subsection+, \verb+\subsubsection+ for
-structuring your vignette.  It's a good practice to start the first section
+structuring your document.  It is a good practice to start the first section
 on a new page by calling \verb+\newpage+ after the TOC:
 
 \begin{verbatim}
@@ -322,12 +325,13 @@ General:
 
 %\BiocStyle\ changes the default setting of the \verb+error+ option
 
-\BiocStyle\ automatically adjusts the line length \Rcode{option("width")} 
+\BiocStyle\ automatically adjusts the line length\footnote{\Rcode{options("width")}} 
+of output code chunks
 depending on the document's font size setting. Therefore, it shouldn't be necessary to set it manually.
 If for some reason you wish to alter it, use the \Rcode{width} argument in the call to \Rfunction{BiocStyle::latex2}.
 
 %---------------------------------------------------------
-\subsection{Figures}\label{incfig}
+\subsection{Figures}\label{sec:figures}
 %---------------------------------------------------------
 
 <<fig, echo=FALSE, fig=TRUE, include=FALSE, width=7.5, height=5>>=
@@ -343,52 +347,78 @@ plot(cars)
 
 
 In addition to the standard \verb+\figure+ environment \BiocStyle\ provides special
-environments for small and wide figures. These environments differ in size, 
-default aspect ratio\footnote{device dimensions are automatically set only in \knitr\ and \rmarkdown, and not in \Sweave}, 
-and horizontal placement on the the page. See the table
-below for details, and Figures \ref{fig:figure}, \ref{fig:wide} and \ref{fig:small} 
+environments for small and wide figures. These three environments differ in size, 
+default aspect ratio\footnote{device dimensions are automatically set only by \knitr\ and \rmarkdown, and not by \Sweave}, 
+and horizontal placement on the the page. See the following
+table for details, and Figures~\ref{fig:figure}, \ref{fig:wide} and \ref{fig:small} 
 for examples.
 
 \begin{table*}
   \begin{small}
-  \begin{tabular}{lllll}
+  \begin{tabular}{llp{8mm}lll}
     \toprule
-    environment & description & output width & device dimensions & aspect ratio\\
+    environment & description & \multicolumn{2}{l}{output width} & device dimensions & aspect ratio\\
     \midrule
-    \latex{figure} & regular figure & 100mm & 7.5in x 5.0in & 1.5\\
-    \latex{figure*} & wide figure & 140mm & 10.0in x 5.0in & 2.0\\
-    \latex{smallfigure} & small figure & 65mm & 5.0in x 5.0in & 1.0 \\
+    \latex{figure} & regular figure & 100mm &($\approx$3.9in) & 7.5 x 5.0 in & 1.5\\
+    \latex{figure*} & wide figure & 140mm  &($\approx$5.5in)& 10.0 x 5.0 in & 2.0\\
+    \latex{smallfigure} & small figure & 65mm &($\approx$2.6in)& 5.0 x 5.0 in & 1.0 \\
     \bottomrule
   \end{tabular}
   \end{small}
 \end{table*}
 
-The \verb+figure+ environment produces regular figures which are about 0.8 paragraph wide and are right-aligned with the margin, as Figure \ref{fig:figure}.
-Use the \verb+figure*+ environment to make use of the whole available width by producing figures which are about 1.2 paragraph wide 
-and extend on the right margin (Figure \ref{fig:wide}). The \verb+smallfigure+ environment is meant for possibly rectangular plots, which are about half as wide as the paragraph and appear centered with respect to it (Figure \ref{fig:small}). The default placement specifier for \BiocStyle\ floats is \latex{\thefpsfigure}, which typically outputs them in the place where they are defined.
-
 \begin{figure}
   \includegraphics{\jobname-fig}
-  \caption{\label{fig:figure}Regular figure. A figure rendered with the \latex{\textbackslash figure} environment.}
+  \caption{\label{fig:figure}Regular figure. A plot displayed with the \latex{\textbackslash figure} environment.}
 \end{figure}
 
 \begin{figure*}
   \includegraphics{\jobname-widefig}
-  \caption{\label{fig:wide}Wide figure. A figure rendered
+  \caption{\label{fig:wide}Wide figure. A plot displayed
   with the {\ttfamily\textbackslash figure*} environment.}
 \end{figure*}
 
 \begin{smallfigure}
   \includegraphics{\jobname-smallfig}
-  \caption{\label{fig:small}Small figure. A figure rendered with the \latex{\textbackslash{}smallfigure} environment.}
+  \caption{\label{fig:small}Small figure. A plot displayed with the \latex{\textbackslash{}smallfigure} environment.}
 \end{smallfigure}
 
+The \verb+figure+ environment produces regular figures which are about 0.8 paragraph wide
+and right-aligned with the margin, as Figure~\ref{fig:figure}.
+To utilize the whole available width use the \verb+figure*+ environment.
+It produces figures which are about 1.2 paragraph wide 
+and extend on the right margin (Figure~\ref{fig:wide}).
+The \verb+smallfigure+ environment is meant for possibly rectangular plots
+which are about half as wide as the paragraph (Figure~\ref{fig:small}).
+The default placement specifier for \BiocStyle\ floats is \latex{\thefpsfigure}, 
+which typically outputs them in the place where they are defined. 
+The first sentence of figure captions is emphasized to serve as figure title. 
+This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex2}.
+
+To use figure environments in \Sweave, write explicit \LaTeX\ code which inserts
+the figure in combination  with the \Sweave\ option \verb+include=FALSE+. 
+For example, Figure~\ref{fig:wide} was produced with the following code.
+
+\begin{verbatim}
+    <<widefig, echo=FALSE, fig=TRUE, include=FALSE, width=10, height=5>>=
+    par(mar=c(4,4,0.5,0.5))
+    plot(cars)
+    @
+\end{verbatim}
+\begin{verbatim}
+    \begin{figure*}
+      \includegraphics{\jobname-widefig}
+      \caption{\label{fig:wide}Wide figure. A plot displayed
+      with the {\ttfamily\textbackslash figure*} environment.}
+    \end{figure*}
+\end{verbatim}
+
 In \knitr\ and \rmarkdown\ the output environment for a graphics-producing code
-chunk can be specified in the \Rcode{fig.env} chunk option, e.g. set 
+chunk can be specified in \Rcode{fig.env} chunk option, e.g.~set 
 \Rcode{fig.env='smallfigure'} to get \verb+\begin{smallfigure}+. 
 It is also possible to specify the wide and small figure
-environments by setting the \Rcode{fig.wide} or \Rcode{fig.small} option to \Rcode{TRUE}.
-The following two \knitr\ code chunks 
+environments by setting \Rcode{fig.wide} or \Rcode{fig.small} option to \Rcode{TRUE}.
+The following two \knitr\ code chunks are equivalent and produce the same output, similar to Figure~\ref{fig:small}.
 \begin{verbatim}
     <<smallfig, fig.cap="Small figure.", fig.env="smallfigure">>=
     plot(cars)
@@ -399,27 +429,13 @@ The following two \knitr\ code chunks
     plot(cars)
     @
 \end{verbatim}
-are equivalent and produce the same output, similar to Figure~\ref{fig:small}.
-
-To use the figure environments in Sweave, use explicit \LaTeX\ code which inserts
-the figure in combination  with the Sweave option \verb+include=FALSE+. 
-For example, Figure~\ref{fig:wide} was produced with the following code.
-
-\begin{verbatim}
-    \begin{figure*}
-      \includegraphics{\jobname-widefig}
-      \caption{\label{fig:wide}Wide figure. A figure rendered
-      with the {\ttfamily\textbackslash figure*} environment.}
-    \end{figure*}
-\end{verbatim}
-
-The first sentence of figure captions is emphasized to serve as a figure title. This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex2}.
 
 When \knitr\ is used plots are cropped so that blank margins around them are removed to make better use of the space in the output document\footnote{otherwise one often has to struggle with \Rcode{par} to set appropriate margins}. This feature can be switched off by setting the chunk option \Rcode{knitr::opts\_chunk\$set(crop = NULL)}.
 
+\subsubsection{\latex{\textbackslash incfig} convenience macro}\label{incfig}
+
 Besides the usual \LaTeX\ capabilities (the \verb+figure+ environment and
-\verb+\includegraphics+ command), \BiocStyle\ defines a
-macro 
+\verb+\includegraphics+ command) \BiocStyle\ defines a macro 
 
 \verb+    \incfig[placement]{filename}{width}{title}{caption}+
 
@@ -430,7 +446,7 @@ which expects four arguments:
   \Sweave\ and \knitr\ options place figures in a
   subdirectory; unless \Rcode{short.fignames=TRUE} is set the full file name,
   including the subdirectory and any prefixes, should be provided. By default,
-  these are \file{<sweavename>-} for \Sweave and \file{figure/} for
+  these are \file{<sweavename>-} for \Sweave\ and \file{figure/} for
   \knitr. Also note the different naming scheme used by
   \knitr: figure files are named \file{<chunkname>-i} where \emph{i}
   is the number of the plot generated in the chunk. 
@@ -440,7 +456,7 @@ which expects four arguments:
 \item[caption] Extended description of the figure.
 \end{description}
 The optional \textbf{\ttfamily placement} specifier controls where the figure is placed
-on page and takes the usual values allowed by \LaTeX{} floats, i.e., a list
+on page; it takes the usual values allowed by \LaTeX{} floats, i.e., a list
 containing \verb+t+, \verb+b+, \verb+p+, or \verb+h+, where letters enumerate
 permitted placements\footnote{if no placement specifier is given, the default
 \latex{\thefpsfigure} is assumed}.
@@ -448,52 +464,55 @@ permitted placements\footnote{if no placement specifier is given, the default
 For \verb+incfig+ with \Sweave\, use
 \begin{verbatim}
     <<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
+    par(mar=c(4,4,0.5,0.5))
     v = seq(0, 60i, length=1000)
     plot(abs(v)*exp(v), type="l", col="Royalblue")
     @
-    \incfig{\jobname-figureexample}{0.65\textwidth}{A curve.}
+    \incfig{\jobname-figureexample}{0.5\textwidth}{A curve.}
       {The code that creates this figure is shown in the code chunk.}
     as shown in Figure~\ref{\jobname-figureexample}.
 \end{verbatim}
 This results in
-<<figureexample, fig=TRUE, include=FALSE, width=4.2, height=4.6>>=
+<<figureexample, fig=TRUE, include=FALSE, width=4, height=4>>=
+par(mar=c(4,4,0.5,0.5))
 v = seq(0, 60i, length=1000)
 plot(abs(v)*exp(v), type="l", col="Royalblue")
 @
-\incfig{\jobname-figureexample}{0.65\textwidth}{A curve.}
+\incfig{\jobname-figureexample}{0.5\textwidth}{A curve.}
   {The code that creates this figure is shown in the code chunk.}
-as shown in Figure~\ref{\jobname-figureexample}.  When the option
-\Rcode{short.fignames} is set to \Rcode{TRUE}, figure names used by
+as shown in Figure~\ref{\jobname-figureexample}.  
+
+When option \Rcode{short.fignames=TRUE} is set, figure names used by
 \verb+\incfig+ and \verb+\ref+ do not contain any prefix and are
 identical to the corresponding code chunk labels (plus figure number in case of
 \knitr). For example, in \Sweave\ the respective code for the above
 example would be \verb+\incfig{figureexample}{...}{...}{...}+ and
-\verb+\ref{figureexample}+, while in \knitr~these are expected to be
-\verb+\incfig{figureexample-1}{...}{...}{...}+ and
-\verb+\ref{figureexample-1}+.
+\verb+\ref{figureexample}+.
 
-For \verb+\incfig+ with \Rpackage{knitr}, use the option
+For \verb+\incfig+ with \knitr, use the option
 \Rcode{fig.show='hide'} rather than \Rcode{include=FALSE}. The
-\Rpackage{knitr}-equivalent code for
+\knitr-equivalent code for
 Figure~\ref{LatexStyle2-figureexample} is:
 \begin{verbatim}
-    <<figureexample, fig.show='hide', fig.width=4.2, fig.height=4.6>>=
+    <<figureexample, fig.show='hide', fig.width=4, fig.height=4>>=
+    par(mar=c(4,4,0.5,0.5))
     v = seq(0, 60i, length=1000)
     plot(abs(v)*exp(v), type="l", col="Royalblue")
     @
 \end{verbatim}
 Note the difference in option names setting the figure width and
-height compared to \Rpackage{Sweave}.  Unless
+height compared to \Sweave.  Unless
 \Rcode{short.fignames=TRUE} is set, use the default \file{figure/}
 prefix when inserting and referring to figures, e.g.:
 \begin{verbatim}
-    \incfig{figure/figureexample-1}{0.65\textwidth}{A curve.}
+    \incfig{figure/figureexample-1}{0.5\textwidth}{A curve.}
       {The code that creates this figure is shown in the code chunk.}
 \end{verbatim}
 A custom prefix for figure file names can be passed to
 \Rfunction{latex2} in the \Rcode{fig.path} argument. When
 \Rcode{short.fignames=TRUE}, figures can be referred to directly by
-code chunk labels, as described earlier in this section.
+code chunk labels, i.e., \verb+\incfig{figureexample-1}...+ and
+\verb+\ref{figureexample-1}+.
 
 \subsection{Equations}
 
@@ -505,8 +524,8 @@ When referencing equations, e.g.~\eqref{equation}, use \verb+\eqref+ to ensure p
 
 \subsection{Footnotes}
 
-One of the distinctive features of the style is an assymetric page layout 
-with a wide margin on the right. This provides additional space for ancilliary information in side notes. These can be entered in footnotes\footnote{this is a side note entered using the {\ttfamily \textbackslash footnote} command} typeset as margin notes, which has the advantage that the notes appear close to the place where they are defined. 
+One of the distinctive features of the style is an asymmetric page layout 
+with a wide margin on the right. This provides additional space for ancillary information in side notes. These can be entered in footnotes\footnote{this is a side note entered using the {\ttfamily \textbackslash footnote} command} typeset as margin notes, which has the advantage that the notes appear close to the place where they are defined. 
 
 %---------------------------------------------------------
 \subsection{Bibliography}
@@ -552,7 +571,9 @@ pkgs = sort(unique(c(pkgs, "hyperref")))
 latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 @
 
-\BiocStyle\ loads the following \LaTeX\ packages: \Sexpr{latexpkgs}.
+\BiocStyle\ loads the following \LaTeX\ packages:
+
+\Sexpr{latexpkgs}.
 
 
 \section{Known issues}
@@ -566,7 +587,7 @@ Please refrain from using \latex{float}, in particular the \verb+[H]+ placement 
 
 \BiocStyle\ does not support tables produced by the \R\ package \CRANpkg{xtable} in plain \Sweave\ documents.
 This limitation does not apply to documents compiled with \knitr. If you would like to 
-use \Rpackage{xtable} in your \BiocStyle-enabled document, please consider using \knitr\footnote{see Section~\ref{sec:knitr} for details on using BiocStyle with \knitr} instead of \Sweave.
+use \Rpackage{xtable} in your \BiocStyle-enabled document, please consider using \knitr\footnote{see Sections~\ref{sec:knitr} and \ref{sec:figures} for details on using BiocStyle with \knitr} instead of \Sweave.
 
 
 \end{document}

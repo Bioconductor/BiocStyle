@@ -14,89 +14,7 @@ pdf_document2 <- function(toc = TRUE,
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  ## get and modify the default pandoc template
-  
-  # choose the rmarkdown template depending on pandoc version
-  version <- rmarkdown::pandoc_version()
-  
-  template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
-                               pattern = "\\.tex$")
-  template_versions <- sub("default-?([1-9.]*).tex", "\\1", template_files)
-  template_versions <- numeric_version(template_versions, strict = FALSE)
-  template_versions <- sort(template_versions, decreasing = TRUE)
-  
-  idx <- match(TRUE, version >= template_versions)
-  
-  template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
-  
-  # customize the template
-  lines <- readLines(system.file("rmd", "latex", template, package = "rmarkdown"))
-  
-  template <- file.path(tempdir(), template)
-  
-  substituteLines = function (lines, from, to, insert = NULL, replace = TRUE, from.offset = 0L, to.offset = 0L, ...) {
-    from = grep(from, lines, fixed=TRUE)
-    # exit if nothing found
-    if (length(from)==0)
-      return(lines)
-    
-    if (missing(to)) {
-      to = from
-    } else {
-      to = grep(to, lines, fixed=TRUE)
-    }
-    
-    # exit if nothing found
-    if (length(to)==0)
-      return(lines)
-    
-    from = from + from.offset
-    to = to + to.offset
-    
-    if (isTRUE(replace)) { # substitute lines from-to
-      c(lines[1:(from-1L)], insert, lines[(to+1L):length(lines)])
-    } else { # append after to
-      c(lines[1:to], insert, lines[(to+1L):length(lines)])
-    }
-  }
-  
-  # remove redundand hyperref definitions
-  lines <- substituteLines(lines, "\\usepackage[unicode=true]{hyperref}", "\\urlstyle{same}", from.offset = -5L)
-  lines <- substituteLines(lines, "\\usepackage{hyperref}", "\\urlstyle{same}") # >= 1.15.2
-  
-  # do not set links in TOC to black
-  lines <- substituteLines(lines, "\\hypersetup{linkcolor=black}")
-  lines <- substituteLines(lines, "\\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}") # >= 1.14
-  
-  # load BiocStyle after 'titling' to override title page formating, but before 
-  # author specification to ensure 'hyperref' gets loaded before 'authblk'
-  lines <- substituteLines(lines, "\\usepackage{titling}", replace = FALSE, to.offset = 1L,
-                           insert = c(loadBioconductorStyleFile(titlecaps = titlecaps), ""))
-  
-  # add author affiliations
-  lines <- substituteLines(lines, "\\author{$for(author)$$author$$sep$ \\\\ $endfor$}",
-                           insert = c("$for(author)$",
-                                      "$if(author.name)$  \\author{$author.name$$if(author.email)$\\thanks{\\ttfamily$author.email$}$endif$}$else$  \\author{$author$}$endif$",
-                                      "$if(author.affiliation)$  \\affil{$author.affiliation$}$endif$$endfor$"))
-  
-  # add package version number
-  lines <- substituteLines(lines, "\\end{abstract}", replace = FALSE,
-                           insert = c("",
-                                      "$if(package)$",
-                                      "\\packageVersion{$package$}",
-                                      "$endif$"))
-  
-  # remove highlighting-macros
-  lines <- substituteLines(lines, "$highlighting-macros$", from.offset = -1L, to.offset = 1L)
-  
-  ## output TOC on a separate page
-  lines <- substituteLines(lines, "\\tableofcontents", insert = c("$if(toc-newpage)$",
-                                                                  "\\newpage",
-                                                                  "$endif$",
-                                                                  "\\tableofcontents",
-                                                                  "\\newpage"))
-  
-  writeLines(lines, template)
+  template <- create_latex_template()
   
   head = NULL
   
@@ -179,4 +97,69 @@ pdf_document2 <- function(toc = TRUE,
                              pandoc_args = pandoc_args,
                              ...)
   )
+}
+
+
+create_latex_template <- function() {
+  ## get and modify the default pandoc template
+  
+  # choose the rmarkdown template depending on pandoc version
+  version <- rmarkdown::pandoc_version()
+  
+  template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
+                               pattern = "\\.tex$")
+  template_versions <- sub("default-?([1-9.]*).tex", "\\1", template_files)
+  template_versions <- numeric_version(template_versions, strict = FALSE)
+  template_versions <- sort(template_versions, decreasing = TRUE)
+  
+  idx <- match(TRUE, version >= template_versions)
+  
+  template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
+  
+  # customize the template
+  lines <- readLines(system.file("rmd", "latex", template, package = "rmarkdown"))
+  
+  template <- file.path(tempdir(), "newtemplate.tex")
+  
+  
+  
+  # remove redundand hyperref definitions
+  lines <- modifyLines(lines=lines, from="\\usepackage[unicode=true]{hyperref}", to="\\urlstyle{same}", offset=c(-5L, 0L))
+  lines <- modifyLines(lines=lines, from="\\usepackage{hyperref}", to="\\urlstyle{same}") # >= 1.15.2
+  
+  # do not set links in TOC to black
+  lines <- modifyLines(lines=lines, from="\\hypersetup{linkcolor=black}")
+  lines <- modifyLines(lines=lines, from="\\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}") # >= 1.14
+  
+  # load BiocStyle after 'titling' to override title page formating, but before 
+  # author specification to ensure 'hyperref' gets loaded before 'authblk'
+  lines <- modifyLines(lines=lines, from="\\usepackage{titling}", replace=FALSE, c("", loadBioconductorStyleFile("notitlecaps")))
+  
+  # add author affiliations
+  lines <- modifyLines(lines=lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", c(
+    "$for(author)$",
+    "$if(author.name)$  \\author{$author.name$$if(author.email)$\\thanks{\\ttfamily$author.email$}$endif$}$else$  \\author{$author$}$endif$",
+    "$if(author.affiliation)$  \\affil{$author.affiliation$}$endif$$endfor$"))
+  
+  # add package version number
+  lines <- modifyLines(lines=lines, from="\\end{abstract}", replace=FALSE, c(
+    "",
+                                    "$if(package)$",
+                                      "\\packageVersion{$package$}",
+                                      "$endif$"))
+  
+  # remove highlighting-macros
+  lines <- modifyLines(lines=lines, from="$highlighting-macros$", offset=c(-1L, 1L))
+  
+  ## output TOC on a separate page
+  lines <- modifyLines(lines=lines, from="\\tableofcontents", c(
+    "$if(toc-newpage)$",
+    "\\newpage",
+                                                                  "$endif$",
+                                                                  "\\tableofcontents",
+                                                                  "\\newpage"))
+  
+  writeLines(lines, template)
+  
+  template
 }

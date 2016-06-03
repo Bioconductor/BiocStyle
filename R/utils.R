@@ -1,5 +1,6 @@
-modifyLines <- function (..., lines, from, to, replace = TRUE, before = FALSE, offset = 0L) {
-  from <- grep(from, lines, fixed=TRUE)[1L]
+modifyLines <- function (lines, from, to, replace = TRUE, before = FALSE, 
+                         offset = 0L, fixed = TRUE, insert = "") {
+  from <- grep(from, lines, fixed=fixed)[1L]
   
   # exit if nothing found
   if (is.na(from)) return(lines)
@@ -7,7 +8,7 @@ modifyLines <- function (..., lines, from, to, replace = TRUE, before = FALSE, o
   if (missing(to)) {
     to <- from
   } else {
-    to <- grep(to, lines, fixed=TRUE)
+    to <- grep(to, lines, fixed=fixed)
     if (length(to)==0) return(lines) else to = to[to > from][1L]
   }
   
@@ -16,11 +17,23 @@ modifyLines <- function (..., lines, from, to, replace = TRUE, before = FALSE, o
   to <- to + offset[2L]
   
   if (isTRUE(replace)) { # substitute lines from-to
-    c(lines[1:(from-1L)], ..., lines[(to+1L):length(lines)])
+    c(lines[1:(from-1L)], insert, lines[(to+1L):length(lines)])
   } else {
     if (isTRUE(before)) # insert before
-      c(lines[1:(from-1L)], ..., lines[from:length(lines)])
+      c(lines[1:(from-1L)], insert, lines[from:length(lines)])
     else # insert after
-      c(lines[1:from], ..., lines[(from+1L):length(lines)])
+      c(lines[1:from], insert, lines[(from+1L):length(lines)])
   }
+}
+
+readUTF8 = function(file, ...) readLines(file, encoding = 'UTF-8', warn = FALSE, ...)
+
+writeUTF8 = function(text, ...) writeLines(enc2utf8(text), ..., useBytes = TRUE)
+
+biocTempfile = function(name) {
+  biocDir = file.path(tempdir(), "BiocStyle")
+  if (!dir.exists(biocDir))
+    dir.create(biocDir)
+  
+  file.path(biocDir, name)
 }

@@ -1,0 +1,188 @@
+/*
+.main-container {
+  background: #ff0;
+}
+.col-md-9 {
+    background: #f00;
+}
+.col-md-3 {
+    background: #0f0;
+}
+*/
+
+body {
+  max-width: 1054px;
+  margin: 0px auto;
+}
+
+body, td {
+  font-family: sans-serif;
+  font-size: 10pt;
+}
+
+/* Table of contents style */
+
+div#TOC li {
+    list-style:none;
+    background-image:none;
+    background-repeat:none;
+    background-position:0;
+}
+
+p {
+  padding: 0px 150px 0px 65px;
+  text-align: justify;
+}
+
+pre {
+  margin: 0em 150px 0.5em 0em;
+  padding: 0px 0px 0px 65px;
+  border: 0px none;
+  background-color: #f0f0f0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+pre code {
+  background-color: inherit;
+  display: block;
+  padding: 10px 10px 10px 0px;
+  overflow-x: inherit;
+}
+
+/* markdown v1 */
+pre code[class] {
+  background-color: inherit;
+}
+
+/* markdown v2 */
+pre[class] code {
+  background-color: inherit;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1, h2, h3, h4, h5, h6 { 
+  font-family: Helvetica, Arial, sans-serif;
+  padding-right: 150px;
+  margin: 1.2em 150px 0.6em 0em;
+}
+
+h1.title {
+  color: #87b13f;
+  line-height: 1.1em;
+  margin-top: 25px;
+  border-bottom: 0px;
+}
+
+h1 {
+  line-height: 1.4em;
+  border-bottom: 1px #1a81c2 solid;
+}
+
+h1, h2, h3 {
+  color: #1a81c2;
+}
+
+h1 {
+  font-size: 18.0pt;
+}
+
+h2 {
+  font-size: 14.5pt;
+}
+
+h3 {
+  font-size: 12pt;
+}
+
+span.header-section-number {
+  float: left;
+  width: 65px;
+}
+
+/* formatting of inline code */
+code { 
+  background-color: #f0f0f0;
+  color: #404040;
+  font-size: 92%;
+}
+
+/* figures */
+
+.figure { 
+  margin: 0em 0px 0.5em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  padding: 0px 150px;
+}
+
+p > img {
+  padding-left: 85px;
+  padding-right: 0px;
+}
+
+img.smallfigure {
+  padding-right: 300px;
+}
+
+img.widefigure {
+  padding: 0px 65px;
+}
+
+p.caption {
+  font-size: 8pt;
+  padding-left: 150px;
+  padding-right: 65px;
+}
+
+/* footnotes as sidenotes */
+
+.sidenote {
+  float: right;
+  clear: right;
+  margin-right: -150px;
+  width: 130px;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 8pt;
+  line-height: 1.3;
+  vertical-align: baseline;
+  position: relative;
+  text-align: left;
+}
+
+.sidenote-number {
+  position: relative;
+  vertical-align: super;
+  font-size: smaller;
+  font-weight: normal;
+  line-height: normal;
+}
+
+input.margin-toggle { display: none; }
+
+label.sidenote-number { display: inline; }
+
+label.margin-toggle:not(.sidenote-number) { display: none; }
+
+/* Class described in https://benjeffrey.com/posts/pandoc-syntax-highlighting-css
+   Colours from https://gist.github.com/robsimmons/1172277 */
+
+code > span.kw { color: #E07020; } /* Function calls */
+code > span.dt { color: #404040; } /* Function args */
+code > span.dv { color: #D02070; } /* DecVal (decimal values) */
+code > span.bn { color: #d14; } /* BaseN */
+code > span.fl { color: #D02070; } /* Float */
+code > span.ch { color: #40A040; } /* Char */
+code > span.st { color: #40A040; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.ot { color: #2020F0; } /* Keywords */
+code > span.al { color: #ff0000; font-weight: bold; } /* AlertToken */
+code > span.fu { color: #E07020; } /* Function calls */ 
+code > span.er { color: #FF0000; } /* ErrorTok */

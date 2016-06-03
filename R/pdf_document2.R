@@ -70,7 +70,10 @@ pdf_document2 <- function(toc = TRUE,
                  adjustwidth[2L])
         }
       }),
-    opts_hooks = .opts_hooks,
+    opts_hooks = c(.opts_hooks,
+                   fig.cap = function(options) {
+                     fig.cap
+                   }),
     opts_template = NULL
   )
   
@@ -117,49 +120,50 @@ create_latex_template <- function() {
   template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
   
   # customize the template
-  lines <- readLines(system.file("rmd", "latex", template, package = "rmarkdown"))
+  lines <- readUTF8(system.file("rmd", "latex", template, package = "rmarkdown"))
   
-  template <- file.path(tempdir(), "newtemplate.tex")
-  
+  template <- biocTempfile("template.tex")
   
   
   # remove redundand hyperref definitions
-  lines <- modifyLines(lines=lines, from="\\usepackage[unicode=true]{hyperref}", to="\\urlstyle{same}", offset=c(-5L, 0L))
-  lines <- modifyLines(lines=lines, from="\\usepackage{hyperref}", to="\\urlstyle{same}") # >= 1.15.2
+  lines <- modifyLines(lines, from="\\usepackage[unicode=true]{hyperref}", to="\\urlstyle{same}", offset=c(-5L, 0L))
+  lines <- modifyLines(lines, from="\\usepackage{hyperref}", to="\\urlstyle{same}") # >= 1.15.2
   
   # do not set links in TOC to black
-  lines <- modifyLines(lines=lines, from="\\hypersetup{linkcolor=black}")
-  lines <- modifyLines(lines=lines, from="\\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}") # >= 1.14
+  lines <- modifyLines(lines, from="\\hypersetup{linkcolor=black}")
+  lines <- modifyLines(lines, from="\\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}") # >= 1.14
   
   # load BiocStyle after 'titling' to override title page formating, but before 
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
-  lines <- modifyLines(lines=lines, from="\\usepackage{titling}", replace=FALSE, c("", loadBioconductorStyleFile("notitlecaps")))
+  lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
+    "",
+    loadBioconductorStyleFile("notitlecaps")))
   
   # add author affiliations
-  lines <- modifyLines(lines=lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", c(
+  lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert=c(
     "$for(author)$",
     "$if(author.name)$  \\author{$author.name$$if(author.email)$\\thanks{\\ttfamily$author.email$}$endif$}$else$  \\author{$author$}$endif$",
     "$if(author.affiliation)$  \\affil{$author.affiliation$}$endif$$endfor$"))
   
   # add package version number
-  lines <- modifyLines(lines=lines, from="\\end{abstract}", replace=FALSE, c(
+  lines <- modifyLines(lines, from="\\end{abstract}", replace=FALSE, insert=c(
     "",
-                                    "$if(package)$",
-                                      "\\packageVersion{$package$}",
-                                      "$endif$"))
+    "$if(package)$",
+    "\\packageVersion{$package$}",
+    "$endif$"))
   
   # remove highlighting-macros
-  lines <- modifyLines(lines=lines, from="$highlighting-macros$", offset=c(-1L, 1L))
+  lines <- modifyLines(lines, from="$highlighting-macros$", offset=c(-1L, 1L))
   
   ## output TOC on a separate page
-  lines <- modifyLines(lines=lines, from="\\tableofcontents", c(
+  lines <- modifyLines(lines, from="\\tableofcontents", insert=c(
     "$if(toc-newpage)$",
     "\\newpage",
-                                                                  "$endif$",
-                                                                  "\\tableofcontents",
-                                                                  "\\newpage"))
+    "$endif$",
+    "\\tableofcontents",
+    "\\newpage"))
   
-  writeLines(lines, template)
+  writeUTF8(lines, template)
   
   template
 }

@@ -1,101 +1,135 @@
-## this function uses a modified copy of the original rmarkdown::html_document 
-## function; the reason for using this approach rather than calling 
-## html_document is that we want to use custom template but trick rmarkdown into
-## thinking that it uses its default template which allows to retain original
-## mathjax functionality
+## This function uses a modified copy of the original rmarkdown::html_document 
+## function. The reason for it is that we want to use custom template but trick
+## rmarkdown into thinking that it uses its default template, which allows to
+## retain some of the original functionality such as mathjax, floating toc, and
+## code folding.
 
 html_document2 <- function(toc = TRUE,
-                          toc_depth = 3,
-                          number_sections = TRUE,
-                          fig_width = 7,
-                          fig_height = 5,
-                          fig_retina = NULL,
-                          fig_caption = FALSE,
-                          dev = 'png',
-                          smart = TRUE,
-                          self_contained = TRUE,
-                          highlight = "default",
-                          mathjax = "default",
-                          css = NULL,
-                          includes = NULL,
-                          keep_md = FALSE,
-                          lib_dir = NULL,
-                          md_extensions = NULL,
-                          pandoc_args = NULL,
-                          ...) {
+                           number_sections = TRUE,
+                           fig_width = NA,
+                           fig_height = NA,
+                           fig_retina = NULL,
+                           css = NULL,
+                           ...) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  # append any user-provided CSS files
-  css <- c(bioconductor.css, css)
-
-  # build pandoc args
-  args <- c("--standalone")
-
-  # use section divs
-  args <- c(args, "--section-divs")
-
-  # table of contents
-  args <- c(args, rmarkdown::pandoc_toc_args(toc, toc_depth))
-
-  # template path and assets
-  args <- c(args, "--template", rmarkdown::pandoc_path_arg(file.path(resources, "html", "template.html")))
+  ## customize the default rmarkdown template
+  template <- create_html_template()
   
-  # numbered sections
-  if (number_sections)
-    args <- c(args, "--number-sections")
-
-  # additional css
-  for (css_file in css)
-    args <- c(args, "--css", rmarkdown::pandoc_path_arg(css_file))
-
-  # pre-processor for arguments that may depend on the name of the
-  # the input file (e.g. ones that need to copy supporting files)
-  pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir,
-                            output_dir) {
-
-    # use files_dir as lib_dir if not explicitly specified
-    if (is.null(lib_dir))
-      lib_dir <- files_dir
-
-    # extra args
-    args <- c()
-
-    # highlight
-    args <- c(args, rmarkdown:::pandoc_html_highlight_args(highlight,
-                                               template = "default",
-                                               self_contained,
-                                               lib_dir,
-                                               output_dir))
-
-    # content includes (we do this here so that user include-in-header content
-    # goes after dependency generated content). make the paths absolute if
-    # making a Shiny document so we can resolve them even if rendering
-    # elsewhere.
-    args <- c(args, rmarkdown::includes_to_pandoc_args(includes,
-                      filter = if (identical(runtime, "shiny"))
-                        rmarkdown:::normalize_path
-                      else
-                        identity))
-
-    # return additional args
-    args
+  # append any user-provided CSS files
+  css <- c(bioconductor2.css, css)
+  
+  post_processor = function(metadata, input, output, clean, verbose) {
+    x = readUTF8(output)
+    footnotes = parse_footnotes(x)
+    notes = footnotes$items
+    # replace footnotes with sidenotes
+    for (i in seq_along(notes)) {
+      num = sprintf(
+        '<a href="#fn%d" class="footnoteRef" id="fnref%d"><sup>%d</sup></a>',
+        i, i, i
+      )
+      con = sprintf(paste0(
+        '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
+        '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',
+        '<span class="sidenote"><span class="sidenote-number">%d</span> %s</span>'
+      ), i, i, i, i, notes[i])
+      x = gsub(num, con, x, fixed=TRUE)
+    }
+    # remove footnotes at the bottom
+    if (length(footnotes$range)) x = x[-footnotes$range]
+    
+    writeUTF8(x, output)
+    output
   }
-
-  # return format
+  
+  # knitr options
+  knitr = rmarkdown::knitr_options(
+    opts_chunk = list(),
+    knit_hooks = list(
+      plot = function(x, options = list()) {
+        out.extra = switch(options$fig.env, NULL,
+                           "smallfigure" = 'class="smallfigure"',
+                           "figure*" = 'class="widefigure"',
+                           "figure" = NULL)
+        options$out.extra = paste(options$out.extra, out.extra)
+        knitr::hook_plot_md(x, options)
+      }),
+    opts_hooks = c(.opts_hooks,
+                   fig.cap = function(options) {
+                     options
+                   }),
+  )
+  
   rmarkdown::output_format(
-    knitr = rmarkdown::knitr_options_html(fig_width, fig_height, fig_retina, keep_md, dev),
-    pandoc = rmarkdown::pandoc_options(to = "html",
-                            from = rmarkdown:::from_rmarkdown(fig_caption, md_extensions),
-                            args = args),
-    keep_md = keep_md,
-    clean_supporting = self_contained,
-    pre_processor = pre_processor,
-    base_format = rmarkdown::html_document_base(smart = smart, theme = NULL,
-                                     self_contained = self_contained,
-                                     lib_dir = lib_dir, mathjax = mathjax,
-                                     template = "default",
-                                     pandoc_args = pandoc_args, ...)
+    knitr = knitr,
+    pandoc = NULL,
+    post_processor = post_processor,
+    base_format = rmarkdown_html_document(toc = toc,
+                                          number_sections = number_sections,
+                                          fig_width = fig_width,
+                                          fig_height = fig_height,
+                                          template = template,
+                                          #fig_retina = fig_retina,
+                                          css = css,
+                                          ...))
+}
+
+# modify the default rmarkdown template
+create_html_template <- function() {
+  lines <- readUTF8(system.file("rmd", "h", "default.html", package = "rmarkdown"))
+  
+  template <- biocTempfile("template.html")
+  
+  lines <- modifyLines(lines, from='<div class="abstract">', to='</div>', insert=c(
+    '<h4 class="abstract">Abstract</h4>',
+    '$abstract$',
+    '$endif$',
+    '$if(package)$',
+    '<h4 class="package">Package: <span style="font-weight: normal">$package$</span></h4>'))
+  
+  lines <- modifyLines(lines, from='<div id="$idprefix$TOC">', replace=FALSE, before=TRUE, insert="<h1>Contents</h1>")
+  
+  ## modify some inline CSS
+  lines <- modifyLines(lines, from='^\\.toc-content \\{', to = '\\}', fixed=FALSE)
+  
+  lines <- modifyLines(lines, from='^\\code \\{', to = '\\}', fixed=FALSE)
+  
+  for (i in 1:2) 
+    lines <- modifyLines(lines, from='^  pre:not\\(\\[class\\]\\) \\{', to = '\\}', fixed=FALSE)
+  
+  lines <- modifyLines(lines=lines, from='^\\.main-container \\{', to = '\\}', fixed=FALSE, offset=c(1L, -1L), insert=c(
+    '  max-width: 768px;',
+    '  margin-left: auto;',
+    '  margin-right: auto;'))
+  
+  lines <- modifyLines(lines, from='^div\\.tocify \\{', to = '\\}', fixed=FALSE, offset=c(1L, -1L), insert=c(
+    '  width: 20%;',
+    '  max-width: 226px;',
+    '  max-height: 85%;'))
+  
+  ## use the modified code folding script
+  lines <- modifyLines(lines=lines, from='<script src="$navigationjs$/codefolding.js"></script>',
+                       insert=sprintf('<script src="%s"></script>', 
+                                      file.path(resources, "html", "codefolding.js")))
+  
+  writeUTF8(lines, template)
+  
+  template
+}
+
+# the following function is copied from the RStudio's 'tufte' package
+parse_footnotes = function(x) {
+  i = which(x == '<div class="footnotes">')
+  if (length(i) == 0) return(list(items = character(), range = integer()))
+  j = which(x == '</div>')
+  j = min(j[j > i])
+  n = length(x)
+  r = '<li id="fn([0-9]+)"><p>(.+)<a href="#fnref\\1">.</a></p></li>'
+  list(
+    items = gsub(r, '\\2', grep(r, x[i:n], value = TRUE)),
+    range = i:j
   )
 }

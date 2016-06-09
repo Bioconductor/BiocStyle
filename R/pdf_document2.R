@@ -2,19 +2,18 @@ pdf_document2 <- function(toc = TRUE,
                           number_sections = TRUE,
                           fig_width = NA,
                           fig_height = NA,
-                          fig_caption = TRUE,
                           use.unsrturl = TRUE,
                           includes,
                           keep_md = FALSE,
-                          keep_tex = FALSE,
                           toc_newpage = FALSE,
                           titlecaps = TRUE,
+                          base_format = rmarkdown::pdf_document,
                           ...) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  template <- create_latex_template()
+  template <- create_latex_template(if (isTRUE(titlecaps)) NULL else "notitlecaps")
   
   head = NULL
   
@@ -49,7 +48,9 @@ pdf_document2 <- function(toc = TRUE,
   
   # knitr options
   knitr = list(
-    opts_knit = list(width = .width()),
+    opts_knit = list(width = .width(),
+                     # use labels of the form (\#label) in knitr
+                     bookdown.internal.label = TRUE),
     opts_chunk = list(collapse=TRUE, fig.scap=NA),
     knit_hooks = list(
       plot = function(x, options = list()) {
@@ -70,10 +71,7 @@ pdf_document2 <- function(toc = TRUE,
                  adjustwidth[2L])
         }
       }),
-    opts_hooks = c(.opts_hooks,
-                   fig.cap = function(options) {
-                     fig.cap
-                   }),
+    opts_hooks = .opts_hooks,
     opts_template = NULL
   )
   
@@ -83,27 +81,58 @@ pdf_document2 <- function(toc = TRUE,
     if (is.na(fig_height)) fig_height = 5.0
   }
   
-  # call the base pdf_document function
+  base_format = base_format(
+    toc = toc,
+    number_sections = number_sections,
+    fig_width = fig_width,
+    fig_height = fig_height,
+    template = template,
+    includes = includes,
+    pandoc_args = pandoc_args,
+    ...)
+  
+  # bookdown-style cross-references
+  base_format$pandoc$ext = '.tex'
+  
+  post_processor = function(metadata, input, output, clean, verbose) {
+    texfile <- sub_ext(output, ".tex")
+    lines = readUTF8(texfile)
+    
+    lines = gsub('(?<!\\\\textbackslash{})@ref\\(([-:[:alnum:]]+)\\)', '\\\\ref{\\1}', lines, perl = TRUE)
+    lines = gsub('\\(\\\\#((fig|tab):[-[:alnum:]]+)\\)', '\\\\label{\\1}', lines)
+    
+    writeUTF8(lines, texfile)
+    
+    rmarkdown:::latexmk(texfile, base_format$pandoc$latex_engine)
+    #unlink(with_ext(output, 'bbl'))  # not sure why latexmk left a .bbl there
+    
+    output = sub_ext(output, '.pdf')
+    
+    out_dir = opts$get('output_dir')
+    keep_tex = isTRUE(base_format$pandoc$keep_tex)
+    
+    if (!keep_tex) {
+      file.remove(texfile)
+      texfile = NULL
+    } 
+    
+    output = c(output, texfile)
+    
+    if (!is.null(out_dir))
+      file.rename(output, file.path(out_dir, output))
+      
+    output[1L]
+  }
+  
   rmarkdown::output_format(knitr = knitr,
                            pandoc = NULL,
                            keep_md = keep_md,
-                           clean_supporting = !keep_tex,
-                           base_format = rmarkdown::pdf_document(
-                             toc = toc,
-                             number_sections = number_sections,
-                             fig_width = fig_width,
-                             fig_height = fig_height,
-                             fig_caption = fig_caption,
-                             template = template,
-                             includes = includes,
-                             keep_tex = keep_tex,
-                             pandoc_args = pandoc_args,
-                             ...)
-  )
+                           post_processor = post_processor,
+                           base_format = base_format)
 }
 
 
-create_latex_template <- function() {
+create_latex_template <- function(opts=NULL) {
   ## get and modify the default pandoc template
   
   # choose the rmarkdown template depending on pandoc version
@@ -137,7 +166,7 @@ create_latex_template <- function() {
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
   lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
     "",
-    loadBioconductorStyleFile("notitlecaps")))
+    loadBioconductorStyleFile(opts)))
   
   # add author affiliations
   lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert=c(

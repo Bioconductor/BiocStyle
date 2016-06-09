@@ -1,15 +1,3 @@
-/*
-.main-container {
-  background: #ff0;
-}
-.col-md-9 {
-    background: #f00;
-}
-.col-md-3 {
-    background: #0f0;
-}
-*/
-
 body {
   max-width: 1054px;
   margin: 0px auto;
@@ -133,6 +121,11 @@ img.smallfigure {
 
 img.widefigure {
   padding: 0px 65px;
+}
+
+span.figure-title {
+  color: #1a81c2;
+  font-weight: bold;
 }
 
 p.caption {

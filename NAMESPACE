@@ -1,4 +1,5 @@
 importFrom(utils, packageVersion)
+importFrom(stats, setNames)
 
 export(latex)
 export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg, Rpackage, Githubpkg)

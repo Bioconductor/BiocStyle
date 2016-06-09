@@ -23,6 +23,14 @@ html_document2 <- function(toc = TRUE,
   
   post_processor = function(metadata, input, output, clean, verbose) {
     x = readUTF8(output)
+    
+    ## format caption titles
+    x = caption_titles(x)
+    
+    ## cross-references
+    x = resolve_refs(x)
+    
+    ## footnotes
     footnotes = parse_footnotes(x)
     notes = footnotes$items
     # replace footnotes with sidenotes
@@ -47,6 +55,7 @@ html_document2 <- function(toc = TRUE,
   
   # knitr options
   knitr = rmarkdown::knitr_options(
+    opts_knit = list(bookdown.internal.label = TRUE), # use labels of the form (\#label) in knitr
     opts_chunk = list(),
     knit_hooks = list(
       plot = function(x, options = list()) {
@@ -57,24 +66,24 @@ html_document2 <- function(toc = TRUE,
         options$out.extra = paste(options$out.extra, out.extra)
         knitr::hook_plot_md(x, options)
       }),
-    opts_hooks = c(.opts_hooks,
-                   fig.cap = function(options) {
-                     options
-                   }),
-  )
+    opts_hooks = .opts_hooks)
+  
+  rmarkdown_html_document = rmarkdown::html_document(
+    toc = toc,
+    number_sections = number_sections,
+    fig_width = fig_width,
+    fig_height = fig_height,
+    css = css,
+    ...)
+  
+  template_arg = which(rmarkdown_html_document$pandoc$args == "--template") + 1L
+  rmarkdown_html_document$pandoc$args[template_arg] = template
   
   rmarkdown::output_format(
     knitr = knitr,
     pandoc = NULL,
     post_processor = post_processor,
-    base_format = rmarkdown_html_document(toc = toc,
-                                          number_sections = number_sections,
-                                          fig_width = fig_width,
-                                          fig_height = fig_height,
-                                          template = template,
-                                          #fig_retina = fig_retina,
-                                          css = css,
-                                          ...))
+    base_format = rmarkdown_html_document)
 }
 
 # modify the default rmarkdown template
@@ -111,16 +120,37 @@ create_html_template <- function() {
     '  max-height: 85%;'))
   
   ## use the modified code folding script
-  lines <- modifyLines(lines=lines, from='<script src="$navigationjs$/codefolding.js"></script>',
-                       insert=sprintf('<script src="%s"></script>', 
-                                      file.path(resources, "html", "codefolding.js")))
+  lines <- modifyLines(lines=lines, from='<script src="$navigationjs$/codefolding.js"></script>', insert=
+                         sprintf('<script src="%s"></script>', file.path(resources, "html", "codefolding.js")))
+  
+  ## Automatic equation numbering
+  lines <- modifyLines(lines=lines, from='$if(mathjax-url)$', replace=FALSE, before=TRUE, insert=c(
+    '<script type="text/x-mathjax-config">',
+    '  MathJax.Hub.Config({',
+    '    TeX: {',
+    '      TagSide: "right",',
+    '      equationNumbers: {',
+    '        autoNumber: "AMS"', 
+    '      }',
+    '    },',
+    '    "HTML-CSS": {',
+    '      styles: {',
+    '        ".MathJax_Display": {',
+    '           "text-align": "center",',
+    '           padding: "0px 150px 0px 65px",',
+    '           margin: "0px 0px 0.5em"',
+    '        },',
+    '      }',
+    '    }',
+    '  });',
+    '</script>'))
   
   writeUTF8(lines, template)
   
   template
 }
 
-# the following function is copied from the RStudio's 'tufte' package
+# the following function is a copy from the RStudio's 'tufte' package
 parse_footnotes = function(x) {
   i = which(x == '<div class="footnotes">')
   if (length(i) == 0) return(list(items = character(), range = integer()))
@@ -132,4 +162,101 @@ parse_footnotes = function(x) {
     items = gsub(r, '\\2', grep(r, x[i:n], value = TRUE)),
     range = i:j
   )
+}
+
+caption_titles = function(lines) {
+  lines
+}
+
+resolve_refs = function(content) {
+  
+  ## Parse figure/table labels
+  
+  m = gregexpr('\\(#((fig|tab):[-[:alnum:]]+)\\)', content)
+  labs = regmatches(content, m)
+  figs = grep('^<div class="figure', content)
+  
+  idx = which(vapply(labs, length, integer(1L)) == 1L)
+  
+  newlabs = gsub('^\\(#|\\)$', '', labs[idx])
+  type = ifelse(grepl('^fig:', newlabs), 'Figure', 'Table')
+  
+  # counters
+  cntr = integer(length(type))
+  for (t in c('Figure', 'Table')) {
+    sel = type == t
+    cntr[sel] = 1:sum(sel)
+  }
+  
+  ref_table = setNames(cntr, newlabs)  # an array of the form c(label = number, ...)
+  
+  labs[idx] = 
+    mapply(newlabs, idx, type, cntr, SIMPLIFY=FALSE, USE.NAMES=FALSE, 
+           FUN = function(lab, i, type, num) {
+             if (type == 'Figure') {
+               if (any(grepl('^<p class="caption', content[i - 0:1]))) {
+                 k = max(figs[figs <= i])
+                 content[k] <<- paste0(content[k], sprintf('<span id="%s"></span>', lab))
+                 paste0(type, ' ', num, ': ')
+               } else {
+                 # remove these labels, because there must be a caption on this or
+                 # previous line (possible negative case: the label appears in the alt
+                 # text of <img>)
+                 ""
+               }
+             } else {
+               if (any(grepl("^<caption>", content[i - 0:1]))) {
+                 sprintf('<span id="%s">%s</span>', lab, paste0(type, ' ', num, ': '))
+               } else {
+                 ""
+               }
+             }
+           })
+  
+  regmatches(content, m) = labs
+  
+  # remove labels in figure alt text (it will contain \ like (\#fig:label))
+  content = gsub('"\\(\\\\#(fig:[-[:alnum:]]+)\\)', '"', content)
+  
+  
+  ## Parse section labels
+  
+  sec_num = '^<h[1-6]><span class="header-section-number">([.A-Z0-9]+)</span>.+</h[1-6]>$'
+  sec_ids = '^<div id="([^"]+)" class="section .+">$'
+  
+  idx = grep(sec_num, content)
+  idx = idx[grepl(sec_ids, content[idx-1L])] ## make sure all sections have ids
+  
+  ref_table = c(ref_table, setNames(
+    sub(sec_num, '\\1', content[idx]),
+    sub(sec_ids, '\\1', content[idx-1L])
+  ))
+  
+  
+  ## look for @ref(label) and resolve to actual figure/table/section numbers
+  m = gregexpr('(?<!\\\\)@ref\\(([-:[:alnum:]]+)\\)', content, perl = TRUE)
+  refs = regmatches(content, m)
+  idx = vapply(refs, length, integer(1L)) > 0L
+  refs[idx] = lapply(refs[idx], ref_to_number, ref_table)
+  regmatches(content, m) = refs
+  
+  content
+}
+
+ref_to_number = function(ref, ref_table) {
+  ref = gsub('^@ref\\(|\\)$', '', ref)
+  num = ref_table[ref]
+  i = is.na(num)
+  j = i & grepl('^eq:', ref)
+  # equation labels will be replaced by \ref{eq:label}; the reason that we
+  # cannot directly use \ref{} for HTML even MathJax supports it is that
+  # Pandoc will remove the LaTeX command \ref{} for HTML output, and MathJax
+  # needs the literal command \ref{} on the page
+  i[j] = FALSE
+  if (any(i)) {
+    if (!isTRUE(opts$get('preview')))
+      warning('Label(s) ', paste(ref[i], collapse = ', '), ' not found', call. = FALSE)
+    num[i] = '<strong>??</strong>'
+  }
+  ifelse(j, sprintf('\\ref{%s}', ref), sprintf('<a href="#%s">%s</a>', ref, num))
 }

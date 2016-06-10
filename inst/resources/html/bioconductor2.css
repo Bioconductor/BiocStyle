@@ -123,15 +123,19 @@ img.widefigure {
   padding: 0px 65px;
 }
 
-span.figure-title {
+p.caption, caption {
+  font-size: 8pt;
+  padding-left: 150px;
+  padding-right: 65px;
+}
+
+span.caption-title {
   color: #1a81c2;
   font-weight: bold;
 }
 
-p.caption {
-  font-size: 8pt;
-  padding-left: 150px;
-  padding-right: 65px;
+span.caption-label {
+  font-weight: bold;
 }
 
 /* footnotes as sidenotes */

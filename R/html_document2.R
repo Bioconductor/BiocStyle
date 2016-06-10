@@ -1,9 +1,3 @@
-## This function uses a modified copy of the original rmarkdown::html_document 
-## function. The reason for it is that we want to use custom template but trick
-## rmarkdown into thinking that it uses its default template, which allows to
-## retain some of the original functionality such as mathjax, floating toc, and
-## code folding.
-
 html_document2 <- function(toc = TRUE,
                            number_sections = TRUE,
                            fig_width = NA,
@@ -67,6 +61,11 @@ html_document2 <- function(toc = TRUE,
         knitr::hook_plot_md(x, options)
       }),
     opts_hooks = .opts_hooks)
+  
+  
+  # Call the rmarkdown::html_document function with `template="default"` and
+  # substitute the template only afterwards in order to retain some of the
+  # original functionality such as mathjax, floating toc, and code folding.
   
   rmarkdown_html_document = rmarkdown::html_document(
     toc = toc,
@@ -165,6 +164,19 @@ parse_footnotes = function(x) {
 }
 
 caption_titles = function(lines) {
+  lines = readLines("/home/oles/sandbox/BiocStyle/sample_rmarkdown_BiocStyle.html.org.html")
+  
+  # tables: match to <caption>...</caption> lines
+  regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-[:alnum:]]+\\))?[[:space:]]*([^.]+.?)'
+  idx = which(grepl(regex, lines, perl=TRUE))
+  lines[idx]
+  lines = gsub(regex, '\\1<span class="caption-title">\\2</span>', lines, perl=TRUE)
+  
+  # figures: match to figure labels preceded by '<p class="caption'
+  regex = '(\\(#fig:[-[:alnum:]]+\\))[[:space:]]*([^.]+.?)'
+  idx =  which(grepl(regex, lines))
+  idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
+  lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span>', lines[idx])
   lines
 }
 
@@ -190,6 +202,9 @@ resolve_refs = function(content) {
   
   ref_table = setNames(cntr, newlabs)  # an array of the form c(label = number, ...)
   
+  format_label = function(type, num)
+    paste0('<span class="caption-label">', type, ' ', num, ': </span>')
+  
   labs[idx] = 
     mapply(newlabs, idx, type, cntr, SIMPLIFY=FALSE, USE.NAMES=FALSE, 
            FUN = function(lab, i, type, num) {
@@ -197,7 +212,7 @@ resolve_refs = function(content) {
                if (any(grepl('^<p class="caption', content[i - 0:1]))) {
                  k = max(figs[figs <= i])
                  content[k] <<- paste0(content[k], sprintf('<span id="%s"></span>', lab))
-                 paste0(type, ' ', num, ': ')
+                 format_label(type, num)
                } else {
                  # remove these labels, because there must be a caption on this or
                  # previous line (possible negative case: the label appears in the alt
@@ -206,7 +221,7 @@ resolve_refs = function(content) {
                }
              } else {
                if (any(grepl("^<caption>", content[i - 0:1]))) {
-                 sprintf('<span id="%s">%s</span>', lab, paste0(type, ' ', num, ': '))
+                 sprintf('<span id="%s">%s</span>', lab, format_label(type, num))
                } else {
                  ""
                }

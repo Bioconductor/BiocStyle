@@ -164,8 +164,6 @@ parse_footnotes = function(x) {
 }
 
 caption_titles = function(lines) {
-  lines = readLines("/home/oles/sandbox/BiocStyle/sample_rmarkdown_BiocStyle.html.org.html")
-  
   # tables: match to <caption>...</caption> lines
   regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-[:alnum:]]+\\))?[[:space:]]*([^.]+.?)'
   idx = which(grepl(regex, lines, perl=TRUE))

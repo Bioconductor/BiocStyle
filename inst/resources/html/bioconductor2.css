@@ -22,6 +22,15 @@ p {
   text-align: justify;
 }
 
+ol, ul {
+  padding: 0px 150px 0px 85px;
+  list-style: square;
+}
+
+li p {
+  padding: 0px;
+}
+
 pre {
   margin: 0em 150px 0.5em 0em;
   padding: 0px 0px 0px 65px;
@@ -31,6 +40,10 @@ pre {
   overflow-x: auto;
 }
 
+li pre {
+  margin: 0em 0px 0.5em -65px;
+  padding: 0px 0px 0px 65px;
+}
 pre code {
   background-color: inherit;
   display: block;
@@ -54,7 +67,6 @@ tt, code, pre {
 
 h1, h2, h3, h4, h5, h6 { 
   font-family: Helvetica, Arial, sans-serif;
-  padding-right: 150px;
   margin: 1.2em 150px 0.6em 0em;
 }
 
@@ -183,3 +195,12 @@ code > span.ot { color: #2020F0; } /* Keywords */
 code > span.al { color: #ff0000; font-weight: bold; } /* AlertToken */
 code > span.fu { color: #E07020; } /* Function calls */ 
 code > span.er { color: #FF0000; } /* ErrorTok */
+
+code > span.identifier { color: #404040; }
+code > span.number { color: #D02070; }
+code > span.string { color: #40A040; }
+code > span.comment { color: #808080; font-style: italic; }
+code > span.keyword { color: #2020F0; }
+code > span.literal { color: #2020F0; }
+code > span.operator { color: #000000;}
+code > span.paren { color: #000000;}

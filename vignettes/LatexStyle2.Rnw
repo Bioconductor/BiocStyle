@@ -560,6 +560,9 @@ this document was compiled:
 toLatex(sessionInfo())
 @
 
+\makebox[.5\textwidth][l]{makebox test}
+\makebox[\overhang][l]{\ldots}
+
 \section{Attached \LaTeX\ packages}\label{sec:pkgs}
 
 <<latexPkgs, echo=FALSE>>=

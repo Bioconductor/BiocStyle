@@ -517,7 +517,7 @@ code chunk labels, i.e., \verb+\incfig{figureexample-1}...+ and
 \subsection{Equations}
 
 When referencing equations, e.g.~\eqref{equation}, use \verb+\eqref+ to ensure proper label formatting.
-
+%
 \begin{equation}\label{equation}
   \sin^2 \theta + \cos^2 \theta \equiv 1
 \end{equation}

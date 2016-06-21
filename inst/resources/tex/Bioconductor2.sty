@@ -179,9 +179,11 @@
 \renewcommand\topfraction{0.9}
 \renewcommand\bottomfraction{0.5}
 \renewcommand\textfraction{0.1}
-\renewcommand\floatpagefraction{0.9}
+\renewcommand\floatpagefraction{0.9}% originally 0.8
 \renewcommand\dbltopfraction{0.9}
 \renewcommand\dblfloatpagefraction{0.8}
+%
+\RequirePackage[defaultlines=3,all]{nowidow}% prevent widows and orphans
 %
 %% Title page
 % use parnotes to typeset email addresses

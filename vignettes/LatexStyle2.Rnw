@@ -560,8 +560,6 @@ this document was compiled:
 toLatex(sessionInfo())
 @
 
-\makebox[.5\textwidth][l]{makebox test}
-\makebox[\overhang][l]{\ldots}
 
 \section{Attached \LaTeX\ packages}\label{sec:pkgs}
 
@@ -569,8 +567,12 @@ toLatex(sessionInfo())
 bioconductor.sty = readLines(BiocStyle:::bioconductor2.sty)
 pattern = "^\\\\RequirePackage(\\[.*\\])?\\{([[:alnum:]]+)\\}.*"
 pkgs = sub(pattern, "\\2", grep(pattern, bioconductor.sty, value = TRUE))
-#sort and add hyperref which is not captured by the regex
-pkgs = sort(unique(c(pkgs, "hyperref")))
+# add hyperref which is not captured by the regex
+pkgs = c(pkgs, "hyperref")
+# remove etoolbox which is used only conditionally to fix broken 'titlesec'
+pkgs = pkgs[pkgs!="etoolbox"]
+# list sorted and unique names
+pkgs = sort(unique(pkgs))
 latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 @
 

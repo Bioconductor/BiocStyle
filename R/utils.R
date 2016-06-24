@@ -40,5 +40,4 @@ biocTempfile = function(name) {
 
 sub_ext = function(file, ext) sub("([.][[:alnum:]]+)?$", ext, file)
 
-opts = knitr:::new_defaults()
-
+opts = function() knitr:::new_defaults()

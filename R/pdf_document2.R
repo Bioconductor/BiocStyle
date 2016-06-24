@@ -108,7 +108,7 @@ pdf_document2 <- function(toc = TRUE,
     
     output = sub_ext(output, '.pdf')
     
-    out_dir = opts$get('output_dir')
+    out_dir = opts()$get('output_dir')
     keep_tex = isTRUE(base_format$pandoc$keep_tex)
     
     if (!keep_tex) {

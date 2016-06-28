@@ -305,7 +305,8 @@
 \newcommand\packageVersion[1]{\par{\bfhelvet\hskip-\overhang Package}\unskip\strut\par#1\unskip\strut\par}
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
-\RequirePackage[side, ragged, flushmargin]{footmisc}
+\RequirePackage[side, ragged, flushmargin, multiple]{footmisc}
+\RequirePackage{marginfix}% prevent margin notes from overflowing the bottom margin
 %
 %% FLOATS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

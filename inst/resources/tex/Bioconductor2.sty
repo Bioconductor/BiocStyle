@@ -94,7 +94,7 @@
 \RequirePackage[scaled=0.8]{beramono}
 \RequirePackage[T1]{fontenc}
 %
-\RequirePackage[newlinetospace]{titlesec}
+\RequirePackage[newlinetospace,explicit]{titlesec}
 %
 % Patch the bug introduced in titlesec 2.10.1
 % http://tex.stackexchange.com/q/299969/102422
@@ -113,20 +113,24 @@
 %
 \def\titlefont{\mdhelvet\color{BiocBlue}}
 % Fixed-width labels
-\def\labelbox{\makebox[\overhang][l]{\thetitle}}
+\def\labelbox{\makebox[\overhang][l]{\textcolor{BiocBlue}{\thetitle}}}
 \titlelabel{\labelbox}
 % Section
 \titleformat{\section}
- {\LARGE\titlefont}
- {\labelbox}{0in}{}
- [\vspace{-.2ex}\titlerule]
+ {\LARGE\mdhelvet}
+ {\labelbox}{0in}{\textcolor{BiocBlue}{#1}}
+ [\vspace{-.2ex}\titleline{\color{BiocBlue}\titlerule}]
 % Section, numberless
 \titleformat{name=\section,numberless}
- {\LARGE\titlefont}
- {}{0in}{}
+ {\LARGE\mdhelvet}
+ {}{0in}{\textcolor{BiocBlue}{#1}}
 % Subsection and Subsubsection
-\titleformat*{\subsection}{\Large\titlefont}
-\titleformat*{\subsubsection}{\large\titlefont}
+\titleformat{\subsection}
+ {\Large\mdhelvet}
+ {\labelbox}{0in}{\textcolor{BiocBlue}{#1}}
+\titleformat{\subsubsection}
+ {\large\mdhelvet}
+ {\labelbox}{0in}{\textcolor{BiocBlue}{#1}}
 %
 \titlespacing{\section}{-\overhang}{*3.5}{*2.5}
 \titlespacing{\subsection}{-\overhang}{*3.25}{*1.5}

@@ -311,6 +311,25 @@
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin, multiple]{footmisc}
 \RequirePackage{marginfix}% prevent margin notes from overflowing the bottom margin
+% Patch the internal LaTeX macro used by \marginpar to save the current color
+% Fixes https://github.com/Bioconductor/BiocStyle/issues/5
+% and   https://github.com/shicks/marginfix/issues/13
+% Implemented using the idea from http://tex.stackexchange.com/a/247854/102422
+\makeatletter
+\long\def \@savemarbox #1#2{%
+  \global\setbox #1%
+    \color@vbox
+      \vtop{%
+        \hsize\marginparwidth
+        \@parboxrestore
+        \@marginparreset
+        \color@setgroup#2\color@endgroup%
+        \@minipagefalse
+        \outer@nobreak
+        }%
+    \color@endbox
+}
+\makeatother
 %
 %% FLOATS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

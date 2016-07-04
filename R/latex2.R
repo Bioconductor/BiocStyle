@@ -146,17 +146,22 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
     }
     options
   },
-  # set default plot dimensions if user provided no values
+  # Set default plot dimensions if user provided no values
+  # Important: the hooks are processed in the order they are defined here
+  # regardless of the order of options in the code chunk header
   fig.width = function(options) {
     if (is.na(options$fig.width)) {
-      options$fig.width = switch(options$fig.env, 7, # fallback to knitr defaults
+      options$fig.width = switch(options$fig.env, 7,# fallback to knitr default
                                  "smallfigure" = 5,
                                  "figure*" = 10,
                                  "figure" = 7.5)
+      # override 'fig.height' if 'fig.asp' is set (as plain knitr does)
+      if (is.numeric(options$fig.asp))
+        options$fig.height = options$fig.width * options$fig.asp
     }
     options
   },
-  fig.height = function(options) { 
+  fig.height = function(options) {
     if ( is.na(options$fig.height) ){
       options$fig.height = 5
     }

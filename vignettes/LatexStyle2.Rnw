@@ -343,8 +343,10 @@ plot(cars)
 <<smallfig, echo=FALSE, fig=TRUE, include=FALSE, width=5, height=5>>=
 par(mar=c(4,4,0.5,0.5))
 plot(cars)
+<<squarefig, echo=FALSE, fig=TRUE, include=FALSE, width=10, height=10>>=
+par(mar=c(4,4,0.5,0.5))
+plot(cars)
 @
-
 
 In addition to the standard \verb+\figure+ environment \BiocStyle\ provides special
 environments for small and wide figures. These three environments differ in size, 
@@ -365,6 +367,7 @@ for examples.
     \bottomrule
   \end{tabular}
   \end{small}
+  \label{tab:figs}
 \end{table*}
 
 \begin{figure}
@@ -396,7 +399,7 @@ The first sentence of figure captions is emphasized to serve as figure title.
 This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex2}.
 
 To use figure environments in \Sweave, write explicit \LaTeX\ code which inserts
-the figure in combination  with the \Sweave\ option \verb+include=FALSE+. 
+them in combination with the \Sweave\ option \verb+include=FALSE+. 
 For example, Figure~\ref{fig:wide} was produced with the following code.
 
 \begin{verbatim}
@@ -429,6 +432,22 @@ The following two \knitr\ code chunks are equivalent and produce the same output
     plot(cars)
     @
 \end{verbatim}
+
+Specify \Rcode{fig.width} and/or \Rcode{fig.height} to override the default 
+device dimensions listed in the table on page~\pageref{tab:figs}. To adjust the 
+aspect ratio use \Rcode{fig.asp}. For example, the following code would produce 
+a full-width square plot, as in Figure~\ref{fig:square}.
+
+\begin{verbatim}
+    <<square, fig.wide=TRUE, fig.asp=1>>=
+    plot(cars)
+    @
+\end{verbatim}
+
+\begin{figure*}
+  \includegraphics{\jobname-squarefig}
+  \caption{Full-width square figure. Use {\ttfamily fig.wide=TRUE, fig.asp=1} code chunk options to enter with \knitr\ or \rmarkdown.\label{fig:square}}
+\end{figure*}
 
 When \knitr\ is used plots are cropped so that blank margins around them are removed to make better use of the space in the output document\footnote{otherwise one often has to struggle with \Rcode{par} to set appropriate margins}. This feature can be switched off by setting the chunk option \Rcode{knitr::opts\_chunk\$set(crop = NULL)}.
 

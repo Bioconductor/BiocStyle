@@ -383,28 +383,23 @@
  {\@biocfloat@regular{table}{#1}}
  {\end@biocfloat}
 \renewenvironment{table*}[1][\fps@table]
- {\@biocfloat@wide{table}{#1}}
- {\end@biocfloat}
+ {\blockmargin\@biocfloat@wide{table}{#1}}
+ {\endtable\unblockmargin}
 \renewenvironment{figure}[1][\fps@figure]
  {\@biocfloat@regular{figure}{#1}}
  {\end@biocfloat}
 \renewenvironment{figure*}[1][\fps@figure]
- {\@biocfloat@wide{figure}{#1}}
- {\end@biocfloat}
+ {\blockmargin\@biocfloat@wide{figure}{#1}}
+ {\endfigure\unblockmargin}
 \newenvironment{smallfigure}[1][\fps@figure]
  {\@biocfloat@small{figure}{#1}}
- {\end@biocfloat}
+ {\endfigure}
 % Adaption to the [H] placement provided by the 'float' package
 % http://tex.stackexchange.com/a/314261/102422
 \AtBeginDocument{
  \@ifpackageloaded{float}{%
   \let\float@endHorg\float@endH
   \def\float@endH{\endadjustwidth\float@endHorg}
-  % we need to overwrite the end commands because 'float' redefines only
-  % \end<type> for the the base LaTeX types of floats
-  \def\endsmallfigure{\endfigure}
-  \expandafter\def\csname endfigure*\endcsname{\endfigure}
-  \expandafter\def\csname endtable*\endcsname{\endtable}
  }{}
 }
 %

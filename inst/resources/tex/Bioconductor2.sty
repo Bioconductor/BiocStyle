@@ -352,49 +352,61 @@
 %
 \RequirePackage[strict]{changepage}
 %
-% Uses the approach from http://stackoverflow.com/a/1569922/2792099
+\def\@biocfloat%
+#1% {type}
+#2% {placement}
+#3% {fltoffsetleft}
+#4% {fltoffsetright}
+#5% {capoffsetleft}
+#6% {capoffsetright}
+{% Uses the approach described in http://stackoverflow.com/a/1569922/2792099
+ \edef\@tempa{\noexpand\@float{#1}[#2]}
+ \@tempa
+ \addtolength{\capoffset}{#6}
+ \captionsetup{margin={#5,\capoffset}}
+ \addtolength{\textwidth}{-#3}\addtolength{\textwidth}{-#4}
+ \adjustwidth{#3}{#4}
+}
+\def\end@biocfloat{\endadjustwidth\end@float}
 %
-\newenvironment{@biocfloat}[6][]%[1:position]{2:type}{3:fltoffsetleft}{4:fltoffsetright}{5:capoffsetleft}{6:capoffsetright}
-{%
-\edef\@tempa{\noexpand\@float{#2}[#1]}%
-\@tempa%
-\addtolength{\capoffset}{#6}
-\captionsetup{margin={#5,\capoffset}}%
-\addtolength{\textwidth}{-#3}\addtolength{\textwidth}{-#4}%
-\begin{adjustwidth}{#3}{#4}}%
-{\end{adjustwidth}\end@float}
-%
-\newenvironment{@biocfloat@regular}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{\fltoffset}{0mm}{0mm}{0mm}}
-{\end{@biocfloat}}
-%
-\newenvironment{@biocfloat@small}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{\fltoffset}{\rightoffset}{0mm}{-\rightoffset}}
-{\end{@biocfloat}}
-%
-\newenvironment{@biocfloat@wide}[2][]%[position]{type}
-{\begin{@biocfloat}[#1]{#2}{0mm}{-\fltoffset}{\fltoffset}{\fltoffset}}
-{\end{@biocfloat}}
+\newcommand{\@biocfloat@regular}[2]{%
+ \@biocfloat{#1}{#2}{\fltoffset}{0mm}{0mm}{0mm}%
+}
+\newcommand{\@biocfloat@small}[2]{%
+ \@biocfloat{#1}{#2}{\fltoffset}{\rightoffset}{0mm}{-\rightoffset}%
+}
+\newcommand{\@biocfloat@wide}[2]{%
+ \@biocfloat{#1}{#2}{0mm}{-\fltoffset}{\fltoffset}{\fltoffset}
+}
 %
 \renewenvironment{table}[1][\fps@table]
-{\begin{@biocfloat@regular}[#1]{table}}
-{\end{@biocfloat@regular}}
-%
+ {\@biocfloat@regular{table}{#1}}
+ {\end@biocfloat}
 \renewenvironment{table*}[1][\fps@table]
-{\begin{@biocfloat@wide}[#1]{table}}
-{\end{@biocfloat@wide}}
-%
+ {\@biocfloat@wide{table}{#1}}
+ {\end@biocfloat}
 \renewenvironment{figure}[1][\fps@figure]
-{\begin{@biocfloat@regular}[#1]{figure}}
-{\end{@biocfloat@regular}}
-%
+ {\@biocfloat@regular{figure}{#1}}
+ {\end@biocfloat}
 \renewenvironment{figure*}[1][\fps@figure]
-{\begin{@biocfloat@wide}[#1]{figure}}
-{\end{@biocfloat@wide}}
-%
+ {\@biocfloat@wide{figure}{#1}}
+ {\end@biocfloat}
 \newenvironment{smallfigure}[1][\fps@figure]
-{\begin{@biocfloat@small}[#1]{figure}}
-{\end{@biocfloat@small}}
+ {\@biocfloat@small{figure}{#1}}
+ {\end@biocfloat}
+% Adaption to the [H] placement provided by the 'float' package
+% http://tex.stackexchange.com/a/314261/102422
+\AtBeginDocument{
+ \@ifpackageloaded{float}{%
+  \let\float@endHorg\float@endH
+  \def\float@endH{\endadjustwidth\float@endHorg}
+  % we need to overwrite the end commands because 'float' redefines only
+  % \end<type> for the the base LaTeX types of floats
+  \def\endsmallfigure{\endfigure}
+  \expandafter\def\csname endfigure*\endcsname{\endfigure}
+  \expandafter\def\csname endtable*\endcsname{\endtable}
+ }{}
+}
 %
 % incfig macro
 %

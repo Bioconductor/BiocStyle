@@ -602,11 +602,6 @@ latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 
 \section{Known issues}
 
-\subsection{Use with \LaTeX\ package \latex{float}}
-
-The current implementation of \BiocStyle\ is not compatible with the \LaTeX\ package \latex{float}.
-Please refrain from using \latex{float}, in particular the \verb+[H]+ placement specifier.
-
 \subsection{Compatibility with the \Rpackage{xtable} \R\ package}
 
 \BiocStyle\ does not support tables produced by the \R\ package \CRANpkg{xtable} in plain \Sweave\ documents.

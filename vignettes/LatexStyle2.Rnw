@@ -588,8 +588,6 @@ pattern = "^\\\\RequirePackage(\\[.*\\])?\\{([[:alnum:]]+)\\}.*"
 pkgs = sub(pattern, "\\2", grep(pattern, bioconductor.sty, value = TRUE))
 # add hyperref which is not captured by the regex
 pkgs = c(pkgs, "hyperref")
-# remove etoolbox which is used only conditionally to fix broken 'titlesec'
-pkgs = pkgs[pkgs!="etoolbox"]
 # list sorted and unique names
 pkgs = sort(unique(pkgs))
 latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")

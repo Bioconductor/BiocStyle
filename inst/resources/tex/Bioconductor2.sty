@@ -94,6 +94,7 @@
 \RequirePackage[scaled=0.8]{beramono}
 \RequirePackage[T1]{fontenc}
 %
+\RequirePackage{etoolbox}% provides \patchcmd
 \RequirePackage[newlinetospace,explicit]{titlesec}
 %
 % Patch the bug introduced in titlesec 2.10.1
@@ -101,7 +102,6 @@
 %
 \makeatletter
 \@ifpackagelater{titlesec}{2016/03/15}{\@ifpackagelater{titlesec}{2016/03/21}{}{%
-  \RequirePackage{etoolbox}
   \patchcmd{\ttlh@hang}{\noindent}{}{}{}
   \patchcmd{\ttlh@hang}{\sbox}{\noindent\sbox}{}{}
 }}{}
@@ -310,6 +310,10 @@
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin, multiple]{footmisc}
+% align the footnote mark inside the footnote body 
+\makeatletter
+\patchcmd{\@makefntext}{\llap{\@makefnmark}}{\@makefnmark}{}{}
+\makeatother
 \RequirePackage{marginfix}% prevent margin notes from overflowing the bottom margin
 % Patch the internal LaTeX macro used by \marginpar to save the current color
 % Fixes https://github.com/Bioconductor/BiocStyle/issues/5
@@ -384,13 +388,13 @@
  {\end@biocfloat}
 \renewenvironment{table*}[1][\fps@table]
  {\blockmargin\@biocfloat@wide{table}{#1}}
- {\endtable\unblockmargin}
+ {\endtable\unblockmargin[1em]}
 \renewenvironment{figure}[1][\fps@figure]
  {\@biocfloat@regular{figure}{#1}}
  {\end@biocfloat}
 \renewenvironment{figure*}[1][\fps@figure]
  {\blockmargin\@biocfloat@wide{figure}{#1}}
- {\endfigure\unblockmargin}
+ {\endfigure\unblockmargin[1em]}
 \newenvironment{smallfigure}[1][\fps@figure]
  {\@biocfloat@small{figure}{#1}}
  {\endfigure}

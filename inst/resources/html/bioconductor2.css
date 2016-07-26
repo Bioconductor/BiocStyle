@@ -10,12 +10,41 @@ body, td {
 
 /* Table of contents style */
 
-div#TOC li {
-    list-style:none;
-    background-image:none;
-    background-repeat:none;
-    background-position:0;
+div#TOC ul {
+  padding: 0px 0px 0px 45px;
+  list-style: none;
+  background-image: none;
+  background-repeat: none;
+  background-position: 0;
+  font-size: 10pt;
+  font-family: Helvetica, Arial, sans-serif;
 }
+
+div#TOC > ul {
+  padding: 0px 150px 0px 65px;
+  font-size: 12pt;
+}
+
+div#TOC > ul > li {
+  padding: 5px 0px 0px 0px;
+}
+
+div#TOC ul ul {
+  font-size: 11pt;
+}
+
+div#TOC.tocify ul {
+  padding: 0px;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+div#TOC.tocify li {
+  padding: 5px;
+  font-size: inherit;
+  font-family: inherit;
+}
+
 
 p {
   padding: 0px 150px 0px 65px;

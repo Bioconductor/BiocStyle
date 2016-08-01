@@ -3,7 +3,9 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  if (toc) {
+  base_format = rmarkdown::md_document(toc = FALSE, ...)
+  
+  if (isTRUE(toc)) {
     generate_toc <- function(input, output, template, toc_depth, verbose = FALSE) {
       quoted <- rmarkdown:::quoted
       pandoc <- rmarkdown:::pandoc
@@ -32,7 +34,7 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
       invisible()
     }
     
-    pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
+    base_format$pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
       ## set up file names and paths
       toc_file <- sub("([^.]+\\.)utf8\\.md$", "\\1toc.md", input_file)
       toc_template = file.path(resources, "md", "toc.template")
@@ -47,16 +49,9 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
       ## return the additional argument to pandoc for TOC inclusion
       c("--include-before-body", toc_file)
     }
-  } else {
-    pre_processor <- NULL
   }
- 
+  
   # return format
-  rmarkdown::output_format(
-    knitr = NULL,
-    pandoc = NULL,
-    pre_processor = pre_processor,
-    base_format = rmarkdown::md_document(toc = FALSE, ...)
-  )
+  base_format
 }
   

@@ -38,7 +38,7 @@ pdf_document2 <- function(toc = TRUE,
   if ( missing(includes) )
     includes = inc
   else
-    includes$in_header = c(includes$in_header, inc)
+    includes$in_header = c(includes$in_header, inc$in_header)
   
   
   # pandoc options

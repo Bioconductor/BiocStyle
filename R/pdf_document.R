@@ -25,7 +25,7 @@ pdf_document <- function(toc = TRUE,
   if ( missing(includes) )
     includes = inc
   else
-    includes$in_header = c(includes$in_header, inc)
+    includes$in_header = c(includes$in_header, inc$in_header)
   
   # call the base pdf_document function
   rmarkdown::output_format(knitr = rmarkdown::knitr_options(opts_chunk = list(collapse=TRUE)),

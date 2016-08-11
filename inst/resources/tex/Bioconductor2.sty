@@ -206,22 +206,17 @@
 %% Title page
 % use parnotes to typeset email addresses
 \RequirePackage{parnotes}
-\renewcommand{\parnotefmt}[1]{#1}
-\renewcommand{\parnotemarkfmt}[1]{\textsuperscript{\normalfont\footnotesize\fnsymbol{#1}}}
+\renewcommand{\parnotefmt}[1]{#1}% typeset as normal text
 \renewcommand{\parnotevskip}{0in}
-% redefine the following command in order to get rid of space after symbol 
-\long\def\PN@parnote@real#1{%
-    \global\advance\c@PN@t\@ne
-    \g@addto@macro\PN@text{%
-        \global\advance\c@PN@n\@ne
-        \parnotemarkfmt{PN@n}\nolinebreak#1% removed \thinspace from this line
-            \unless\ifnum\c@PN@n=\c@PN@t
-                \parnoteintercmd
-            \fi
-        }%
-    \unskip\parnotemarkfmt{PN@t}%
+\@ifpackagelater{parnotes}{2016/07/26}{%
+  \renewcommand{\theparnotemark}{\fnsymbol{parnotemark}}
+  \renewcommand{\parnotecusmarkfmt}[1]{\textsuperscript{\normalfont\footnotesize{#1}}}
+}{%
+  \renewcommand{\parnotemarkfmt}[1]{\textsuperscript{\normalfont\footnotesize\fnsymbol{#1}}}
 }
-\renewcommand{\thanks}[1]{\,\parnote{#1}\!}
+% patch the following command in order to get rid of space after symbol
+\patchcmd{\PN@parnote@real}{\thinspace}{}{}{}
+\renewcommand{\thanks}[1]{\,\parnote{#1}\hspace{-.16667em}}
 \renewcommand{\maketitle}{%
 %\begin{titlepage}
 \thispagestyle{empty}
@@ -310,6 +305,7 @@
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin, multiple]{footmisc}
+\setfnsymbol{lamport}% to avoid clash with parnotes
 % align the footnote mark inside the footnote body 
 \makeatletter
 \patchcmd{\@makefntext}{\llap{\@makefnmark}}{\@makefnmark}{}{}

@@ -305,7 +305,6 @@
 % Footnotes on margin
 \RequirePackage{ragged2e}% expose \RaggedRight to 'footmisc' to allowing hyphenation
 \RequirePackage[side, ragged, flushmargin, multiple]{footmisc}
-\setfnsymbol{lamport}% to avoid clash with parnotes
 % align the footnote mark inside the footnote body 
 \makeatletter
 \patchcmd{\@makefntext}{\llap{\@makefnmark}}{\@makefnmark}{}{}

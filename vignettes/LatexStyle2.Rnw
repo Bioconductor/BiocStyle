@@ -313,8 +313,8 @@ Communication:
   \exitem{warning}{common pitfalls}{signals}
   \exitem{fixme}{incomplete functionality}{provides an indication of}
 \end{itemize}
-%\vspace{1em}
-%%
+For all of the above message types, the default opening word can be overriden in an optional argument, e.g.~\latex{\textbackslash{fixme}[TODO]\{missing functionality\}} produces \fixme[TODO]{missing functionality}.
+
 General:
 \begin{itemize}
   \exitem{email}{user@domain.com}{to provide a linked email address,}

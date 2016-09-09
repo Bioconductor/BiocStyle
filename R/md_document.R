@@ -51,7 +51,20 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
     }
   }
   
+  post_processor <- function(metadata, input_file, output_file, clean, verbose) {
+    lines <- readUTF8(output_file)
+    
+    # unescape square brackets
+    lines <- gsub('\\\\\\[([^[\\]*)\\\\\\]', '\\[\\1\\]', lines)
+    
+    writeUTF8(lines, output_file)
+    output_file
+  }
+  
   # return format
-  base_format
+  rmarkdown::output_format(knitr = NULL,
+                           pandoc = NULL,
+                           post_processor = post_processor,
+                           base_format = base_format)
 }
   

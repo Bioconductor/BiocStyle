@@ -54,8 +54,11 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
   post_processor <- function(metadata, input_file, output_file, clean, verbose) {
     lines <- readUTF8(output_file)
     
-    # unescape square brackets
+    # unescape square brackets (to have "[" instead of "\[" in nanoc output)
     lines <- gsub('\\\\\\[([^[\\]*)\\\\\\]', '\\[\\1\\]', lines)
+    
+    # move all headers one level down (for proper formatting when embedded in the website)
+    lines <- gsub('^(#+ )', '#\\1', lines)
     
     writeUTF8(lines, output_file)
     output_file

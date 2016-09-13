@@ -66,7 +66,7 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
   
   # return format
   rmarkdown::output_format(knitr = NULL,
-                           pandoc = NULL,
+                           pandoc = list(args = "--atx-headers"),
                            post_processor = post_processor,
                            base_format = base_format)
 }

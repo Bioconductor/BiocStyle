@@ -3,7 +3,7 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  base_format = rmarkdown::md_document(toc = FALSE, ...)
+  base_format = rmarkdown::md_document(toc = FALSE, md_extensions = "-markdown_in_html_blocks", ...)
   
   if (isTRUE(toc)) {
     generate_toc <- function(input, output, template, toc_depth, verbose = FALSE) {
@@ -54,13 +54,18 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
   post_processor <- function(metadata, input_file, output_file, clean, verbose) {
     lines <- readUTF8(output_file)
     
-    # unescape square brackets (to have "[" instead of "\[" in nanoc output)
-    lines <- gsub('\\\\\\[([^[\\]*)\\\\\\]', '\\[\\1\\]', lines)
-    
     # move all headers one level down (for proper formatting when embedded in the website)
-    lines <- gsub('^(#+ )', '#\\1', lines)
+    pattern <- '^(#+ )'
+    lines <- gsub(pattern, '#\\1', lines)
     
-    writeUTF8(lines, output_file)
+    # make sure there is a newline before headers (pandoc removes them if preceeded by, e.g., <p>...</p>)
+    idx <- grep(pattern, lines)
+    idx <- idx[lines[idx - 1] != ""]
+    idx <- idx + 0:(length(idx)-1)
+    res <- vector(mode="character", length(lines)+length(idx))
+    res[-idx] <- lines
+    
+    writeUTF8(res, output_file)
     output_file
   }
   

@@ -60,12 +60,15 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
     
     # make sure there is a newline before headers (pandoc removes them if preceeded by, e.g., <p>...</p>)
     idx <- grep(pattern, lines)
-    idx <- idx[lines[idx - 1] != ""]
-    idx <- idx + 0:(length(idx)-1)
-    res <- vector(mode="character", length(lines)+length(idx))
-    res[-idx] <- lines
+    idx <- idx[lines[idx - 1L] != ""]
+    if ((l = length(idx))) {
+      idx <- idx + 0:(l-1L)
+      res <- vector(mode="character", length(lines)+l)
+      res[-idx] <- lines
+      lines <- res
+    }
     
-    writeUTF8(res, output_file)
+    writeUTF8(lines, output_file)
     output_file
   }
   

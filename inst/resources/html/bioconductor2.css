@@ -132,6 +132,17 @@ span.header-section-number {
   width: 65px;
 }
 
+p.author-name {
+  font-size: 14.5pt;
+  font-weight: bold;
+  font-style: italic;
+  text-align: left;
+}
+
+sup {
+  top: 0em;
+}
+
 /* formatting of inline code */
 code { 
   background-color: #f0f0f0;
@@ -195,11 +206,12 @@ span.caption-label {
   text-align: left;
 }
 
-.sidenote-number {
+.sidenote-number, .affil-mark {
   position: relative;
   vertical-align: super;
-  font-size: smaller;
+  font-size: 7.5pt;
   font-weight: normal;
+  font-style: normal;
   line-height: normal;
 }
 

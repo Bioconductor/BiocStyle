@@ -17,6 +17,9 @@ html_document2 <- function(toc = TRUE,
   
   post_processor = function(metadata, input, output, clean, verbose) {
     x = readUTF8(output)
+  
+    ## insert author affiliations
+    x <- modifyLines(x, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
     
     ## format caption titles
     x = caption_titles(x)
@@ -90,6 +93,9 @@ create_html_template <- function() {
   lines <- readUTF8(system.file("rmd", "h", "default.html", package = "rmarkdown"))
   
   template <- biocTempfile("template.html")
+  
+  ## placeholder for author affiliation block which is inserted during postprocessing
+  lines <- modifyLines(lines, from='$for(author)$', to='$endfor$', insert='<!-- AUTH AFFIL -->')
   
   lines <- modifyLines(lines, from='<div class="abstract">', to='</div>', insert=c(
     '<h4 class="abstract">Abstract</h4>',

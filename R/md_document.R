@@ -68,6 +68,21 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
       lines <- res
     }
     
+    header <- NULL
+    
+    # add document title
+    if ( !is.null(metadata$title) )
+      header <- c(sprintf("# %s", metadata$title), "", header)
+    
+    # add author affiliations
+    if ( !is.null((auth_affil <- auth_affil_html(metadata))) )
+      header <- c(header, auth_affil, "")
+    
+    # TOC header
+    header <- c(header, "## Contents", "")
+    
+    lines <- c(header, lines)
+    
     writeUTF8(lines, output_file)
     output_file
   }

@@ -22,7 +22,7 @@ modifyLines <- function (lines, from, to, replace = TRUE, before = FALSE,
     if (isTRUE(before)) # insert before
       c(lines[1:(from-1L)], insert, lines[from:length(lines)])
     else # insert after
-      c(lines[1:from], insert, lines[(from+1L):length(lines)])
+      c(lines[1:to], insert, lines[(to+1L):length(lines)])
   }
 }
 

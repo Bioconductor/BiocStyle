@@ -68,18 +68,21 @@ md_document <- function(toc = TRUE, toc_depth = 3, ...) {
       lines <- res
     }
     
+    # remove empty line between TOC and kramdown reference name
+    lines <- modifyLines(lines, from="{:toc}", offset=-1L, insert=NULL)
+    
     header <- NULL
     
     # add document title
     if ( !is.null(metadata$title) )
-      header <- c(sprintf("# %s", metadata$title), "", header)
+      header <- c(sprintf("# %s", metadata$title), "{:.no_toc}", "", header)
     
     # add author affiliations
     if ( !is.null((auth_affil <- auth_affil_html(metadata))) )
       header <- c(header, auth_affil, "")
     
     # TOC header
-    header <- c(header, "## Contents", "")
+    header <- c(header, "## Contents", "{:.no_toc}", "")
     
     lines <- c(header, lines)
     

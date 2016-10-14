@@ -1,3 +1,28 @@
+CHANGES IN VERSION 2.2.0
+------------------------
+
+NEW FEATURES
+
+    o New Bioconductor HTML Style. See package vignettes for details.
+    
+BUG FIXES AND IMPROVEMENTS to Bioconductor LaTeX Style 2
+
+    o Use `\path` for file names to allow long line breaks
+    o Load 'nowidow' LaTeX package to prevent widows and orphans
+    o Patch bug in 'titlesec' 2.10.1 (http://tex.stackexchange.com/q/299969/102422)
+    o Pass option `multiple` to 'footmisc' for better handling of consecutive footnotes
+    o Load 'marginfix' LaTeX package to prevent margin notes from overflowing the bottom margin
+    o Fix the issue with color spilling out on margin notes (https://github.com/Bioconductor/BiocStyle/issues/5)
+    o Use `fig.asp` to override figure height (https://github.com/Bioconductor/BiocStyle/issues/4)
+    o Fix compatibility with the 'float' package, in particular the `[H]` placement specifier
+    o Load 'marginfix' LaTeX package to prevent margin notes from overflowing the bottom margin
+    o Enclose wide floats in `\blockmargin` and `\unblockmargin` to prevent footnotes from entering them
+    o Move the footnote mark inside margin notes
+    o Add vertical skip after margin phantoms of wide floats for better alignment of margin notes with paragraph text
+    o Fix concatenation of `includes` reported in https://github.com/Bioconductor/BiocStyle/issues/8
+    o Stratify parnote mark definition depending on package version (https://github.com/Bioconductor/BiocStyle/issues/7)
+    o Capitalize default opening words in `\comment`, `\warning` and `\fixme`, and mention the optional argument in the vignette
+    
 CHANGES IN VERSION 2.0.0
 ------------------------
 

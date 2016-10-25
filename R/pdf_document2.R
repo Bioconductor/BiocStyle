@@ -98,6 +98,9 @@ pdf_document2 <- function(toc = TRUE,
     texfile <- sub_ext(output, ".tex")
     lines = readUTF8(texfile)
     
+    ## insert author affiliations
+    lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
+    
     lines = gsub('(?<!\\\\textbackslash{})@ref\\(([-:[:alnum:]]+)\\)', '\\\\ref{\\1}', lines, perl = TRUE)
     lines = gsub('\\(\\\\#((fig|tab):[-[:alnum:]]+)\\)', '\\\\label{\\1}', lines)
     
@@ -169,10 +172,7 @@ create_latex_template <- function(opts=NULL) {
     loadBioconductorStyleFile(opts)))
   
   # add author affiliations
-  lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert=c(
-    "$for(author)$",
-    "$if(author.name)$  \\author{$author.name$$if(author.email)$\\thanks{\\ttfamily$author.email$}$endif$}$else$  \\author{$author$}$endif$",
-    "$if(author.affiliation)$  \\affil{$author.affiliation$}$endif$$endfor$"))
+  lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert="%% AUTH AFFIL %%")
   
   # add package version number
   lines <- modifyLines(lines, from="\\end{abstract}", replace=FALSE, insert=c(

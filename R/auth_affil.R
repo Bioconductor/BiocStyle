@@ -109,3 +109,34 @@ auth_affil_html = function(m) {
   
   res
 }
+
+auth_affil_latex = function(m) {
+  m <- parse_auth_affil(m)
+  
+  ## missing author metadata
+  if ( is.null(m) )
+    return()
+  
+  author <- m$names
+  
+  ## append emails in \thanks
+  if ( !is.null(m$email_marks) ) {
+    idx <- m$email_marks != ""
+    author[idx] <-  sprintf("%s\\thanks{\\ttfamily %s}", author[idx], m$email)
+  }
+  
+  if ( is.null(m$affil_marks) ) {
+    if ((l = length(author)) > 2)
+      author <- c(paste(author[1:(l-1L)], collapse=", "), author[l])
+    
+    author <- paste(author, collapse=" and ")
+    author <- sprintf("\\author{%s}", author)
+    affil <- NULL
+  }
+  else {
+    author <- sprintf("\\author[%s]{%s}", m$affil_marks, author)
+    affil <- sprintf("\\affil[%s]{%s}", seq_along(m$affil), m$affil)
+  }
+  
+  c(author, affil)
+}

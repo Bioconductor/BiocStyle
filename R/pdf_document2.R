@@ -171,6 +171,9 @@ create_latex_template <- function(opts=NULL) {
     "",
     loadBioconductorStyleFile(opts)))
   
+  # use \bioctitle to capture short title for page headings
+  lines <- modifyLines(lines, from="\\title{$title$}", insert="\\bioctitle[$if(shorttitle)$$shorttitle$$endif$]{$title$}")
+  
   # add author affiliations
   lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert="%% AUTH AFFIL %%")
   

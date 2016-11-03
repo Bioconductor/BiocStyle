@@ -114,7 +114,9 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
     switch(fontsize, default,
            "12pt" = 58L,
            "11pt" = 64L,
-           "10pt" = 70L)
+           "10pt" = 70L,
+           "9pt"  = 78L,
+           "8pt"  = 88L)
   
   # knitr output is usually commented out
   if (knitr)

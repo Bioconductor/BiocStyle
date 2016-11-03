@@ -84,6 +84,7 @@ html_document2 <- function(toc = TRUE,
   rmarkdown::output_format(
     knitr = knitr,
     pandoc = NULL,
+    pre_processor = pre_processor,
     post_processor = post_processor,
     base_format = rmarkdown_html_document)
 }

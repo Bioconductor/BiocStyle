@@ -130,6 +130,7 @@ pdf_document2 <- function(toc = TRUE,
   rmarkdown::output_format(knitr = knitr,
                            pandoc = NULL,
                            keep_md = keep_md,
+                           pre_processor = pre_processor,
                            post_processor = post_processor,
                            base_format = base_format)
 }

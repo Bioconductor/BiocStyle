@@ -3,11 +3,11 @@ Title: Standard styles for vignettes and other Bioconductor documents
 Description: Provides standard formatting styles for Bioconductor PDF
     and HTML documents. Package vignettes illustrate use and
     functionality.
-Version: 2.3.4
+Version: 2.3.5
 Author: Andrzej Oleś, Martin Morgan, Wolfgang Huber
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 Imports: stats, utils
-Suggests: base64enc, knitr (>= 1.12), rmarkdown, BiocGenerics, RUnit
+Suggests: base64enc, knitr (>= 1.12), rmarkdown, BiocGenerics, RUnit, yaml
 biocViews: Software
 License: Artistic-2.0
 VignetteBuilder: knitr

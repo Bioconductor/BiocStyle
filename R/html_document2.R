@@ -52,7 +52,8 @@ html_document2 <- function(toc = TRUE,
   
   # knitr options
   knitr = rmarkdown::knitr_options(
-    opts_knit = list(bookdown.internal.label = TRUE), # use labels of the form (\#label) in knitr
+    opts_knit = list(width = .width(),
+                     bookdown.internal.label = TRUE), # use labels of the form (\#label) in knitr
     opts_chunk = list(),
     knit_hooks = list(
       plot = function(x, options = list()) {

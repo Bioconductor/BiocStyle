@@ -78,6 +78,7 @@ pre code {
   display: block;
   padding: 10px 10px 10px 0px;
   overflow-x: inherit;
+  font-size: 95%;
 }
 
 /* markdown v1 */
@@ -147,7 +148,7 @@ sup {
 code { 
   background-color: #f0f0f0;
   color: #404040;
-  font-size: 92%;
+  font-size: 95%;
 }
 
 /* figures */

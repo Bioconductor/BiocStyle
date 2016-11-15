@@ -13,10 +13,14 @@ parse_auth_affil = function(m) {
     email_marks = NULL
   )
   
+  ## author list with additional metadata
   if (is.list(auth)) {
-    ## author list with additional metadata
+    ## multiple authors
     if (is.null(names(auth))) {
-      ## multiple authors
+      ## convert plain entries to named lists for the sake of easier processing
+      idx <- !sapply(auth, is.list)
+      auth[idx] <- lapply(auth[idx], function(x) list(name = x))
+      
       names <- sapply(auth, .subset2, "name")
       email <- sapply(auth, .subset2, "email")
       affil <- sapply(auth, .subset2, "affiliation")
@@ -46,8 +50,8 @@ parse_auth_affil = function(m) {
         res$email_marks <- email_marks
       }
     }
+    ## single author
     else {
-      ## single author
       res$names <- auth$name
       res$email <- auth$email
       res$affil <- auth$affiliation

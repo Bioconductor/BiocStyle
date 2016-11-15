@@ -75,12 +75,6 @@ pdf_document2 <- function(toc = TRUE,
     opts_template = NULL
   )
   
-  # LEGACY CODE: when rmarkdown 0.9.6 is released add dependency in DESCRIPTION and remove the following lines
-  if( packageVersion("rmarkdown") < package_version("0.9.6") ) {
-    if (is.na(fig_width)) fig_width = 7.5
-    if (is.na(fig_height)) fig_height = 5.0
-  }
-  
   base_format = base_format(
     toc = toc,
     number_sections = number_sections,

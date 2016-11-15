@@ -4,10 +4,19 @@ html_document2 <- function(toc = TRUE,
                            fig_height = NA,
                            fig_retina = NULL,
                            css = NULL,
+                           pandoc_args = NULL,
                            ...) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
+  
+  base_format <- function(toc = TRUE,
+                          number_sections = TRUE,
+                          fig_width = NA,
+                          fig_height = NA,
+                          fig_retina = NULL,
+                          css = NULL,
+                          ...) {
   
   ## customize the default rmarkdown template
   template <- create_html_template()
@@ -24,11 +33,8 @@ html_document2 <- function(toc = TRUE,
     ## format caption titles
     x = caption_titles(x)
     
-    ## cross-references
-    x = resolve_refs(x)
-    
     ## footnotes
-    footnotes = parse_footnotes(x)
+    footnotes = tufte:::parse_footnotes(x)
     notes = footnotes$items
     # replace footnotes with sidenotes
     for (i in seq_along(notes)) {
@@ -52,8 +58,7 @@ html_document2 <- function(toc = TRUE,
   
   # knitr options
   knitr = rmarkdown::knitr_options(
-    opts_knit = list(width = .width(),
-                     bookdown.internal.label = TRUE), # use labels of the form (\#label) in knitr
+    opts_knit = list(width = .width()),
     opts_chunk = list(),
     knit_hooks = list(
       plot = function(x, options = list()) {
@@ -73,14 +78,32 @@ html_document2 <- function(toc = TRUE,
   
   rmarkdown_html_document = rmarkdown::html_document(
     toc = toc,
-    number_sections = number_sections,
+    number_sections = TRUE,
     fig_width = fig_width,
     fig_height = fig_height,
     css = css,
     ...)
   
-  template_arg = which(rmarkdown_html_document$pandoc$args == "--template") + 1L
-  rmarkdown_html_document$pandoc$args[template_arg] = template
+  ## override some default pandoc args; we use this low-level approach rather 
+  ## than passing them in 'pandoc_args' to 'rmarkdown::html_document' because 
+  ## rmarkdown just concatenates base and overlay argument lists which does not 
+  ## allow for substitution
+  pandoc_args = c(pandoc_args, c("--template", template))
+  
+  arg_names <- c("--email-obfuscation", "--template")
+  arg_names <- arg_names[arg_names %in% pandoc_args]
+  
+  idx = match(arg_names, pandoc_args)
+  
+  ## substitute arguments
+  rmarkdown_html_document$pandoc$args [
+    match(arg_names, rmarkdown_html_document$pandoc$args) + 1L
+  ] <- pandoc_args [idx + 1L]
+  
+  ## append the rest
+  rmarkdown_html_document$pandoc$args <- 
+    c(rmarkdown_html_document$pandoc$args, pandoc_args[-c(idx, idx+1L)])
+  
   
   rmarkdown::output_format(
     knitr = knitr,
@@ -88,6 +111,18 @@ html_document2 <- function(toc = TRUE,
     pre_processor = pre_processor,
     post_processor = post_processor,
     base_format = rmarkdown_html_document)
+  }
+
+  bookdown::html_document2(
+    base_format = base_format,
+    toc = toc,
+    number_sections = FALSE,
+    fig_width = fig_width,
+    fig_height = fig_height,
+    fig_retina = fig_retina,
+    css = css,
+    ...
+  )
 }
 
 # modify the default rmarkdown template
@@ -157,20 +192,6 @@ create_html_template <- function() {
   template
 }
 
-# the following function is a copy from the RStudio's 'tufte' package
-parse_footnotes = function(x) {
-  i = which(x == '<div class="footnotes">')
-  if (length(i) == 0) return(list(items = character(), range = integer()))
-  j = which(x == '</div>')
-  j = min(j[j > i])
-  n = length(x)
-  r = '<li id="fn([0-9]+)"><p>(.+)<a href="#fnref\\1">.</a></p></li>'
-  list(
-    items = gsub(r, '\\2', grep(r, x[i:n], value = TRUE)),
-    range = i:j
-  )
-}
-
 caption_titles = function(lines) {
   # tables: match to <caption>...</caption> lines
   regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-[:alnum:]]+\\))?[[:space:]]*([^.]+.?)'
@@ -184,100 +205,4 @@ caption_titles = function(lines) {
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
   lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span>', lines[idx])
   lines
-}
-
-resolve_refs = function(content) {
-  
-  ## Parse figure/table labels
-  
-  m = gregexpr('\\(#((fig|tab):[-[:alnum:]]+)\\)', content)
-  labs = regmatches(content, m)
-  figs = grep('^<div class="figure', content)
-  
-  idx = which(vapply(labs, length, integer(1L)) == 1L)
-  
-  newlabs = gsub('^\\(#|\\)$', '', labs[idx])
-  type = ifelse(grepl('^fig:', newlabs), 'Figure', 'Table')
-  
-  # counters
-  cntr = integer(length(type))
-  for (t in c('Figure', 'Table')) {
-    sel = type == t
-    cntr[sel] = 1:sum(sel)
-  }
-  
-  ref_table = setNames(cntr, newlabs)  # an array of the form c(label = number, ...)
-  
-  format_label = function(type, num)
-    paste0('<span class="caption-label">', type, ' ', num, ': </span>')
-  
-  labs[idx] = 
-    mapply(newlabs, idx, type, cntr, SIMPLIFY=FALSE, USE.NAMES=FALSE, 
-           FUN = function(lab, i, type, num) {
-             if (type == 'Figure') {
-               if (any(grepl('^<p class="caption', content[i - 0:1]))) {
-                 k = max(figs[figs <= i])
-                 content[k] <<- paste0(content[k], sprintf('<span id="%s"></span>', lab))
-                 format_label(type, num)
-               } else {
-                 # remove these labels, because there must be a caption on this or
-                 # previous line (possible negative case: the label appears in the alt
-                 # text of <img>)
-                 ""
-               }
-             } else {
-               if (any(grepl("^<caption>", content[i - 0:1]))) {
-                 sprintf('<span id="%s">%s</span>', lab, format_label(type, num))
-               } else {
-                 ""
-               }
-             }
-           })
-  
-  regmatches(content, m) = labs
-  
-  # remove labels in figure alt text (it will contain \ like (\#fig:label))
-  content = gsub('"\\(\\\\#(fig:[-[:alnum:]]+)\\)', '"', content)
-  
-  
-  ## Parse section labels
-  
-  sec_num = '^<h[1-6]><span class="header-section-number">([.A-Z0-9]+)</span>.+</h[1-6]>$'
-  sec_ids = '^<div id="([^"]+)" class="section .+">$'
-  
-  idx = grep(sec_num, content)
-  idx = idx[grepl(sec_ids, content[idx-1L])] ## make sure all sections have ids
-  
-  ref_table = c(ref_table, setNames(
-    sub(sec_num, '\\1', content[idx]),
-    sub(sec_ids, '\\1', content[idx-1L])
-  ))
-  
-  
-  ## look for @ref(label) and resolve to actual figure/table/section numbers
-  m = gregexpr('(?<!\\\\)@ref\\(([-:[:alnum:]]+)\\)', content, perl = TRUE)
-  refs = regmatches(content, m)
-  idx = vapply(refs, length, integer(1L)) > 0L
-  refs[idx] = lapply(refs[idx], ref_to_number, ref_table)
-  regmatches(content, m) = refs
-  
-  content
-}
-
-ref_to_number = function(ref, ref_table) {
-  ref = gsub('^@ref\\(|\\)$', '', ref)
-  num = ref_table[ref]
-  i = is.na(num)
-  j = i & grepl('^eq:', ref)
-  # equation labels will be replaced by \ref{eq:label}; the reason that we
-  # cannot directly use \ref{} for HTML even MathJax supports it is that
-  # Pandoc will remove the LaTeX command \ref{} for HTML output, and MathJax
-  # needs the literal command \ref{} on the page
-  i[j] = FALSE
-  if (any(i)) {
-    if (!isTRUE(opts()$get('preview')))
-      warning('Label(s) ', paste(ref[i], collapse = ', '), ' not found', call. = FALSE)
-    num[i] = '<strong>??</strong>'
-  }
-  ifelse(j, sprintf('\\ref{%s}', ref), sprintf('<a href="#%s">%s</a>', ref, num))
 }

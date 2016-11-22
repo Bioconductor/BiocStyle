@@ -153,12 +153,12 @@
 %% The implementation of the following environment is based on snugshade* from the package framed
 \OuterFrameSep=0mm
 \newenvironment{myshaded}{%
-  \def\FrameCommand##1{\fboxsep=1em%
-   \hskip-\voverhang \hskip\@totalleftmargin
+  \def\FrameCommand##1{\fboxsep=.5\baselineskip%
+   \hskip-\voverhang \hskip\@totalleftmargin%
    \colorbox{shadecolor}{\hskip\voverhang \hskip-\fboxsep ##1}%
       % There is no \@totalrightmargin, so:
       \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
-  \MakeFramed {\advance\hsize\fboxsep \advance\hsize-\width
+  \MakeFramed {\advance\hsize-\width
     \@totalleftmargin\z@ \linewidth\hsize
     \advance\labelsep\fboxsep
     \@setminipage}%

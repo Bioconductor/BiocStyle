@@ -13,7 +13,7 @@ Format for converting from R Markdown to an Bioconductor HTML document.
 html_document(toc = TRUE, toc_depth = 3, number_sections = TRUE,
   fig_width = 7, fig_height = 5, fig_retina = NULL,
   fig_caption = FALSE, dev = "png", smart = TRUE, self_contained = TRUE,
-  highlight = "default", mathjax = "default",
+  highlight = "default", mathjax = "default", extra_dependencies = NULL,
   css = NULL, includes = NULL, keep_md = FALSE,
   lib_dir = NULL, md_extensions = NULL, pandoc_args = NULL, ...)
 }
@@ -71,8 +71,8 @@ for additional details.}
 
 \item{pandoc_args}{Additional command line options to pass to pandoc}
 
-\item{...}{Additional function arguments to pass to the base R Markdown HTML
-  output formatter}
+\item{extra_dependencies, ...}{Additional function arguments to pass to the
+base R Markdown HTML output formatter \code{\link[rmarkdown]{html_document_base}}}
 }
 
 \value{

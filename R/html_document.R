@@ -16,6 +16,7 @@ html_document <- function(toc = TRUE,
                           self_contained = TRUE,
                           highlight = "default",
                           mathjax = "default",
+                          extra_dependencies = NULL,
                           css = NULL,
                           includes = NULL,
                           keep_md = FALSE,
@@ -42,6 +43,22 @@ html_document <- function(toc = TRUE,
   # template path and assets
   args <- c(args, "--template", rmarkdown::pandoc_path_arg(file.path(resources, "html", "template.html")))
   
+  # highlight
+  args <- c(args, rmarkdown:::pandoc_html_highlight_args("default", highlight))
+  
+  # add highlight.js html_dependency if required
+  if (!is.null(highlight) && (highlight %in% c("default", "textmate"))) {
+    extra_dependencies <- append(extra_dependencies, list(
+      htmltools::htmlDependency(
+        "highlightjs",
+        version = "1.1",
+        src = rmarkdown:::rmarkdown_system_file("rmd/h/highlightjs-1.1"),
+        script = "highlight.js",
+        stylesheet = paste0(highlight, ".css")
+      )
+    ))
+  }
+  
   # numbered sections
   if (number_sections)
     args <- c(args, "--number-sections")
@@ -55,19 +72,8 @@ html_document <- function(toc = TRUE,
   pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir,
                             output_dir) {
 
-    # use files_dir as lib_dir if not explicitly specified
-    if (is.null(lib_dir))
-      lib_dir <- files_dir
-
     # extra args
     args <- c()
-
-    # highlight
-    args <- c(args, rmarkdown:::pandoc_html_highlight_args(highlight,
-                                               template = "default",
-                                               self_contained,
-                                               lib_dir,
-                                               output_dir))
 
     # content includes (we do this here so that user include-in-header content
     # goes after dependency generated content). make the paths absolute if
@@ -96,6 +102,8 @@ html_document <- function(toc = TRUE,
                                      self_contained = self_contained,
                                      lib_dir = lib_dir, mathjax = mathjax,
                                      template = "default",
-                                     pandoc_args = pandoc_args, ...)
+                                     pandoc_args = pandoc_args,
+                                     extra_dependencies = extra_dependencies,
+                                     ...)
   )
 }

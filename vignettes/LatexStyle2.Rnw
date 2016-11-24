@@ -175,8 +175,8 @@ remedied (as on the \Bioconductor{} build system) with a final run of
 
 \subsection{Title page}
 
-\warning[Important]{most of the methods described here only work once \BiocStyle\ is \linebreak loaded;
-therefore, specify title and authors \emph{after} the code chunk calling \linebreak\Rfunction{BiocStyle::latex2()}.}
+\warning[Important]{most of the methods described here only work once \BiocStyle\ is loaded;
+therefore, specify title and authors \emph{after} the code chunk calling \Rfunction{BiocStyle::latex2()}.}
 
 \subsubsection{Title and running headers}
 
@@ -334,7 +334,7 @@ If for some reason you wish to alter it, use the \Rcode{width} argument in the c
 \subsection{Figures}\label{sec:figures}
 %---------------------------------------------------------
 
-<<fig, echo=FALSE, fig=TRUE, include=FALSE, width=7.5, height=5>>=
+<<fig, echo=FALSE, fig=TRUE, include=FALSE, width=8, height=5>>=
 par(mar=c(4,4,0.5,0.5))
 plot(cars)
 <<widefig, echo=FALSE, fig=TRUE, include=FALSE, width=10, height=5>>=
@@ -355,20 +355,20 @@ and horizontal placement on the the page. See the following
 table for details, and Figures~\ref{fig:figure}, \ref{fig:wide} and \ref{fig:small} 
 for examples.
 
-\begin{table*}
+\begin{table}
   \begin{small}
-  \begin{tabular}{llp{8mm}lll}
+  \begin{tabular}{llp{6.5mm}lll}
     \toprule
     environment & description & \multicolumn{2}{l}{output width} & device dimensions & aspect ratio\\
     \midrule
-    \latex{figure} & regular figure & 100mm &($\approx$3.9in) & 7.5 x 5.0 in & 1.5\\
-    \latex{figure*} & wide figure & 140mm  &($\approx$5.5in)& 10.0 x 5.0 in & 2.0\\
-    \latex{smallfigure} & small figure & 65mm &($\approx$2.6in)& 5.0 x 5.0 in & 1.0 \\
+    \latex{figure} & regular figure & 120mm &($\approx$4.72in) & 8 x 5 in & 1.6\\
+    \latex{figure*} & wide figure & 150mm  &($\approx$5.90in)& 10 x 5 in & 2.0\\
+    \latex{smallfigure} & small figure & 75mm &($\approx$2.95in)& 5 x 5 in & 1.0 \\
     \bottomrule
   \end{tabular}
   \end{small}
   \label{tab:figs}
-\end{table*}
+\end{table}
 
 \begin{figure}
   \includegraphics{\jobname-fig}
@@ -386,10 +386,10 @@ for examples.
   \caption{\label{fig:small}Small figure. A plot displayed with the \latex{\textbackslash{}smallfigure} environment.}
 \end{smallfigure}
 
-The \verb+figure+ environment produces regular figures which are about 0.8 paragraph wide
-and right-aligned with the margin, as Figure~\ref{fig:figure}.
+The \verb+figure+ environment produces regular figures which are left-indented
+and right-aligned with the paragraph, as Figure~\ref{fig:figure}.
 To utilize the whole available width use the \verb+figure*+ environment.
-It produces figures which are about 1.2 paragraph wide 
+It produces figures which are left-aligned with the paragraph
 and extend on the right margin (Figure~\ref{fig:wide}).
 The \verb+smallfigure+ environment is meant for possibly rectangular plots
 which are about half as wide as the paragraph (Figure~\ref{fig:small}).

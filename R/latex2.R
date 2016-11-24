@@ -97,7 +97,7 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
         fontsize = tryCatch({
           lines = readLines(src)
           documentclass = grep("^[:blank:]*\\\\documentclass", lines, value = TRUE)[1L]
-          sub(".+(1[0-2]pt).+","\\1", documentclass)
+          sub(".+(1?[01289]pt).+","\\1", documentclass)
         }, error = function(e) NULL)
       }
       
@@ -107,16 +107,16 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
     options(..., width = width)
     }
 
-.width = function(fontsize = "10pt", knitr = TRUE, default = 70L) {
+.width = function(fontsize = "10pt", knitr = TRUE, default = 80L) {
   w = if (is.null(fontsize)) 
     default
   else
     switch(fontsize, default,
-           "12pt" = 58L,
-           "11pt" = 64L,
-           "10pt" = 70L,
-           "9pt"  = 78L,
-           "8pt"  = 88L)
+           "12pt" = 66L,
+           "11pt" = 73L,
+           "10pt" = 80L,
+           "9pt"  = 89L,
+           "8pt"  = 100L)
   
   # knitr output is usually commented out
   if (knitr)
@@ -156,7 +156,7 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
       options$fig.width = switch(options$fig.env, 7,# fallback to knitr default
                                  "smallfigure" = 5,
                                  "figure*" = 10,
-                                 "figure" = 7.5)
+                                 "figure" = 8)
       # override 'fig.height' if 'fig.asp' is set (as plain knitr does)
       if (is.numeric(options$fig.asp))
         options$fig.height = options$fig.width * options$fig.asp

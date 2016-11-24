@@ -42,21 +42,13 @@
 \pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
 % Define page layout
 \RequirePackage{geometry}
-\newlength\widthdiff
-\setlength\widthdiff{-210mm}
-\advance\widthdiff\paperwidth
-\newlength\leftoffset
-\setlength\leftoffset{35mm}
-%\advance\leftoffset.5\widthdiff
+%
 \newlength\hfskip
 \setlength\hfskip{15mm}
-\newlength\margin
-\setlength\margin{20mm}
-%
 \newlength\layoutw
-\setlength\layoutw{210mm}
+\setlength\layoutw{210mm}% width of A4 paper which is smaller than US Letter (8.5in=216mm)
 \newlength\layouth
-\setlength\layouth{11in}
+\setlength\layouth{11in}% height of US Letter paper (279mm) which is smaller than A4 (297mm)
 \newlength\layouthoff
 \newlength\layoutvoff
 \setlength\layouthoff\paperwidth
@@ -64,34 +56,34 @@
 \advance\layouthoff-\layoutw
 \advance\layoutvoff-\layouth
 \geometry{%
-% showframe,%
-% page layout equals common area of letter and A4
- layoutsize={\layoutw,\layouth},%
- layouthoffset=.5\layouthoff,%
- centering=true,%
- total={120mm,210mm},%
- marginparsep=5mm,%
- marginparwidth=30mm,%
- left=35mm,%
- right=55mm,%
- %top=35mm,%
- headheight=\hfskip,%
- headsep=0mm,%
- footskip=\hfskip%
+% showframe,showcrop,%
+% page layout set to common area of letter and A4
+ layoutsize={\layoutw,\layouth},
+ layouthoffset=.5\layouthoff,
+ layoutvoffset=.5\layoutvoff,
+ width=135mm,
+ marginparsep=5mm,
+ marginparwidth=30mm,
+ hmargin={30mm,45mm},
+ vmargin={15mm,15mm},
+ includeheadfoot=true,
+ headheight=\hfskip,
+ headsep=0mm,
+ footskip=\hfskip
 }
 \newlength{\overhang}
 \setlength{\overhang}{15mm}
 \newlength{\rightoffset} % right offset of the document body
-\setlength{\rightoffset}{35mm}
+\setlength{\rightoffset}{30mm}
 \newlength{\fltoffset} % left offset of floats relative to paragraph text
-\setlength{\fltoffset}{20mm}
+\setlength{\fltoffset}{15mm}
 \newlength{\capoffset} % right offset of captions relative to float's body
 \setlength{\capoffset}{-\fltoffset}
 %% Use Latin Modern Sans Serif font
 \renewcommand\familydefault\sfdefault
 \renewcommand\sfdefault{lmss}
 %% Beramono font for TT font
-\RequirePackage[scaled=0.8]{beramono}
+\RequirePackage[scaled=0.798]{beramono}
 \RequirePackage[T1]{fontenc}
 %
 \RequirePackage{etoolbox}% provides \patchcmd
@@ -372,7 +364,7 @@
  \@biocfloat{#1}{#2}{\fltoffset}{0mm}{0mm}{0mm}%
 }
 \newcommand{\@biocfloat@small}[2]{%
- \@biocfloat{#1}{#2}{\fltoffset}{\rightoffset}{0mm}{-\rightoffset}%
+ \@biocfloat{#1}{#2}{2\fltoffset}{2\fltoffset}{-\fltoffset}{-2\fltoffset}%
 }
 \newcommand{\@biocfloat@wide}[2]{%
  \@biocfloat{#1}{#2}{0mm}{-\fltoffset}{\fltoffset}{\fltoffset}
@@ -432,6 +424,7 @@
  labelfont=bfhelvet,%
  justification=RaggedRight,%
  singlelinecheck=false,%
+ margin={\fltoffset,\capoffset}% default margin used by longtable
 }
 % %% make first sentence of caption bold
 %
@@ -443,20 +436,25 @@
 \newcommand\formatlabel[1]{%
  \noexpandarg%
  \IfSubStr{#1}{.}{%
-  \StrBefore{#1}{.}[\@captiontitle]%
-  \def\captiontitle{\@captiontitle.}%
+  \StrBefore{#1}{.}[\captiontitle]%
   \StrBehind{#1}{.}[\captionbody]%
  }{%
   \def\captiontitle{#1}%
   \def\captionbody{}%
  }%
- {{\bfhelvet\color{BiocBlue}\captiontitle} \captionbody}
+ {{\bfhelvet\color{BiocBlue}\captiontitle}\\\captionbody}
 }
 \AtBeginDocument{%
  \let\org@caption\@caption
  \def\@caption#1[#2]#3{%  
   \org@caption{#1}[{#2}]{\formatlabel{#3}}%
  }%
+ \@ifundefined{LT@makecaption}{}{%
+   \let\org@LT@makecaption\LT@makecaption
+   \def\LT@makecaption#1#2#3{%  
+    \org@LT@makecaption{#1}{#2}{\formatlabel{#3}}%
+   }%
+ }
 }
 % subfloat captions
 \DeclareCaptionTextFormat{nocaptiontitle}{\renewcommand\formatlabel[1]{##1}#1}

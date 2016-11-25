@@ -41,3 +41,23 @@ biocTempfile = function(name) {
 sub_ext = function(file, ext) sub("([.][[:alnum:]]+)?$", ext, file)
 
 opts = function() knitr:::new_defaults()
+
+## recursively merge two lists
+merge_lists <- function (base_list, overlay_list) {
+  if (length(base_list) == 0L)
+    overlay_list
+  else if (length(overlay_list) == 0L)
+    base_list
+  else {
+    merged_list <- base_list
+    for (name in names(overlay_list)) {
+      base <- base_list[[name]]
+      overlay <- overlay_list[[name]]
+      if (is.list(base) && is.list(overlay))
+        merged_list[[name]] <- merge_lists(base, overlay)
+      else 
+        merged_list[[name]] <- overlay_list[[name]]
+    }
+    merged_list
+  }
+}

@@ -57,9 +57,7 @@ html_document2 <- function(toc = TRUE,
   }
   
   # knitr options
-  knitr = rmarkdown::knitr_options(
-    opts_knit = list(width = .width()),
-    opts_chunk = list(),
+  knitr = merge_lists(.knitr_options(), list(
     knit_hooks = list(
       plot = function(x, options = list()) {
         out.extra = switch(options$fig.env, NULL,
@@ -68,9 +66,9 @@ html_document2 <- function(toc = TRUE,
                            "figure" = NULL)
         options$out.extra = paste(options$out.extra, out.extra)
         knitr::hook_plot_md(x, options)
-      }),
-    opts_hooks = .opts_hooks)
-  
+      }
+    )
+  ))
   
   # Call the rmarkdown::html_document function with `template="default"` and
   # substitute the template only afterwards in order to retain some of the

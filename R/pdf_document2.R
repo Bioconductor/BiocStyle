@@ -19,9 +19,10 @@ pdf_document2 <- function(toc = TRUE,
   
   ## code chunks and code highlighting
   thm <- system.file("themes", "default.css", package = "BiocStyle")
+  knitr::opts_knit$set(out.format="latex");
   head = c(head,
            "% code highlighting",
-           knitr:::theme_to_header_latex(thm)$highlight,
+           knitr::knit_theme$get(thm)$highlight,
            readLines(file.path(resources, "tex", "highlighting-macros.def")))
   
   if (use.unsrturl) {
@@ -47,11 +48,10 @@ pdf_document2 <- function(toc = TRUE,
   if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
   
   # knitr options
-  knitr = list(
-    opts_knit = list(width = .width(),
-                     # use labels of the form (\#label) in knitr
-                     bookdown.internal.label = TRUE),
-    opts_chunk = list(collapse=TRUE, fig.scap=NA),
+  knitr = merge_lists(.knitr_options(), list(
+    opts_chunk = list(
+      collapse = TRUE
+    ),
     knit_hooks = list(
       plot = function(x, options = list()) {
         adjustwidth = NULL
@@ -70,10 +70,10 @@ pdf_document2 <- function(toc = TRUE,
                  knitr::hook_plot_tex(x, options),
                  adjustwidth[2L])
         }
-      }),
-    opts_hooks = .opts_hooks,
-    opts_template = NULL
-  )
+      }
+    )
+  ))
+
   
   base_format = base_format(
     toc = toc,

@@ -137,7 +137,8 @@ create_html_template <- function() {
     '$abstract$',
     '$endif$',
     '$if(package)$',
-    '<h4 class="package">Package: <span style="font-weight: normal">$package$</span></h4>'))
+    '<h4 class="package">Package</h4>',
+    '<p>$package$</p>'))
   
   lines <- modifyLines(lines, from='<div id="$idprefix$TOC">', replace=FALSE, before=TRUE, insert="<h1>Contents</h1>")
   
@@ -150,13 +151,13 @@ create_html_template <- function() {
     lines <- modifyLines(lines, from='^  pre:not\\(\\[class\\]\\) \\{', to = '\\}', fixed=FALSE)
   
   lines <- modifyLines(lines=lines, from='^\\.main-container \\{', to = '\\}', fixed=FALSE, offset=c(1L, -1L), insert=c(
-    '  max-width: 768px;',
+    '  max-width: 828px;',
     '  margin-left: auto;',
     '  margin-right: auto;'))
   
   lines <- modifyLines(lines, from='^div\\.tocify \\{', to = '\\}', fixed=FALSE, offset=c(1L, -1L), insert=c(
     '  width: 20%;',
-    '  max-width: 226px;',
+    '  max-width: 246px;',
     '  max-height: 85%;'))
   
   ## use the modified code folding script
@@ -192,15 +193,13 @@ create_html_template <- function() {
 
 caption_titles = function(lines) {
   # tables: match to <caption>...</caption> lines
-  regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-[:alnum:]]+\\))?[[:space:]]*([^.]+.?)'
-  idx = which(grepl(regex, lines, perl=TRUE))
-  lines[idx]
-  lines = gsub(regex, '\\1<span class="caption-title">\\2</span>', lines, perl=TRUE)
+  regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-/[:alnum:]]+\\))?[[:space:]]*([^.]+.?)'
+  lines = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines, perl=TRUE)
   
   # figures: match to figure labels preceded by '<p class="caption'
-  regex = '(\\(#fig:[-[:alnum:]]+\\))[[:space:]]*([^.]+.?)'
+  regex = '(\\(#fig:[-/[:alnum:]]+\\))[[:space:]]*([^.]+.?)'
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
-  lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span>', lines[idx])
+  lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines[idx])
   lines
 }

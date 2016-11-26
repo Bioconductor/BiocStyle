@@ -1,6 +1,6 @@
 body {
-  max-width: 1054px;
   margin: 0px auto;
+  max-width: 1134px;
 }
 
 body, td {
@@ -51,8 +51,14 @@ p {
   text-align: justify;
 }
 
+/* vertical content spacing */
+p, img, table {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 ol, ul {
-  padding: 0px 150px 0px 85px;
+  padding: 0px 150px 0px 65px;
   list-style: square;
 }
 
@@ -67,6 +73,7 @@ pre {
   background-color: #f0f0f0;
   white-space: pre;
   overflow-x: auto;
+  font-size: 90%;
 }
 
 li pre {
@@ -78,7 +85,7 @@ pre code {
   display: block;
   padding: 10px 10px 10px 0px;
   overflow-x: inherit;
-  font-size: 95%;
+  font-size: 100%;
 }
 
 /* markdown v1 */
@@ -124,7 +131,7 @@ h2 {
   font-size: 14.5pt;
 }
 
-h3 {
+h3, h4 {
   font-size: 12pt;
 }
 
@@ -132,6 +139,8 @@ span.header-section-number {
   float: left;
   width: 65px;
 }
+
+/* document header */
 
 p.author-name {
   font-size: 14.5pt;
@@ -144,11 +153,20 @@ sup {
   top: 0em;
 }
 
+.date {
+  padding-left: 65px;
+  font-weight: bold;
+}
+
+.abstract, .package {
+  font-weight: bold;
+}
+
 /* formatting of inline code */
 code { 
   background-color: #f0f0f0;
   color: #404040;
-  font-size: 95%;
+  font-size: 90%;
 }
 
 /* figures */
@@ -160,28 +178,52 @@ code {
 img {
   max-width: 100%;
   display: block;
-  padding: 0px 150px;
+  padding: 0px 150px 0px 130px;
 }
 
 p > img {
-  padding-left: 85px;
+  padding-left: 65px;
   padding-right: 0px;
 }
 
 img.smallfigure {
-  padding-right: 300px;
+  padding-left: 195px;
+  padding-right: 280px;
+}
+
+p > img.smallfigure {
+  padding-left: 130px;
+  padding-right: 130px;
 }
 
 img.widefigure {
-  padding: 0px 65px;
+  padding-left: 65px;
+  padding-right: 85px;
+  margin-right: -65px;
+}
+
+p > img.widefigure {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-right: -65px;
 }
 
 p.caption, caption {
+  color: inherit;
   font-size: 8pt;
-  padding-left: 150px;
-  padding-right: 65px;
 }
 
+p.caption {
+  padding-left: 130px;
+  padding-right: 85px;
+  margin-bottom: 20px;
+}
+
+caption {
+  padding: 0px;
+  margin-bottom: 10px;
+  min-width: 583;
+}
 span.caption-title {
   color: #1a81c2;
   font-weight: bold;
@@ -189,6 +231,29 @@ span.caption-title {
 
 span.caption-label {
   font-weight: bold;
+}
+
+/* tables */
+
+table {
+  margin-left: 130px;
+  margin-right: 85px;
+}
+
+.table {
+  max-width: 518px;
+}
+
+/* code folding buttons */
+
+.code-folding-btn {
+  position: relative;
+  margin-top: -26px;
+  top: 26px;
+}
+
+.col-md-12 {
+  min-height: 0px;
 }
 
 /* footnotes as sidenotes */

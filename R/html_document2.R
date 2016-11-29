@@ -33,24 +33,8 @@ html_document2 <- function(toc = TRUE,
     ## format caption titles
     x = caption_titles(x)
     
-    ## footnotes
-    footnotes = tufte:::parse_footnotes(x)
-    notes = footnotes$items
-    # replace footnotes with sidenotes
-    for (i in seq_along(notes)) {
-      num = sprintf(
-        '<a href="#fn%d" class="footnoteRef" id="fnref%d"><sup>%d</sup></a>',
-        i, i, i
-      )
-      con = sprintf(paste0(
-        '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
-        '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',
-        '<span class="sidenote"><span class="sidenote-number">%d</span> %s</span>'
-      ), i, i, i, i, notes[i])
-      x = gsub(num, con, x, fixed=TRUE)
-    }
-    # remove footnotes at the bottom
-    if (length(footnotes$range)) x = x[-footnotes$range]
+    ## replace footnotes with sidenotes
+    x = process_footnotes(x)
     
     writeUTF8(x, output)
     output
@@ -201,5 +185,39 @@ caption_titles = function(lines) {
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
   lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines[idx])
+  lines
+}
+
+process_footnotes = function(lines) {
+  ## match to footnotes block
+  i = which(lines == '<div class="footnotes">')
+  if (length(i) == 0L)
+    return()
+  j = which(lines == '</div>')
+  j = min(j[j > i])
+  
+  ## extract footnotes and their ids
+  r = '<li id="fn([0-9]+)"><p>(.+)<a href="#fnref\\1">.</a></p></li>'
+  fn = grep(r, lines[i:j], value=TRUE)
+  id = as.integer(gsub(r, '\\1', fn))
+  fn = gsub(r, '\\2', fn)
+  
+  # remove footnotes at the bottom
+  lines = lines[-(i:j)]
+  
+  # replace footnotes with sidenotes
+  for (i in id)
+    lines = sub(
+      sprintf(
+        '<a href="#fn%d" class="footnoteRef" id="fnref%d"><sup>%d</sup></a>',
+        i, i, i
+      ),
+      sprintf(paste0(
+        '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
+        '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',
+        '<span class="sidenote"><span class="sidenote-number">%d</span> %s</span>'
+        ), i, i, i, i, fn[i]),
+      lines, fixed=TRUE)
+  
   lines
 }

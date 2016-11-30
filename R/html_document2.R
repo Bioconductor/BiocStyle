@@ -198,26 +198,27 @@ process_footnotes = function(lines) {
   
   ## extract footnotes and their ids
   r = '<li id="fn([0-9]+)"><p>(.+)<a href="#fnref\\1">.</a></p></li>'
-  fn = grep(r, lines[i:j], value=TRUE)
-  id = as.integer(gsub(r, '\\1', fn))
-  fn = gsub(r, '\\2', fn)
+  fns = grep(r, lines[i:j], value=TRUE)
+  ids = as.integer(gsub(r, '\\1', fns))
+  fns = gsub(r, '\\2', fns)
   
   # remove footnotes at the bottom
   lines = lines[-(i:j)]
   
   # replace footnotes with sidenotes
-  for (i in id)
+  for (i in seq_along(ids)) {
+    id = ids[i]
+    fn = fns[i]
     lines = sub(
       sprintf(
         '<a href="#fn%d" class="footnoteRef" id="fnref%d"><sup>%d</sup></a>',
-        i, i, i
-      ),
+        id, id, id),
       sprintf(paste0(
         '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
         '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',
         '<span class="sidenote"><span class="sidenote-number">%d</span> %s</span>'
-        ), i, i, i, i, fn[i]),
+        ), id, id, id, id, fn),
       lines, fixed=TRUE)
-  
+  }
   lines
 }

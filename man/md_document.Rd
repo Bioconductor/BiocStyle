@@ -2,19 +2,17 @@
 
 \alias{md_document}
 
-\title{Enable BiocStyle macros and a hyperlinked TOC in markdown output}
+\title{Convert to a BiocStyle markdown document}
 
 \description{
-Format for converting from R Markdown to an Bioconductor HTML document.
+Enable BiocStyle macros and author affiliations in markdown documents.
 }
 
 \usage{
-md_document(toc = TRUE, toc_depth = 3, ...)
+md_document(toc = TRUE, ...)
 }
 \arguments{
 \item{toc}{\code{TRUE} to include a table of contents in the output}
-
-\item{toc_depth}{Depth of headers to include in table of contents}
 
 \item{...}{Additional function arguments to pass to the base R Markdown \code{\link[rmarkdown]{md_document}} 
   output formatter}
@@ -25,11 +23,11 @@ R Markdown output format to pass to \code{\link[rmarkdown]{render}}
 }
 
 \details{
-The \code{BiocStyle::md_document} format extends the \code{\link[rmarkdown]{md_document}} format by a hyperlinked TOC. It also loads the  BiocStyle package namespace to enable the use of helper functions, such as \code{\link{Biocpkg}}.
+The \code{BiocStyle::md_document} format extends the base \code{\link[rmarkdown]{md_document}} format by means of specifing complex author affiliations. It also loads the  BiocStyle package namespace to enable the use of helper functions, such as \code{\link{Biocpkg}}.
 }
 
 \author{
-  Andrzej Oleś <andrzej.oles@embl.de>, 2015
+  Andrzej Oleś <andrzej.oles@embl.de>, 2015-2016
 }
 
 \seealso{
@@ -39,9 +37,7 @@ The \code{BiocStyle::md_document} format extends the \code{\link[rmarkdown]{md_d
 \examples{
 \dontrun{
 
-# simple invocation
-render("input.Rmd", BiocStyle::md_document())
-
+rmarkdown::render("input.Rmd", BiocStyle::md_document())
 }
 }
 

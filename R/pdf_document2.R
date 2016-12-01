@@ -3,16 +3,25 @@ pdf_document2 <- function(toc = TRUE,
                           fig_width = NA,
                           fig_height = NA,
                           use.unsrturl = TRUE,
-                          includes,
                           keep_md = FALSE,
                           toc_newpage = FALSE,
                           titlecaps = TRUE,
-                          base_format = rmarkdown::pdf_document,
                           ...) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
+  base_format <- function(toc,
+                          number_sections,
+                          fig_width,
+                          fig_height,
+                          use.unsrturl,
+                          includes,
+                          keep_md,
+                          toc_newpage,
+                          titlecaps,
+                          ...) {
+    
   template <- create_latex_template(if (isTRUE(titlecaps)) NULL else "notitlecaps")
   
   head = NULL
@@ -75,7 +84,7 @@ pdf_document2 <- function(toc = TRUE,
   ))
 
   
-  base_format = base_format(
+  pdf_document_base = rmarkdown::pdf_document(
     toc = toc,
     number_sections = number_sections,
     fig_width = fig_width,
@@ -85,40 +94,23 @@ pdf_document2 <- function(toc = TRUE,
     pandoc_args = pandoc_args,
     ...)
   
-  # bookdown-style cross-references
-  base_format$pandoc$ext = '.tex'
+  pdf_document_base$inherits <- "pdf_document"
   
   post_processor = function(metadata, input, output, clean, verbose) {
-    texfile <- sub_ext(output, ".tex")
-    lines = readUTF8(texfile)
+    lines = readUTF8(output)
     
     ## insert author affiliations
     lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
     
-    lines = gsub('(?<!\\\\textbackslash{})@ref\\(([-:[:alnum:]]+)\\)', '\\\\ref{\\1}', lines, perl = TRUE)
-    lines = gsub('\\(\\\\#((fig|tab):[-[:alnum:]]+)\\)', '\\\\label{\\1}', lines)
+    ## LaTeX soul hack: substitute all control spaces "\ " in \texttt by regular spaces
+    r = "\\\\texttt{(?:\\{.*\\}|[^\\{])*\\}"
+    m <- regexec(r, lines, perl=TRUE)
+    regmatches(lines, m) <- lapply(regmatches(lines, m),
+                                   function(x) gsub("\\ ", " ", x, fixed=TRUE))
     
-    writeUTF8(lines, texfile)
+    writeUTF8(lines, output)
     
-    rmarkdown:::latexmk(texfile, base_format$pandoc$latex_engine)
-    #unlink(with_ext(output, 'bbl'))  # not sure why latexmk left a .bbl there
-    
-    output = sub_ext(output, '.pdf')
-    
-    out_dir = opts()$get('output_dir')
-    keep_tex = isTRUE(base_format$pandoc$keep_tex)
-    
-    if (!keep_tex) {
-      file.remove(texfile)
-      texfile = NULL
-    } 
-    
-    output = c(output, texfile)
-    
-    if (!is.null(out_dir))
-      file.rename(output, file.path(out_dir, output))
-      
-    output[1L]
+    output
   }
   
   rmarkdown::output_format(knitr = knitr,
@@ -126,7 +118,20 @@ pdf_document2 <- function(toc = TRUE,
                            keep_md = keep_md,
                            pre_processor = pre_processor,
                            post_processor = post_processor,
-                           base_format = base_format)
+                           base_format = pdf_document_base)
+  }
+
+  bookdown::pdf_book(
+    toc = toc,
+    number_sections = number_sections,
+    fig_width = fig_width,
+    fig_height = fig_height,
+    use.unsrturl = use.unsrturl,
+    keep_md = keep_md,
+    toc_newpage = toc_newpage,
+    titlecaps = titlecaps,
+    ...,
+    base_format = base_format)
 }
 
 

@@ -507,4 +507,43 @@
 \let\thebibliographyorg\thebibliography
 \def\thebibliography{\raggedright\thebibliographyorg}
 %
+% patch soul and ragged2e incompatibility http://tex.stackexchange.com/q/191989/102422
+%
+\makeatletter
+\newif\if@inside@soul
+\newif\if@inside@soul@ul
+\g@addto@macro\SOUL@ulpreamble{%
+  \@inside@soul@ultrue
+}
+\patchcmd\SOUL@start{\SOUL@preamble}{\@inside@soultrue\SOUL@preamble}
+  {}{\errmessage{Cannot patch \protect\SOUL@start}}
+\renewcommand{\@raggedtwoe@everyselectfont}{%
+  \if@raggedtwoe@spaceskip
+    \ifdim\fontdimen\thr@@\font=\z@\relax
+      \if@inside@soul
+        \if@inside@soul@ul
+          \spaceskip\fontdimen\tw@\font
+          \@minus\fontdimen4\font
+        \fi
+      \else
+        \spaceskip\z@
+      \fi
+    \else
+      \spaceskip\fontdimen\tw@\font
+    \fi
+  \else
+    \if@inside@soul
+      \if@inside@soul@ul
+        \spaceskip\fontdimen\tw@\font
+        \@plus\fontdimen\thr@@\font
+        \@minus\fontdimen4\font
+      \fi
+    \else
+      \spaceskip\z@
+    \fi
+  \fi
+}
+\makeatother
+%
+%
 \endinput

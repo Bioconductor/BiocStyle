@@ -134,7 +134,7 @@ To enable \BiocStyle\ in your \R\ markdown vignette you need to:
   
 The \verb+vignette+ section is required in order to instruct \R\ how to build the vignette. Note that \verb+\VignetteIndexEntry+ should match the \verb+title+ of your vignette.
   
-See the \emph{Bioconductor \R\ markdown style} package vignette\footnote{in preparation} for
+See the \emph{\href{http://www.bioconductor.org/packages/devel/bioc/vignettes/BiocStyle/inst/doc/AuthoringRmdVignettes.html}{Authoring R Markdown vignettes}} package vignette for
 more details on authoring markdown documents with \BiocStyle.
 
 

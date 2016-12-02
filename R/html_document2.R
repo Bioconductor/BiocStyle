@@ -192,7 +192,7 @@ process_footnotes = function(lines) {
   ## match to footnotes block
   i = which(lines == '<div class="footnotes">')
   if (length(i) == 0L)
-    return()
+    return(lines)
   j = which(lines == '</div>')
   j = min(j[j > i])
   

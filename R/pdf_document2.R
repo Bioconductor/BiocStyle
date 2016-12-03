@@ -8,10 +8,6 @@ pdf_document2 <- function(toc = TRUE,
                           titlecaps = TRUE,
                           ...) {
   
-  ## check dependencies
-  if ( !check_bookdown() )
-    stop("Please install 'bookdown' first and try again.", call.=FALSE)
-  
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
@@ -32,10 +28,10 @@ pdf_document2 <- function(toc = TRUE,
   
   ## code chunks and code highlighting
   thm <- system.file("themes", "default.css", package = "BiocStyle")
-  knitr::opts_knit$set(out.format="latex");
+  opts_knit$set(out.format="latex");
   head = c(head,
            "% code highlighting",
-           knitr::knit_theme$get(thm)$highlight,
+           knit_theme$get(thm)$highlight,
            readLines(file.path(resources, "tex", "highlighting-macros.def")))
   
   if (use.unsrturl) {
@@ -76,11 +72,11 @@ pdf_document2 <- function(toc = TRUE,
         }
         
         if (options$fig.env=="figure" && is.null(adjustwidth)) {
-          knitr::hook_plot_md(x, options)
+          hook_plot_md(x, options)
         }
         else {
           paste0(adjustwidth[1L],
-                 knitr::hook_plot_tex(x, options),
+                 hook_plot_tex(x, options),
                  adjustwidth[2L])
         }
       }
@@ -118,11 +114,11 @@ pdf_document2 <- function(toc = TRUE,
   }
   
   rmarkdown::output_format(knitr = knitr,
-                           pandoc = NULL,
-                           keep_md = keep_md,
-                           pre_processor = pre_processor,
-                           post_processor = post_processor,
-                           base_format = pdf_document_base)
+                pandoc = NULL,
+                keep_md = keep_md,
+                pre_processor = pre_processor,
+                post_processor = post_processor,
+                base_format = pdf_document_base)
   }
 
   bookdown::pdf_book(
@@ -143,7 +139,7 @@ create_latex_template <- function(opts=NULL) {
   ## get and modify the default pandoc template
   
   # choose the rmarkdown template depending on pandoc version
-  version <- rmarkdown::pandoc_version()
+  version <- pandoc_version()
   
   template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
                                pattern = "\\.tex$")

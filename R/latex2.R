@@ -24,27 +24,27 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
     ## knitr
     if (knitr) {
         if (missing(fig.path)) {
-          fig.path = knitr::opts_chunk$get("fig.path", default=TRUE)
+          fig.path = opts_chunk$get("fig.path", default=TRUE)
         } else {
-          knitr::opts_chunk$set(fig.path=fig.path)
+          opts_chunk$set(fig.path=fig.path)
         }
         
         if ( isTRUE(short.fignames) ) setPrefix(fig.path)
       
         ## set knitr options
-        knitr::opts_knit$set(latex.options.color="usenames,dvipsnames")
+        opts_knit$set(latex.options.color="usenames,dvipsnames")
         
-        knitr::opts_chunk$set(
+        opts_chunk$set(
           c(.opts_chunk,
             background = NA, # suppress \definecolor{shadecolor} in knitrout environment 
             fig.width = NA, # reset figure dimensions to detect values set by user
             fig.height = NA)
         )
         
-        knitr::opts_hooks$set(.opts_hooks)
+        opts_hooks$set(.opts_hooks)
         
         # set hooks for special plot output
-        knitr::knit_hooks$set(
+        knit_hooks$set(
           plot = function(x, options = list()) {
             adjustwidth = NULL
             
@@ -57,13 +57,13 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
             # call the default knitr hook as defined in render_latex()
             paste0('\\end{kframe}',
                    adjustwidth[1L],
-                   knitr::hook_plot_tex(x, options),
+                   hook_plot_tex(x, options),
                    adjustwidth[2L],
                    '\\begin{kframe}')
           },
           
           ## remove figure margins with pdfcrop
-          crop = knitr::hook_pdfcrop,
+          crop = hook_pdfcrop,
           
           ## proper aspect ratio of plots
           eval = function(before, options) {
@@ -75,10 +75,10 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
         
         ## code highlighting
         thm <- system.file("themes", "default.css", package = "BiocStyle")
-        knitr::knit_theme$set(thm)
+        knit_theme$set(thm)
         
         ## reset header$framed which by default includes the content of knitr.sty
-        knitr::set_header(framed = "\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX")
+        set_header(framed = "\\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX")
     }
     
     ## assume Sweave
@@ -93,7 +93,7 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
       
       # try to resolve the optimal width based on document font size setting
       src = if (knitr) {
-        knitr::current_input()
+        current_input()
       } else {
         tryCatch(dynGet("file"), error = function(e) NULL) # TODO: might need to be more specific here
       }
@@ -125,7 +125,7 @@ latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
   
   # knitr output is usually commented out
   if (knitr) {
-    com = knitr::opts_chunk$get("comment")
+    com = opts_chunk$get("comment")
     if (!is.null(com) && !is.na(com) && nzchar(com))
       w = w - (nchar(com) + 1L)
   }

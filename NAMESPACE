@@ -1,6 +1,13 @@
 importFrom(utils, install.packages, installed.packages, packageVersion)
 importFrom(stats, setNames)
 
+importFrom(knitr, current_input, hook_pdfcrop, hook_plot_md, hook_plot_tex, 
+           knit_hooks, knit_theme, opts_chunk, opts_hooks, opts_knit, set_header)
+
+importFrom(rmarkdown, metadata, knitr_options, pandoc_toc_args, pandoc_version)
+
+importFrom(yaml, yaml.load)
+
 export(latex)
 export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg, Rpackage, Githubpkg)
 export(doc_date, pkg_ver)

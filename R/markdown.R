@@ -16,7 +16,7 @@ markdown <-
     ## get the version of markdown renderer
 
     rmarkdown.version <-
-        if ( is.null(knitr::opts_knit$get("rmarkdown.version")) ) {
+        if ( is.null(opts_knit$get("rmarkdown.version")) ) {
             1L
         } else 2L
     
@@ -129,11 +129,11 @@ doc_date <- function() {
 ## 
 
 output = function () {
-  knitr::opts_knit$get("rmarkdown.pandoc.to")
+  opts_knit$get("rmarkdown.pandoc.to")
 }
 
 output_format <- function() {
-  output = rmarkdown::metadata$output
+  output = metadata$output
   if (is.list(output)) output = names(output)[[1L]]
   output = regmatches(output, regexpr("html|pdf|word|md", output))[1L]
 }

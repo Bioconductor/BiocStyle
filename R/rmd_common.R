@@ -12,7 +12,7 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
   idx = grep("^package:", front_matter)
   if ( length(idx)==1L ) {
     ## use yaml parser to clean-up input from possible quotes etc.
-    yaml_list <- yaml::yaml.load(front_matter[idx])
+    yaml_list <- yaml.load(front_matter[idx])
     package <- trimws(yaml_list$package)
     ## append version number if the field contains valid package name 
     if ( isTRUE(grepl("^[[:alnum:].]+[[:alnum:]]+$", package)) )

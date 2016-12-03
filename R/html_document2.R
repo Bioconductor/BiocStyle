@@ -7,10 +7,6 @@ html_document2 <- function(toc = TRUE,
                            pandoc_args = NULL,
                            ...) {
   
-  ## check dependencies
-  if ( !check_bookdown() )
-    stop("Please install 'bookdown' first and try again.", call.=FALSE)
-  
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
@@ -53,7 +49,7 @@ html_document2 <- function(toc = TRUE,
                            "figure*" = 'class="widefigure"',
                            "figure" = NULL)
         options$out.extra = paste(options$out.extra, out.extra)
-        knitr::hook_plot_md(x, options)
+        hook_plot_md(x, options)
       }
     )
   ))

@@ -8,6 +8,10 @@ pdf_document2 <- function(toc = TRUE,
                           titlecaps = TRUE,
                           ...) {
   
+  ## check dependencies
+  if ( !check_bookdown() )
+    stop("Please install 'bookdown' first and try again.", call.=FALSE)
+  
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   

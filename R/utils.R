@@ -61,3 +61,25 @@ merge_lists <- function (base_list, overlay_list) {
     merged_list
   }
 }
+
+## return TRUE/FALSE depending on whether bookdown is installed
+check_bookdown <- function() {
+  installed <- "bookdown" %in% installed.packages()
+  if (!installed) {
+    cat("Package 'bookdown' is required to build BiocStyle R Markdown vignettes.\n")
+    if ( interactive() ) {
+      repeat {
+        cat("Do you want to install the package now? [y/n]")
+        answer <- tolower(readLines(n = 1L))
+        if (answer %in% c("y", "n"))
+          break
+      }
+      if (answer=="y") {
+        install.packages("bookdown")
+        ## verify that it has been actually installed
+        installed <- "bookdown" %in% installed.packages()
+      }
+    }
+  }
+  installed
+}

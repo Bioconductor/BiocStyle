@@ -7,6 +7,10 @@ html_document2 <- function(toc = TRUE,
                            pandoc_args = NULL,
                            ...) {
   
+  ## check dependencies
+  if ( !check_bookdown() )
+    stop("Please install 'bookdown' first and try again.", call.=FALSE)
+  
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
@@ -152,12 +156,12 @@ create_html_template <- function() {
   lines <- modifyLines(lines=lines, from='$if(mathjax-url)$', replace=FALSE, before=TRUE, insert=c(
     '<script type="text/x-mathjax-config">',
     '  MathJax.Hub.Config({',
-    '    TeX: {',
-    '      TagSide: "right",',
-    '      equationNumbers: {',
-    '        autoNumber: "AMS"', 
-    '      }',
-    '    },',
+    # '    TeX: {',
+    # '      TagSide: "right",',
+    # '      equationNumbers: {',
+    # '        autoNumber: "AMS"', 
+    # '      }',
+    # '    },',
     '    "HTML-CSS": {',
     '      styles: {',
     '        ".MathJax_Display": {',

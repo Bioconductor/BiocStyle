@@ -8,7 +8,7 @@ author:
   email: corresponding@author.com
 package: packageName
 output:
-  BiocStyle::pdf_document2
+  BiocStyle::html_document2
 abstract: |
   Description of your vignette
 vignette: |

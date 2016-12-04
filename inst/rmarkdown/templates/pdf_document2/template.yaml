@@ -1,4 +1,4 @@
-name: Bioconductor PDF Document v.2
+name: Bioconductor PDF Vignette
 description: >
   Template for Bioconductor PDF documents.
 create_dir: false

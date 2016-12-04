@@ -1,19 +1,19 @@
 ---
 title: "Authoring R Markdown vignettes"
 author:
-- affiliation: European Molecular Biology Laboratory, Heidelberg, Germany
-  name: Andrzej Oleś
-- affiliation: European Molecular Biology Laboratory, Heidelberg, Germany
-  name: Wolfgang Huber
-- affiliation: Roswell Park Cancer Institute, Buffalo, NY
-  name: Martin Morgan
+- name: Andrzej Oleś
+  affiliation: European Molecular Biology Laboratory, Heidelberg, Germany
+- name: Wolfgang Huber
+  affiliation: European Molecular Biology Laboratory, Heidelberg, Germany
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Institute, Buffalo, NY
 output:
   BiocStyle::html_document2:
     toc_float: true
   BiocStyle::pdf_document2: default
 package: BiocStyle
 abstract: |
-  Instructions on enabling *Bioconductor* style in R Markdown vignettes.
+  Instructions on enabling _Bioconductor_ style in R Markdown vignettes.
 vignette: |
   %\VignetteIndexEntry{Authoring R Markdown vignettes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,23 +23,15 @@ vignette: |
 
 # Prerequisites
 
-In order to build BiocStyle .Rmd documents the R package `r CRANpkg("bookdown")` is necessary, which relies on `r CRANpkg("rmarkdown")` and [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document.
-
-All the required additional package dependencies can be installed by running
-
-```{r rmarkdown, eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("BiocStyle", dependencies = TRUE)
-```
-
-Unless you are using RStudio, you will also need a recent version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.12.3). See the [pandoc installation instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for details on installing pandoc for your platform.
+_Bioconductor_ R Markdown format is build on top of _R_ package `r CRANpkg("bookdown")`, which in turn relies on `r CRANpkg("rmarkdown")` and [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document.
+Therefore, unless you are using RStudio, you will need a recent version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.12.3). See the [pandoc installation instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for details on installing pandoc for your platform.
 
 
 # Getting started
 
-To enable the _Bioconductor_ style in your R Markdown vignettes you need to:
+To enable the _Bioconductor_ style in your R Markdown vignette you need to:
 
-- Edit to the `DESCRIPTION` file by adding
+- Edit the `DESCRIPTION` file by adding
 
         VignetteBuilder: knitr
         Suggests: BiocStyle, knitr, rmarkdown
@@ -58,22 +50,22 @@ To enable the _Bioconductor_ style in your R Markdown vignettes you need to:
           %\VignetteEncoding{UTF-8}  
         ---
 
-The `vignette` section is required in order to instruct *R* how to build the vignette.^[`\VignetteIndexEntry` should match the `title` of your vignette] The `package` field which should contain the package name is used to print the package version in the output document header. It is not necessary to specify `date` as by default the document compilation date will be automatically included.
+The `vignette` section is required in order to instruct _R_ how to build the vignette.^[`\VignetteIndexEntry` should match the `title` of your vignette] The `package` field which should contain the package name is used to print the package version in the output document header. It is not necessary to specify `date` as by default the document compilation date will be automatically included.
 See the following section for details on specifying author affiliations and abstract.
 
-BiocStyle's `html_document2` and `pdf_document2` format functions extend the corresponding original rmarkdown formats, so they accept the same arguments as `html_document` and `pdf_document`, respectively. For example, use `toc_float: true` to obtain a floating TOC as in this vignette.
+BiocStyle's `html_document2` and `pdf_document2` format functions extend the corresponding original _rmarkdown_ formats, so they accept the same arguments as `html_document` and `pdf_document`, respectively. For example, use `toc_float: true` to obtain a floating TOC as in this vignette.
 
 ## Use with R markdown v1
 
 Apart from the default markdown engine implemented in the `r CRANpkg('rmarkdown')` package,
-it is also possible to compile Bioconductor documents with the older markdown v1 engine 
+it is also possible to compile _Bioconductor_ documents with the older markdown v1 engine 
 from the package `r CRANpkg('markdown')`. There are some
 differences in setup and the resulting output between these two
 engines. 
 
 To use the `r CRANpkg('markdown')` vignette builder engine:
 
-- Add the following to the `DESCRIPTION` file
+- Edit the `DESCRIPTION` file to include
 
         VignetteBuilder: knitr
         Suggests: BiocStyle, knitr
@@ -121,7 +113,7 @@ or a list
     
 which will print as "First Author, Second Author and Last Author".
 
-Author affiliations and emails can be specified in named sublists of the author list. Multiple affiliations per author can be specified this way.
+Author affiliations and emails can be entered in named sublists of the author list. Multiple affiliations per author can be specified this way.
 
     author:
     - name: First Author
@@ -132,11 +124,11 @@ Author affiliations and emails can be specified in named sublists of the author 
       affiliation: Shared affiliation
       email: corresponding@author.com
 
-A list of unique affiliations will be displayed in below the authors, similar as in this document.
+A list of unique affiliations will be displayed below the authors, similar as in this document.
 
 For clarity, compactness, and to avoid errors,
 repeated nodes in YAML header can be initially denoted by an anchor entered with an ampersand &,
-and later referenced with an asterisk *. For example, the above specification is equivalent to the shorthand notation
+and later referenced with an asterisk *. For example, the above affiliation metadata is equivalent to the shorthand notation
 
     author:
     - name: First Author
@@ -192,18 +184,18 @@ referring to _R_ packages:
 * `r macro("Rpackage", "MyPkg", "for _R_ packages that are _not_
   available on _Bioconductor_, CRAN or GitHub;")`.
 
-These can be conveniently called inline, e.g., `r inline('Biocpkg("IRanges")')`.
+These are meant to be called inline, e.g., `r inline('Biocpkg("IRanges")')`.
 
 # Figures
 
-BiocStyle comes with three predefined figure sizes. Regular figures not otherwise specified appear indented with respect to the paragraph text, as in the example below.
+_BiocStyle_ comes with three predefined figure sizes. Regular figures not otherwise specified appear indented with respect to the paragraph text, as in the example below.
 
 ```{r no-cap}
 plot(cars)
 ```
 
-Figures which have no captions are just placed wherever they were generated in the R code.
-If you assign a figure caption to a code chunk via the chunk option `fig.cap`, the plot will be automatically labeled and numbered^[additionally, for PDF output they will be placed in figure environments], and can be also cross-referenced. These features are provided by `r CRANpkg("bookdown")`, which defines a cross-format syntax for specifying references. The figure label is generated from the code chunk label by prefixing it with `fig:`, e.g., the label of a figure originating from the chunk `foo` will be `fig:foo`. To reference a figure, use the syntax `\@ref(label)`^[do not forget the leading backslash!], where `label` is the figure label, e.g., `fig:foo`. For example, the following code chunk was used to produce Figure \@ref(fig:plot).
+Figures which have no captions are just placed wherever they were generated in the _R_ code.
+If you assign a caption to a figure via the code chunk option `fig.cap`, the plot will be automatically labeled and numbered^[for PDF output it will be placed in a floating figure environment], and it will be also possible to reference it. These features are provided by `r CRANpkg("bookdown")`, which defines a format-independent syntax for specifying cross-references, see Section \@ref(cross-references). The figure label is generated from the code chunk label by prefixing it with `fig:`, e.g., the label of a figure originating from the chunk `foo` will be `fig:foo`. To reference a figure, use the syntax `\@ref(label)`^[do not forget the leading backslash!], where `label` is the figure label, e.g., `fig:foo`. For example, the following code chunk was used to produce Figure \@ref(fig:plot).
 
     ```{r plot, fig.cap = "Regular figure. The first sentence...", echo = FALSE}`r ''`
     plot(cars)
@@ -213,7 +205,7 @@ If you assign a figure caption to a code chunk via the chunk option `fig.cap`, t
 plot(cars)
 ```
 
-In addition to regular figures, *BiocStyle* provides small and wide figures specified by `fig.small` and `fig.wide` code chunk options.
+In addition to regular figures, *BiocStyle* provides small and wide figures which can be specified by `fig.small` and `fig.wide` code chunk options.
 Wide figures are left-aligned with the paragraph and extend on the right margin, as Figure \@ref(fig:wide).
 Small figures are meant for possibly rectangular plots which are centered with respect to the text column, see Figure \@ref(fig:small).
 
@@ -228,7 +220,7 @@ plot(cars)
 
 # Tables
 
-Like figures, tables with captions will also be numbered and can be referenced. The caption can be entered as a paragraph starting with `Table:`^[or just `:`], which may appear either before or after the table. When adding labels, make sure that the label appears in the beginning of the table caption in the form `(\#tab:label)`, and use `\@ref(tab:label)` to refer to it. For example, Table \@ref(tab:table) has been produced with the following code.
+Like figures, tables with captions will also be numbered and can be referenced. The caption is entered as a paragraph starting with `Table:`^[or just `:`], which may appear either before or after the table. When adding labels, make sure that the label appears at the beginning of the table caption in the form `(\#tab:label)`, and use `\@ref(tab:label)` to refer to it. For example, Table \@ref(tab:table) has been produced with the following code.
 
 ```markdown
 Fruit   | Price
@@ -252,15 +244,14 @@ The function `knitr::kable()` will automatically generate a label for a table en
 
 ```{r mtcars}
 knitr::kable(
-  head(mtcars[, 1:8], 10), booktabs = TRUE,
-  caption = 'A table of the first 10 rows of the mtcars data.'
+  head(mtcars[, 1:8], 10), caption = 'A table of the first 10 rows of `mtcars`.'
 )
 ```
 
 
 # Equations
 
-To number and refer to equations, put them in equation environments and assign labels to them using the syntax `(\#eq:label)`^[due to technical constraints equation labels must start with `eq:`], e.g.,
+To number and reference equations, put them in equation environments and assign labels to them following the syntax `(\#eq:label)`^[due to technical constraints equation labels must start with `eq:`], e.g.,
 
 ```latex
 \begin{equation}
@@ -280,12 +271,12 @@ You may then refer to Equation \@ref(eq:binom) by `\@ref(eq:binom)`. Note that i
 
 # Cross-references
 
-Apart from referencing figures (Section \@ref(figures)), tables (Section \@ref(tables)), and equations (Section \@ref(equations)), you can also use the same syntax `\@ref(label)` to reference sections, where `label` is the section ID. By default, Pandoc will generate IDs for all section headers, e.g., `# Hello World` will have an ID `hello-world`. You can also manually assign an ID to a section header to make sure you do not forget to update the reference label after you change the section header, by simply appending `{#id}` to the section header.
+Apart from referencing figures (Section \@ref(figures)), tables (Section \@ref(tables)), and equations (Section \@ref(equations)), you can also use the same syntax `\@ref(label)` to reference sections, where `label` is the section ID. By default, Pandoc will generate IDs for all section headers, e.g., `# Hello World` will have an ID `hello-world`. In order to avoid forgetting to update the reference label after you change the section header, you may also manually assign an ID to a section header by appending `{#id}` to it.
 
-When a referenced label cannot be found, you will see two question marks like \@ref(non-existing-label), as well as a warning message in the R console when rendering the document.
+When a referenced label cannot be found, you will see two question marks like \@ref(non-existing-label), as well as a warning message in the _R_ console when rendering the document.
 
 
-# Footnotes
+# Margin notes
 
 Footnotes are displayed as side notes on the right margin^[this is a side note entered as a footnote],
 which has the advantage that they appear close to the place where they are defined. 

@@ -119,7 +119,8 @@ Githubpkg <- function(repo, pkg) {
 ## yaml header convenience functions
 
 pkg_ver <- function(pkg) {
-  paste(pkg, packageVersion(pkg))
+  pkgVer <- if (pkg=="packageName") "X.Y.Z"  else packageVersion(pkg)
+  paste(pkg, pkgVer)
 }
 
 doc_date <- function() {

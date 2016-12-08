@@ -10,18 +10,8 @@ md_document <- function(toc = TRUE, ...) {
     base_format$pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
       lines <- readUTF8(input_file)
       
-      delimiters <- grep("^---\\s*$", lines)
-      
-      if ( length(delimiters) >= 2L ) {
-        head <- lines[(delimiters[1L]):(delimiters[2L])]
-        body <- lines[(delimiters[2L]+1L):length(lines)]
-      }
-      else {
-        head <- NULL
-        body <- lines
-      }
-      
-      lines <- c(head, "{:toc}", body)
+      doc <- rmarkdown:::partition_yaml_front_matter(lines)
+      lines <- c(doc$front_matter, "{:toc}", doc$body)
       
       writeUTF8(lines, input_file)
     }

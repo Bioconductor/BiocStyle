@@ -102,11 +102,16 @@ pdf_document2 <- function(toc = TRUE,
     ## insert author affiliations
     lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
     
-    ## LaTeX soul hack: substitute all control spaces "\ " in \texttt by regular spaces
+    ## LaTeX soul hacks
     r = "\\\\texttt{(?:\\{.*\\}|[^\\{])*\\}"
     m <- regexec(r, lines, perl=TRUE)
-    regmatches(lines, m) <- lapply(regmatches(lines, m),
-                                   function(x) gsub("\\ ", " ", x, fixed=TRUE))
+    regmatches(lines, m) <- lapply(regmatches(lines, m), function(x) {
+      # substitute all control spaces "\ " in \texttt by regular spaces
+      x <- gsub("\\ ", " ", x, fixed=TRUE)
+      # replace carets "\^{}" by "\textasciicircum"
+      x <- gsub("\\^{}", "\\textasciicircum", x, fixed=TRUE)
+      x
+    })
     
     writeUTF8(lines, output)
     

@@ -45,8 +45,7 @@ div#TOC.tocify li {
   font-family: inherit;
 }
 
-
-p {
+p, dl {
   padding: 0px 150px 0px 65px;
   text-align: justify;
 }
@@ -242,6 +241,13 @@ table {
 
 .table {
   max-width: 518px;
+}
+
+/* definition lists */
+
+dd {
+  margin-left: 65px;
+  margin-bottom: 10px;
 }
 
 /* code folding buttons */

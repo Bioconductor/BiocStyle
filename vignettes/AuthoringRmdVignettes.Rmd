@@ -251,7 +251,7 @@ knitr::kable(
 
 # Equations
 
-To number and reference equations, put them in equation environments and assign labels to them following the syntax `(\#eq:label)`^[due to technical constraints equation labels must start with `eq:`], e.g.,
+To number and reference equations, put them in equation environments and append labels to them following the syntax `(\#eq:label)`^[due to technical constraints equation labels must start with `eq:`], e.g.,
 
 ```latex
 \begin{equation}
@@ -282,7 +282,7 @@ Footnotes are displayed as side notes on the right margin^[this is a side note e
 which has the advantage that they appear close to the place where they are defined. 
 
 
-# Session info
+# Session info {.unnumbered}
 
 Here is the output of `sessionInfo()` on the system on which this
 document was compiled:

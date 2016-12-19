@@ -174,7 +174,7 @@ create_latex_template <- function(opts=NULL) {
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
   lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
     "",
-    loadBioconductorStyleFile(opts)))
+    loadBioconductorStyleFile(bioconductor2.sty, opts)))
   
   # use \bioctitle to capture short title for page headings
   lines <- modifyLines(lines, from="\\title{$title$}", insert="\\bioctitle[$if(shorttitle)$$shorttitle$$endif$]{$title$}")

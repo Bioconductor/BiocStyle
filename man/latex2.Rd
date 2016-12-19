@@ -11,7 +11,7 @@
 }
 \usage{
 latex2(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
-       use.unsrturl=TRUE)
+       use.unsrturl=TRUE, relative.path=FALSE)
 }
 \arguments{
 
@@ -33,7 +33,9 @@ latex2(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
   \item{use.unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
     style will be used (\code{\\bibliographystyle} command \emph{not}
     required).}
-
+  
+  \item{relative.path}{logical(1), copy supporting LaTeX files and use relative
+    paths rather than absolute paths to system files.}
 }
 \details{
   Use is described in the \sQuote{Bioconductor LaTeX Style 2.0} vignette.

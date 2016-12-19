@@ -1,17 +1,30 @@
-loadBioconductorStyleFile <- function(opts=NULL) {
+loadBioconductorStyleFile <- function(file, opts=NULL) {
   sprintf("\\RequirePackage[%s]{%s}",
         paste(opts, collapse = ","),
-        sub(".sty$", "2", bioconductor.sty))
+        sub(".sty$", "", file))
+}
+
+copyResource <- function(file, dir) {
+  filename <- basename(file)
+  file.copy(file, file.path(dir, filename))
+  filename
 }
 
 latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
-                   use.unsrturl=TRUE) {
-    cat(
-      loadBioconductorStyleFile(if (isTRUE(titlecaps)) NULL else "notitlecaps"),
-      if (use.unsrturl) {
-        bst <- file.path(resources, "tex", "unsrturl")
-        sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}", bst)
-      }, sep = "\n")
+                   use.unsrturl=TRUE, relative.path = FALSE) {
+  
+  sty <- file.path(resources, "tex", "Bioconductor2.sty")
+  if ( isTRUE(relative.path) )
+    sty <- copyResource(sty, getwd())
+      
+  cat(loadBioconductorStyleFile(sty, if (isTRUE(titlecaps)) NULL else "notitlecaps"), sep="\n")
+  
+  if ( isTRUE(use.unsrturl) ) {
+    bst <- file.path(resources, "tex", "unsrturl.bst")
+    if ( isTRUE(relative.path) )
+      bst <- copyResource(bst, getwd())
+    cat(sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}", sub(".bst$", "", bst)), sep="\n")
+  }
  
     setPrefix = function(x) {
       cat(sprintf("\\renewcommand{\\prefix}[1]{%s#1}", x))

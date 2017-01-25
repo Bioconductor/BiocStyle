@@ -47,12 +47,24 @@
       if (is.numeric(options$fig.asp))
         options$fig.height = options$fig.width * options$fig.asp
     }
+    
+    # re-evaluate code from knitr:::fix_options which is called before the hook
+    if ( is.na(options$out.width.px) )
+      options$out.width.px = options$fig.width * options$dpi/options$fig.retina
+    if ( is.na(options$out.width) )
+      options$out.width = options$fig.width * options$dpi/options$fig.retina
+    
     options
   },
   fig.height = function(options) {
     if ( is.na(options$fig.height) ){
       options$fig.height = 5
     }
+    
+    # re-evaluate code from knitr:::fix_options which is called before the hook
+    if ( is.na(options$out.height.px) )
+      options$out.height.px = options$fig.height * options$dpi/options$fig.retina
+    
     options
   }
 )

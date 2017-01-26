@@ -51,8 +51,8 @@
     # re-evaluate code from knitr:::fix_options which is called before the hook
     if ( is.na(options$out.width.px) )
       options$out.width.px = options$fig.width * options$dpi/options$fig.retina
-    if ( is.na(options$out.width) )
-      options$out.width = options$fig.width * options$dpi/options$fig.retina
+    if ( !is.null(options$out.width) && is.na(options$out.width) )
+      options$out.width = "100%"
     
     options
   },

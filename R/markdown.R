@@ -97,9 +97,9 @@ Biocexptpkg <- function(pkg) {
 }
 
 CRANpkg <- function(pkg) {
-    cran.repository <- "http://cran.fhcrc.org/web/packages"
-    fmt <- '[%s](%s/%s/index.html)'
-    Rpackage( sprintf(fmt, pkg, cran.repository, pkg) )
+    cran <- "https://CRAN.R-project.org/package"
+    fmt <- '[%s](%s=%s)'
+    Rpackage( sprintf(fmt, pkg, cran, pkg) )
 }
 
 Rpackage <- function(pkg) {

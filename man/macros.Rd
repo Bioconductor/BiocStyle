@@ -29,7 +29,7 @@ Rpackage(pkg)
 Use \code{Biocpkg} for Bioconductor software, annotation and experiment data packages. The function automatically includes a
 link to the release landing page or if the package is only in devel, to the devel landing page.
 
-Use \code{CRANpkg} for R packages available on CRAN. The function automatically includes a link to the FHCRC CRAN mirror landing page.
+Use \code{CRANpkg} for R packages available on CRAN. The function automatically includes a link to the master CRAN landing page.
 
 Use \code{Githubpkg} for R packages available on GitHub. The \code{repo} should include the repository address in the format username/repo[/subdir]. If \code{package} is missing, the package name is assumed to be equal the repository name and is extracted from \code{repo}.
 

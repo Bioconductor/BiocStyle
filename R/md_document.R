@@ -56,8 +56,10 @@ md_document <- function(toc = TRUE, ...) {
     output_file
   }
   
+  knitr = knitr_options(opts_knit = list(width = 80L))
+  
   # return format
-  rmarkdown::output_format(knitr = NULL,
+  rmarkdown::output_format(knitr = knitr,
                            pandoc = list(args = "--atx-headers"),
                            clean_supporting = FALSE,
                            post_processor = post_processor,

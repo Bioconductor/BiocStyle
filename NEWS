@@ -1,3 +1,30 @@
+CHANGES IN VERSION 2.4.0
+------------------------
+
+NEW FEATURES
+
+    o Vignette "Authoring R Markdown vignettes"
+    o R Markdown templates for 'pdf_document2' and 'html_document2'
+    o Standard way of specifying author affiliations
+    o Support for short title in R Markdown PDF output
+    o Argument 'relative.path' to 'latex2()' (https://support.bioconductor.org/p/90352/)
+   
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Increase column width in order to accommodate 80 characters wide code chunks
+    o Separate caption title from description with newline
+    o Use canonical URL to link to CRAN packages (https://github.com/Bioconductor/BiocStyle/issues/24)
+    o Consistently number equations on right hand side across different output formats
+    o Numerous CSS tweaks
+
+BUG FIXES AND IMPROVEMENTS
+
+    o Support for PDFs typeset with 9pt and 8pt font size
+    o Proper formatting of 'longtable' captions
+    o Fix to retain spaces in '\texttt'
+    o Replace carets "\^{}" by "\textasciicircum" to fix incompatibility with LaTeX 'soul' package used for inline code highlighting
+    o Patch to avoid overfull pages containing a float followed by a longtable
+
 CHANGES IN VERSION 2.2.0
 ------------------------
 

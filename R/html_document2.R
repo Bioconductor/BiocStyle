@@ -3,6 +3,7 @@ html_document2 <- function(toc = TRUE,
                            fig_width = NA,
                            fig_height = NA,
                            fig_retina = NULL,
+                           self_contained = TRUE,
                            css = NULL,
                            pandoc_args = NULL,
                            ...) {
@@ -15,6 +16,7 @@ html_document2 <- function(toc = TRUE,
                           fig_width = NA,
                           fig_height = NA,
                           fig_retina = NULL,
+                          self_contained,
                           css = NULL,
                           ...) {
   
@@ -63,6 +65,7 @@ html_document2 <- function(toc = TRUE,
     number_sections = TRUE,
     fig_width = fig_width,
     fig_height = fig_height,
+    self_contained = self_contained,
     css = css,
     ...)
   
@@ -90,6 +93,7 @@ html_document2 <- function(toc = TRUE,
   rmarkdown::output_format(
     knitr = knitr,
     pandoc = NULL,
+    clean_supporting = self_contained,
     pre_processor = pre_processor,
     post_processor = post_processor,
     base_format = rmarkdown_html_document)
@@ -102,6 +106,7 @@ html_document2 <- function(toc = TRUE,
     fig_width = fig_width,
     fig_height = fig_height,
     fig_retina = fig_retina,
+    self_contained = self_contained,
     css = css,
     ...
   )

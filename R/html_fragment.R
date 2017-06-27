@@ -1,15 +1,23 @@
 html_fragment <- function(...,
                           toc = TRUE,
                           number_sections = TRUE,
-                          pandoc_args = NULL) {
+                          theme = NULL,
+                          highlight = NULL) {
   
   ## enable BiocStyle macros
   require(BiocStyle, quietly = TRUE)
   
-  output_format_base <- rmarkdown::html_fragment(...,
+  # call rmarkdown::html_document with "default" template and substitute it only
+  # afterwards in order to retain original mathjax functionality
+  output_format_base <- rmarkdown::html_document(...,
                            toc = toc,
                            number_sections = number_sections,
-                           pandoc_args = pandoc_args)
+                           theme = theme,
+                           highlight = highlight)
+
+  template = system.file("resources", "fragment.html", package="BiocStyle")
+  idx = which(output_format_base$pandoc$args=="--template") + 1L
+  output_format_base$pandoc$args[idx] <- template
   
   base_format <- function(number_sections, output_format_base) {
     

@@ -24,7 +24,7 @@ html_fragment <- function(...,
     post_processor <- function(metadata, input_file, output_file, clean, verbose) {
       lines <- readUTF8(output_file)
       
-      # move all headers one level down (for proper formatting when embedded in the website)
+      ## move all headers one level down (for proper formatting when embedded in the website)
       template <- '<h%s>%s</h%s>'
       pattern <- sprintf(template, '([1-5])', '(.*)', '\\1')
       
@@ -38,6 +38,12 @@ html_fragment <- function(...,
       }
       
       regmatches(lines, matches) <- mapply(f, headers, levels+1L, USE.NAMES = FALSE)
+      
+      ## add author affiliations
+      lines <- modifyLines(lines, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
+      
+      ## replace footnotes with sidenotes
+      lines = process_footnotes(lines)
       
       writeUTF8(lines, output_file)
       output_file

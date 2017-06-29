@@ -2,7 +2,23 @@ $for(include-before)$
 $include-before$
 $endfor$
 
+$if(title)$
+<h1 class="title toc-ignore">$title$</h1>
+$endif$
+
+<!-- AUTH AFFIL -->
+
+$if(abstract)$
+<h1>Abstract</h1>
+$abstract$
+$endif$
+
+$if(toc)$
+<h1>Contents</h1>
+<div id="$idprefix$TOC">
 $toc$
+</div>
+$endif$
 
 $body$
 

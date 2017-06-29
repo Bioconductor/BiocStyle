@@ -20,6 +20,9 @@ md_document <- function(toc = TRUE, ...) {
   post_processor <- function(metadata, input_file, output_file, clean, verbose) {
     lines <- readUTF8(output_file)
     
+    # convert absolute paths to relative, see https://github.com/rstudio/rmarkdown/issues/587
+    lines = gsub(file.path(dirname(output_file), ''), '', lines, fixed=TRUE)
+    
     # move all headers one level down (for proper formatting when embedded in the website)
     pattern <- '^(#+ )'
     lines <- gsub(pattern, '#\\1', lines)

@@ -317,3 +317,9 @@ code > span.keyword { color: #2020F0; }
 code > span.literal { color: #2020F0; }
 code > span.operator { color: #000000;}
 code > span.paren { color: #000000;}
+
+/* proper positioning of ggplotly graphics, see https://support.bioconductor.org/p/97609/ */
+
+.js-plotly-plot .plotly {
+  padding-left: 65px;
+}

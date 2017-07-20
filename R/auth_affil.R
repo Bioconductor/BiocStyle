@@ -23,7 +23,7 @@ parse_auth_affil = function(m) {
       
       names <- sapply(auth, .subset2, "name")
       email <- sapply(auth, .subset2, "email")
-      affil <- sapply(auth, .subset2, "affiliation")
+      affil <- lapply(auth, .subset2, "affiliation")
       
       ## author names
       res$names <- names

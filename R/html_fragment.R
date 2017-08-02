@@ -21,9 +21,6 @@ html_fragment <- function(...,
     ## add author affiliations
     lines <- modifyLines(lines, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
     
-    ## add navigation
-    lines <- add_navigation(lines)
-    
     writeUTF8(lines, output)
     output
   }
@@ -61,6 +58,9 @@ html_fragment <- function(...,
     ## set captions as sidenotes
     lines = process_captions(lines)
     
+    ## add navigation
+    lines <- add_navigation(lines)
+    
     writeUTF8(lines, output)
     output
   }
@@ -89,20 +89,63 @@ process_headers = function(lines) {
 add_navigation = function(lines) {
   lines_length = length(lines)
   
-  ## find all section div's except the first one right after the TOC
-  pattern <- sprintf('^<div id="%s" class="section level%s%s">$', '(.*)', '([1-6])', '(.*)')
-  idx <- grep(pattern, lines)[-1L]
-  # toc <- grep('^<div id="TOC">$', lines)
-  # idx <- idx[idx>toc]
+  ## match to all section div's 
+  ## except the first one right after the TOC
+  pattern <- sprintf('^<div id="%s" class="section level%s">$', '(.*)', '([1-6]).*')
+  idx <- grep(pattern, lines)
+  
+  sections <- lines[idx]
+  
+  section_ids <- sub(pattern, '\\1', sections)
+  section_levels <- as.integer(sub(pattern, '\\2', sections))
+  section_names <- sub('<h([1-6])>(?:<span class="header-section-number">[0-9.]*</span> )?(.*)</h\\1>', '\\2', lines[idx+1L])
+  section_length <- length(sections)
+  
+  ## index of previous section
+  section_prev = c(NA, 1:(section_length-1L))
+  
+  ## index of next section on the same level
+  section_next <- sapply(seq_along(sections), function(i) {
+    level = section_levels[i]
+    neighbours <- which(section_levels==level)
+    if (level==1L) 
+      top_level <- length(sections) + 1L
+    else {
+      top_level <- which(section_levels==level-1L)
+      top_level <- top_level[top_level > i ][1L]
+    }
+    neighbours[neighbours>i & neighbours<top_level][1L]
+  })
+    
+  ## index of parent section
+  section_up <- sapply(seq_along(sections), function(i) {
+    level = section_levels[i]
+    if ( level == 1L ) {
+      NA
+    } else {
+      parents = which(section_levels==level-1L)
+      parents <- parents[parents < i]
+      parents[length(parents)]
+    }
+  })
   
   ## preallocate the results vector and populate it with original lines
   idx_length <- length(idx)
   res <- vector(mode = "character", length = lines_length+idx_length)
-  idx <- idx + seq_len(idx_length) - 1L
+  idx <- idx + seq_len(idx_length)
   res[-idx] <- lines
   
   ## insert links
-  links <- '<p class="sidenote"><a href="#TOC">Table of Contents</a></p>'
+  create_link <- function(v, name) {
+    ifelse(is.na(v), "", sprintf('<p class="sidenote">%s: <a href="#%s">%s</a></p>', 
+                                 name, section_ids[v], section_names[v]))
+  }
+  links <- paste0(
+    create_link(section_prev, "Previous"),
+    create_link(section_next, "Next"),
+    create_link(section_up, "Up"),
+    '<p class="sidenote">[ <a href="#TOC">Table of Contents</a> ]</p>'
+  )
   res[idx] <- links
   
   res

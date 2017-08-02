@@ -21,6 +21,9 @@ html_fragment <- function(...,
     ## add author affiliations
     lines <- modifyLines(lines, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
     
+    ## add navigation
+    lines <- add_navigation(lines)
+    
     writeUTF8(lines, output)
     output
   }
@@ -81,6 +84,28 @@ process_headers = function(lines) {
   regmatches(lines, matches) <- mapply(f, headers, levels+1L, USE.NAMES = FALSE)
   
   lines
+}
+
+add_navigation = function(lines) {
+  lines_length = length(lines)
+  
+  ## find all section div's except the first one right after the TOC
+  pattern <- sprintf('^<div id="%s" class="section level%s%s">$', '(.*)', '([1-6])', '(.*)')
+  idx <- grep(pattern, lines)[-1L]
+  # toc <- grep('^<div id="TOC">$', lines)
+  # idx <- idx[idx>toc]
+  
+  ## preallocate the results vector and populate it with original lines
+  idx_length <- length(idx)
+  res <- vector(mode = "character", length = lines_length+idx_length)
+  idx <- idx + seq_len(idx_length) - 1L
+  res[-idx] <- lines
+  
+  ## insert links
+  links <- '<p class="sidenote"><a href="#TOC">Table of Contents</a></p>'
+  res[idx] <- links
+  
+  res
 }
 
 process_captions = function(lines) {

@@ -104,6 +104,9 @@ tt, code, pre {
 h1, h2, h3, h4, h5, h6 { 
   font-family: Helvetica, Arial, sans-serif;
   margin: 1.2em 150px 0.6em 0em;
+/* hanging headings */
+  padding-left: 65px;
+  text-indent: -65px;
 }
 
 h1.title {

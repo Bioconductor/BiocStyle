@@ -87,66 +87,66 @@ process_headers = function(lines) {
 }
 
 add_navigation = function(lines) {
-  lines_length = length(lines)
-  
   ## match to all section div's 
   ## except the first one right after the TOC
   pattern <- sprintf('^<div id="%s" class="section level%s">$', '(.*)', '([1-6]).*')
   idx <- grep(pattern, lines)
-  
   sections <- lines[idx]
+  sections_length <- length(sections)
   
-  section_ids <- sub(pattern, '\\1', sections)
+  ## extract section metadata
+  section_ids <- sub(pattern, '#\\1', sections)
   section_levels <- as.integer(sub(pattern, '\\2', sections))
   section_names <- sub('<h([1-6])>(?:<span class="header-section-number">[0-9.]*</span> )?(.*)</h\\1>', '\\2', lines[idx+1L])
-  section_length <- length(sections)
+  section_fuse <- c(FALSE, idx[-length(idx)]+2L == idx[-1L])
   
-  ## index of previous section
-  section_prev = c(NA, 1:(section_length-1L))
+  ## index of previous section on the same level
+  section_prev <- sapply(seq_along(sections), function(i) {
+    level = section_levels[i]
+    neighbor <- which(section_levels==level)
+    level_up <- which(section_levels==level-1L)
+    level_up <- max(level_up[level_up<i], 0L)
+    neighbor <- neighbor[neighbor<i & neighbor>level_up]
+    neighbor[length(neighbor)][1L]
+  })
   
   ## index of next section on the same level
   section_next <- sapply(seq_along(sections), function(i) {
     level = section_levels[i]
-    neighbours <- which(section_levels==level)
-    if (level==1L) 
-      top_level <- length(sections) + 1L
-    else {
-      top_level <- which(section_levels==level-1L)
-      top_level <- top_level[top_level > i ][1L]
-    }
-    neighbours[neighbours>i & neighbours<top_level][1L]
+    neighbor <- which(section_levels==level)
+    level_up <- which(section_levels==level-1L)
+    level_up <- min(level_up[level_up>i], sections_length+1L)
+    neighbor[neighbor>i & neighbor<level_up][1L]
   })
     
   ## index of parent section
   section_up <- sapply(seq_along(sections), function(i) {
     level = section_levels[i]
-    if ( level == 1L ) {
-      NA
-    } else {
-      parents = which(section_levels==level-1L)
-      parents <- parents[parents < i]
-      parents[length(parents)]
-    }
+    level_up <- which(section_levels[1:i]==level-1L)
+    level_up[length(level_up)][1L]
   })
   
   ## preallocate the results vector and populate it with original lines
   idx_length <- length(idx)
-  res <- vector(mode = "character", length = lines_length+idx_length)
+  res <- vector(mode = "character", length = length(lines)+idx_length)
   idx <- idx + seq_len(idx_length)
   res[-idx] <- lines
   
   ## insert links
-  create_link <- function(v, name) {
-    ifelse(is.na(v), "", sprintf('<p class="sidenote">%s: <a href="#%s">%s</a></p>', 
-                                 name, section_ids[v], section_names[v]))
-  }
+  create_link <- function(v=0L, id=section_ids[v], name=section_names[v], icon) {
+    link <- mapply(function(href, name) { as.character(a(name, href=href))},
+                    id, name, USE.NAMES=FALSE)
+    ifelse(is.na(v), "", sprintf('<span class="nav-icon">%s</span> %s<br/>', icon, link))
+  }     
+  
   links <- paste0(
-    create_link(section_prev, "Previous"),
-    create_link(section_next, "Next"),
-    create_link(section_up, "Up"),
-    '<p class="sidenote">[ <a href="#TOC">Table of Contents</a> ]</p>'
+    create_link(id="#TOC", name="Table of Contents", icon="&#8803;"),
+    create_link(section_prev, icon="&#9666;"),
+    create_link(section_next, icon="&#9656;"),
+    create_link(section_up, icon="&#9652;")
   )
-  res[idx] <- links
+  
+  res[idx] <- sprintf('<p class="sidenote">%s</p>', links)
   
   res
 }

@@ -2,7 +2,10 @@ html_fragment <- function(...,
                           toc = TRUE,
                           number_sections = TRUE,
                           theme = NULL,
-                          highlight = NULL) {
+                          highlight = NULL,
+                          navlinks = TRUE,
+                          navlinks_top = TRUE,
+                          navlinks_level = 3) {
   
   ## enable BiocStyle macros
   require(BiocStyle, quietly = TRUE)
@@ -59,7 +62,8 @@ html_fragment <- function(...,
     lines = process_captions(lines)
     
     ## add navigation
-    lines <- add_navigation(lines)
+    if (isTRUE(navlinks))
+      lines <- add_navigation(lines, navlinks_top, navlinks_level)
     
     writeUTF8(lines, output)
     output
@@ -86,9 +90,9 @@ process_headers = function(lines) {
   lines
 }
 
-add_navigation = function(lines) {
+add_navigation = function(lines, top, level) {
   ## match to all section div's
-  pattern <- sprintf('^<div id="%s" class="section level%s">$', '(.*)', '([1-6]).*')
+  pattern <- sprintf('^<div id="(.*)" class="section level([1-%d]).*">$', level)
   idx <- grep(pattern, lines)
   sections <- lines[idx]
   sections_length <- length(sections)
@@ -98,8 +102,18 @@ add_navigation = function(lines) {
   section_levels <- as.integer(sub(pattern, '\\2', sections))
   section_names <- sub('<h([1-6])>(?:<span class="header-section-number">[0-9.]*</span> )?(.*)</h\\1>', '\\2', lines[idx+1L])
   
+  seq_indices = seq_along(sections)
+  
+  ## add virtual top section at level 0
+  if (isTRUE(top)) {
+    section_ids <- c("#top", section_ids)
+    section_levels <- c(0L, section_levels)
+    section_names <- c("Top", section_names)
+    seq_indices <- seq_indices + 1L
+  }
+  
   ## index of previous section on the same level
-  section_prev <- sapply(seq_along(sections), function(i) {
+  section_prev <- sapply(seq_indices, function(i) {
     level = section_levels[i]
     neighbor <- which(section_levels==level)
     level_up <- which(section_levels==level-1L)
@@ -109,7 +123,7 @@ add_navigation = function(lines) {
   })
   
   ## index of next section on the same level
-  section_next <- sapply(seq_along(sections), function(i) {
+  section_next <- sapply(seq_indices, function(i) {
     level = section_levels[i]
     neighbor <- which(section_levels==level)
     level_up <- which(section_levels==level-1L)
@@ -118,7 +132,7 @@ add_navigation = function(lines) {
   })
     
   ## index of parent section
-  section_up <- sapply(seq_along(sections), function(i) {
+  section_up <- sapply(seq_indices, function(i) {
     level = section_levels[i]
     level_up <- which(section_levels[1:i]==level-1L)
     level_up[length(level_up)][1L]

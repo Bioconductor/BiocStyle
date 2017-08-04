@@ -87,8 +87,7 @@ process_headers = function(lines) {
 }
 
 add_navigation = function(lines) {
-  ## match to all section div's 
-  ## except the first one right after the TOC
+  ## match to all section div's
   pattern <- sprintf('^<div id="%s" class="section level%s">$', '(.*)', '([1-6]).*')
   idx <- grep(pattern, lines)
   sections <- lines[idx]
@@ -98,7 +97,6 @@ add_navigation = function(lines) {
   section_ids <- sub(pattern, '#\\1', sections)
   section_levels <- as.integer(sub(pattern, '\\2', sections))
   section_names <- sub('<h([1-6])>(?:<span class="header-section-number">[0-9.]*</span> )?(.*)</h\\1>', '\\2', lines[idx+1L])
-  section_fuse <- c(FALSE, idx[-length(idx)]+2L == idx[-1L])
   
   ## index of previous section on the same level
   section_prev <- sapply(seq_along(sections), function(i) {
@@ -126,6 +124,27 @@ add_navigation = function(lines) {
     level_up[length(level_up)][1L]
   })
   
+  ## join navigation for sections and their immediate subsections 
+  section_fuse <- c(FALSE, idx[-length(idx)]+2L == idx[-1L])
+  section_ids[section_fuse] <- section_ids[section_fuse[-1L]]
+  idx <- idx[!section_fuse]
+  
+  ## move links to next subsections from fused sections up to their parents
+  section_down <- rep(NA_integer_, sections_length)
+  section_down[section_fuse[-1L]] <- section_next[section_fuse]
+  
+  ## create links
+  create_link <- function(v=0L, id=section_ids[v], name=section_names[v], icon)
+    ifelse(is.na(v), "", sprintf('<span class="nav-icon">%s</span> <a href="%s">%s</a><br/>', icon, id, name))
+  
+  links <- paste0(
+    create_link(id="#TOC", name="Table of Contents", icon="&#8803;"),
+    create_link(section_next, icon="&#9656;"),
+    create_link(section_prev, icon="&#9666;"),
+    create_link(section_up, icon="&#9652;"),
+    create_link(section_down, icon="&#9662;")
+  )[!section_fuse]
+  
   ## preallocate the results vector and populate it with original lines
   idx_length <- length(idx)
   res <- vector(mode = "character", length = length(lines)+idx_length)
@@ -133,19 +152,6 @@ add_navigation = function(lines) {
   res[-idx] <- lines
   
   ## insert links
-  create_link <- function(v=0L, id=section_ids[v], name=section_names[v], icon) {
-    link <- mapply(function(href, name) { as.character(a(name, href=href))},
-                    id, name, USE.NAMES=FALSE)
-    ifelse(is.na(v), "", sprintf('<span class="nav-icon">%s</span> %s<br/>', icon, link))
-  }     
-  
-  links <- paste0(
-    create_link(id="#TOC", name="Table of Contents", icon="&#8803;"),
-    create_link(section_prev, icon="&#9666;"),
-    create_link(section_next, icon="&#9656;"),
-    create_link(section_up, icon="&#9652;")
-  )
-  
   res[idx] <- sprintf('<p class="sidenote">%s</p>', links)
   
   res

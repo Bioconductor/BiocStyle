@@ -1,6 +1,10 @@
 html_fragment <- function(...,
                           toc = TRUE,
                           number_sections = TRUE,
+                          fig_width = 5.67,
+                          fig_height = fig_width,
+                          fig_align = "right",
+                          fig_crop = TRUE,
                           theme = NULL,
                           highlight = NULL,
                           navlinks = TRUE,
@@ -10,9 +14,10 @@ html_fragment <- function(...,
   ## enable BiocStyle macros
   require(BiocStyle, quietly = TRUE)
   
-  knitr <- knitr_options(opts_knit = list(width = 80L), 
+  knitr <- knitr_options(opts_knit = list(width = 80L),
                          # remove figure margins
-                         opts_chunk = list(crop = TRUE),
+                         opts_chunk = list(crop = isTRUE(fig_crop),
+                                           fig.align = fig_align),
                          knit_hooks = list(crop = hook_pdfcrop))
   
   post_processor <- function(metadata, input, output, clean, verbose) {
@@ -33,11 +38,13 @@ html_fragment <- function(...,
     pandoc = NULL,
     post_processor = post_processor,
     base_format = bookdown::html_document2(
-      ...,
       toc = toc,
       number_sections = number_sections,
+      fig_width = fig_width,
+      fig_height = fig_height,
       theme = theme,
-      highlight = highlight
+      highlight = highlight,
+      ...
     ))
   
   ## swap template afterwards in order to retain original mathjax functionality

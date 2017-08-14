@@ -56,13 +56,18 @@ p, img, table {
   margin-bottom: 10px;
 }
 
+/* lists */
 ol, ul {
-  padding: 0px 150px 0px 65px;
+  padding: 0px 150px 0px 100px;
   list-style: square;
 }
 
+li ol, li ul {
+  padding: 0px 0px 0px 35px;
+}
+
 li p {
-  padding: 0px;
+  padding: 0;
 }
 
 pre {
@@ -156,7 +161,7 @@ sup {
 }
 
 .date {
-  padding-left: 65px;
+  text-indent: 0px;
   font-weight: bold;
 }
 

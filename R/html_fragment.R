@@ -23,11 +23,15 @@ html_fragment <- function(...,
   post_processor <- function(metadata, input, output, clean, verbose) {
     lines <- readUTF8(output)
     
-    ## move all headers one level down (for proper formatting when embedded in the website)
-    lines <- process_headers(lines)
-    
     ## add author affiliations
     lines <- modifyLines(lines, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
+    
+    ## append "References" section header
+    if ( !is.null(metadata$bibliography) )
+      lines <- add_refs_header(lines)
+    
+    ## move all headers one level down (for proper formatting when embedded in the website)
+    lines <- process_headers(lines)
     
     writeUTF8(lines, output)
     output
@@ -77,6 +81,17 @@ html_fragment <- function(...,
   }
   
   config
+}
+
+add_refs_header = function(lines) {
+  refs <- grep('^<div id="refs" class="references">$', lines)
+  
+  if ( !isTRUE(grepl('<h1>.*</h1>', lines[refs-1L])) )
+    lines <- c(lines[1:refs],
+               '<h1>References</h1>',
+               lines[(refs+1L):length(lines)])
+  
+  lines
 }
 
 process_headers = function(lines) {
@@ -145,14 +160,14 @@ add_navigation = function(lines, top, level) {
     level_up[length(level_up)][1L]
   })
   
-  ## join navigation for sections and their immediate subsections 
-  section_fuse <- c(FALSE, idx[-length(idx)]+2L == idx[-1L])
-  section_ids[section_fuse] <- section_ids[section_fuse[-1L]]
-  idx <- idx[!section_fuse]
+  ## join navigation for sections and their immediate subsections
+  section_fuse <- which(c(FALSE, idx[-length(idx)]+2L == idx[-1L]))
+  section_ids[section_fuse + isTRUE(top)] <- section_ids[section_fuse + isTRUE(top) - 1L]
+  idx <- idx[-section_fuse]
   
   ## move links to next subsections from fused sections up to their parents
   section_down <- rep(NA_integer_, sections_length)
-  section_down[section_fuse[-1L]] <- section_next[section_fuse]
+  section_down[section_fuse -1L] <- section_next[section_fuse]
   
   ## create links
   create_link <- function(v=0L, id=section_ids[v], name=section_names[v], icon)
@@ -164,7 +179,7 @@ add_navigation = function(lines, top, level) {
     create_link(section_prev, icon="&#9666;"),
     create_link(section_up, icon="&#9652;"),
     create_link(section_down, icon="&#9662;")
-  )[!section_fuse]
+  )[-section_fuse]
   
   ## preallocate the results vector and populate it with original lines
   idx_length <- length(idx)

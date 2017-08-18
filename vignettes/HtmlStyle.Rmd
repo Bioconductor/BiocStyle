@@ -1,1 +1,0 @@
-../inst/rmarkdown/templates/html_document/skeleton/skeleton.Rmd

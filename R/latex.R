@@ -1,7 +1,7 @@
-latex <-
-    function(..., width=90, short.fignames=FALSE, fig.path,
-             error=FALSE, use.unsrturl=TRUE)
-{
+latex_old <- function(..., width=90, short.fignames=FALSE, fig.path,
+                      error=FALSE, use.unsrturl=TRUE) {
+    .Deprecated("latex", old="latex_old")
+    
     options(..., width=width)
     cat(sprintf("\\RequirePackage{%s}\n\n",
                 sub(".sty$", "", bioconductor.sty)))

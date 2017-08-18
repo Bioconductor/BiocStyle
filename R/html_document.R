@@ -4,7 +4,7 @@
 ## thinking that it uses its default template which allows to retain original
 ## mathjax functionality
 
-html_document <- function(toc = TRUE,
+html_document_old <- function(toc = TRUE,
                           toc_depth = 3,
                           number_sections = TRUE,
                           fig_width = 7,
@@ -24,6 +24,7 @@ html_document <- function(toc = TRUE,
                           md_extensions = NULL,
                           pandoc_args = NULL,
                           ...) {
+  .Deprecated("html_document", old = "html_document_old")
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)

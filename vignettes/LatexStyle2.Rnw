@@ -5,7 +5,7 @@
 \documentclass{article}
 
 <<style, eval=TRUE, echo=FALSE, results=tex>>=
-BiocStyle::latex2()
+BiocStyle::latex()
 @ 
 
 \usepackage{booktabs} % book-quality tables
@@ -73,11 +73,11 @@ To use with \Sweave, add the following to your package \file{DESCRIPTION} file:
 and add this code chunk to the preamble\footnote{before the {\ttfamily \textbackslash begin\{document\}} command, and preferably right after the {\ttfamily \textbackslash documentclass} definition} of your .Rnw file:
 \begin{verbatim}
     <<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
-    BiocStyle::latex2()
+    BiocStyle::latex()
     @ 
 \end{verbatim}
 
-See \Rcode{?latex2} for additional options. It is not necessary to include
+See \Rcode{?latex} for additional options. It is not necessary to include
 {\ttfamily \textbackslash usepackage\-\{Sweave\}} in your document preamble, as it is already inserted by \BiocStyle.
 See Appendix~\ref{sec:pkgs} for a list of other automatically attached \LaTeX\ packages.
 
@@ -95,11 +95,11 @@ this to the top of the .Rnw file:
 and this to the preamble:
 \begin{verbatim}
     <<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
-    BiocStyle::latex2()
+    BiocStyle::latex()
     @ 
 \end{verbatim}
 
-See \Rcode{?latex2} for additional options, and Appendix~\ref{sec:pkgs} for a list of automatically attached \LaTeX\ packages.
+See \Rcode{?latex} for additional options, and Appendix~\ref{sec:pkgs} for a list of automatically attached \LaTeX\ packages.
 
 \subsubsection{R markdown}
 
@@ -114,14 +114,14 @@ To enable \BiocStyle\ in your \R\ markdown vignette you need to:
     Suggests: BiocStyle, knitr, rmarkdown
   \end{verbatim}
     
-  \item Specify \Rcode{BiocStyle::pdf\_document2} as the output format and add vignette metadata to the document header:
+  \item Specify \Rcode{BiocStyle::pdf\_document} as the output format and add vignette metadata to the document header:
 
   \begin{verbatim}
     ---
     title: "Vignette Title"
     author: "Vignette Author"
     output: 
-      BiocStyle::pdf_document2
+      BiocStyle::pdf_document
     vignette: >
       %\VignetteIndexEntry{Vignette Title}
       %\VignetteEngine{knitr::rmarkdown}
@@ -175,7 +175,7 @@ remedied (as on the \Bioconductor{} build system) with a final run of
 \subsection{Title page}
 
 \warning[Important]{most of the methods described here only work once \BiocStyle\ is loaded;
-therefore, specify title and authors \emph{after} the code chunk calling \Rfunction{BiocStyle::latex2()}.}
+therefore, specify title and authors \emph{after} the code chunk calling \Rfunction{BiocStyle::latex()}.}
 
 \subsubsection{Title and running headers}
 
@@ -327,7 +327,7 @@ General:
 \BiocStyle\ automatically adjusts the line length\footnote{\Rcode{options("width")}} 
 of output code chunks
 depending on the document's font size setting. Therefore, it shouldn't be necessary to set it manually.
-If for some reason you wish to alter it, use the \Rcode{width} argument in the call to \Rfunction{BiocStyle::latex2}.
+If for some reason you wish to alter it, use the \Rcode{width} argument in the call to \Rfunction{BiocStyle::latex}.
 
 %---------------------------------------------------------
 \subsection{Figures}\label{sec:figures}
@@ -395,7 +395,7 @@ which are about half as wide as the paragraph (Figure~\ref{fig:small}).
 The default placement specifier for \BiocStyle\ floats is \latex{\thefpsfigure}, 
 which typically outputs them in the place where they are defined. 
 The first sentence of figure captions is emphasized to serve as figure title. 
-This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex2}.
+This feature can be disabled be setting the argument \Rcode{titlecaps=FALSE} in the call to \Rfunction{BiocStyle::latex}.
 
 To use figure environments in \Sweave, write explicit \LaTeX\ code which inserts
 them in combination with the \Sweave\ option \verb+include=FALSE+. 
@@ -527,7 +527,7 @@ prefix when inserting and referring to figures, e.g.:
       {The code that creates this figure is shown in the code chunk.}
 \end{verbatim}
 A custom prefix for figure file names can be passed to
-\Rfunction{latex2} in the \Rcode{fig.path} argument. When
+\Rfunction{latex} in the \Rcode{fig.path} argument. When
 \Rcode{short.fignames=TRUE}, figures can be referred to directly by
 code chunk labels, i.e., \verb+\incfig{figureexample-1}...+ and
 \verb+\ref{figureexample-1}+.
@@ -549,7 +549,7 @@ with a wide margin on the right. This provides additional space for ancillary in
 \subsection{Bibliography}
 %---------------------------------------------------------
 
-\Rfunction{BiocStyle::latex2} has default argument
+\Rfunction{BiocStyle::latex} has default argument
 \Rcode{use.unsrturl=TRUE} to automatically format bibliographies using
 \software{natbib}'s unsrturl style. There is no need to explicitly
 include \software{natbib}, and it is an error to use a

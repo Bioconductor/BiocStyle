@@ -12,8 +12,10 @@ export(latex)
 export(markdown, Biocpkg, Biocannopkg, Biocexptpkg, CRANpkg, Rpackage, Githubpkg)
 export(doc_date, pkg_ver)
 export(html_document, pdf_document, md_document)
+export(output)
 
-# BiocStyle v.2
+# BiocStyle deprecated
 export(latex2)
 export(html_document2, pdf_document2)
-export(output)
+export(latex_old)
+export(html_document_old, pdf_document_old)

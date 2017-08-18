@@ -8,9 +8,9 @@ author:
 - name: Martin Morgan
   affiliation: Roswell Park Cancer Institute, Buffalo, NY
 output:
-  BiocStyle::html_document2:
+  BiocStyle::html_document:
     toc_float: true
-  BiocStyle::pdf_document2: default
+  BiocStyle::pdf_document: default
 package: BiocStyle
 abstract: |
   Instructions on enabling _Bioconductor_ style in R Markdown vignettes.
@@ -24,7 +24,7 @@ vignette: |
 # Prerequisites
 
 _Bioconductor_ R Markdown format is build on top of _R_ package `r CRANpkg("bookdown")`, which in turn relies on `r CRANpkg("rmarkdown")` and [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output document.
-Therefore, unless you are using RStudio, you will need a recent version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.12.3). See the [pandoc installation instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for details on installing pandoc for your platform.
+Therefore, unless you are using RStudio, you will need a recent version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.17.2). See the [pandoc installation instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for details on installing pandoc for your platform.
 
 
 # Getting started
@@ -36,14 +36,14 @@ To enable the _Bioconductor_ style in your R Markdown vignette you need to:
         VignetteBuilder: knitr
         Suggests: BiocStyle, knitr, rmarkdown
 
-- Specify `BiocStyle::html_document2` or `BiocStyle::pdf_document2` as output format and add vignette metadata in the document header:
+- Specify `BiocStyle::html_document` or `BiocStyle::pdf_document` as output format and add vignette metadata in the document header:
 
         ---
         title: "Vignette Title"
         author: "Vignette Author"
         package: PackageName
         output: 
-          BiocStyle::html_document2
+          BiocStyle::html_document
         vignette: >
           %\VignetteIndexEntry{Vignette Title}
           %\VignetteEngine{knitr::rmarkdown}
@@ -53,7 +53,7 @@ To enable the _Bioconductor_ style in your R Markdown vignette you need to:
 The `vignette` section is required in order to instruct _R_ how to build the vignette.^[`\VignetteIndexEntry` should match the `title` of your vignette] The `package` field which should contain the package name is used to print the package version in the output document header. It is not necessary to specify `date` as by default the document compilation date will be automatically included.
 See the following section for details on specifying author affiliations and abstract.
 
-BiocStyle's `html_document2` and `pdf_document2` format functions extend the corresponding original _rmarkdown_ formats, so they accept the same arguments as `html_document` and `pdf_document`, respectively. For example, use `toc_float: true` to obtain a floating TOC as in this vignette.
+BiocStyle's `html_document` and `pdf_document` format functions extend the corresponding original _rmarkdown_ formats, so they accept the same arguments as `html_document` and `pdf_document`, respectively. For example, use `toc_float: true` to obtain a floating TOC as in this vignette.
 
 ## Use with R markdown v1
 
@@ -153,7 +153,7 @@ as in the example below.
     abstract: >
       Document summary
     output: 
-      BiocStyle::pdf_document2
+      BiocStyle::pdf_document
     ---
 
 The `shorttitle` option specifies the title used in running headers 

@@ -1,4 +1,9 @@
-pdf_document2 <- function(toc = TRUE,
+pdf_document2 <- function(...) {
+  .Deprecated("pdf_document", old = "pdf_document2")
+  pdf_document(...)
+}
+
+pdf_document <- function(toc = TRUE,
                           number_sections = TRUE,
                           fig_width = NA,
                           fig_height = NA,

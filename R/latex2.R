@@ -10,7 +10,12 @@ copyResource <- function(file, dir) {
   filename
 }
 
-latex2 <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
+latex2 <- function(...) {
+  .Deprecated("latex", old="latex2")
+  latex(...)
+}
+
+latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
                    use.unsrturl=TRUE, relative.path = FALSE) {
   
   sty <- file.path(resources, "tex", "Bioconductor2.sty")

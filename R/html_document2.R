@@ -1,4 +1,9 @@
-html_document2 <- function(toc = TRUE,
+html_document2 <- function(...) {
+  .Deprecated("html_document", old = "html_document2")
+  html_document(...)
+}
+
+html_document <- function(toc = TRUE,
                            number_sections = TRUE,
                            fig_width = NA,
                            fig_height = NA,

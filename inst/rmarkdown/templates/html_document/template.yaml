@@ -1,4 +1,4 @@
-name: Bioconductor HTML Document
+name: Bioconductor HTML Vignette
 description: >
   Template for Bioconductor HTML documents.
 create_dir: false

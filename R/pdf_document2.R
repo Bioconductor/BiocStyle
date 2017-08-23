@@ -185,7 +185,7 @@ create_latex_template <- function(opts=NULL) {
   lines <- modifyLines(lines, from="\\author{$for(author)$$author$$sep$ \\\\ $endfor$}", insert="%% AUTH AFFIL %%")
   
   # add package version number
-  lines <- modifyLines(lines, from="\\end{abstract}", replace=FALSE, insert=c(
+  lines <- modifyLines(lines, from="\\end{abstract}", offset=1L, replace=FALSE, insert=c(
     "",
     "$if(package)$",
     "\\packageVersion{$package$}",

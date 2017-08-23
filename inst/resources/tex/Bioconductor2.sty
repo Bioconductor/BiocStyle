@@ -278,10 +278,12 @@
 \definecolor{errorcolor}{rgb}{1, 0, 0}
 \definecolor{functioncolor}{RGB}{240, 112, 32}
 %
-% local redefinition \def\`{\char0} in \texttt to allow use of \`{} inside \hl
-% \char0 corresponds to ` in T1 font encoding 
-% http://www.micropress-inc.com/fonts/encoding/t1.htm
-\renewcommand{\texttt}[2][codecolor]{{\def\`{\char0}\textcolor{#1}{\hl{\ttfamily#2}}}}
+% local redefinitions in \texttt to allow use of \`{}  and \^{} in \hl
+\renewcommand{\texttt}[2][codecolor]{{%
+ \def\`{\textasciigrave}%
+ \def\^{\textasciicircum}%
+ \textcolor{#1}{\hl{\ttfamily#2}}%
+}}
 \newcommand{\Rcode}[1]{\texttt{#1}}
 \newcommand{\Rfunction}[1]{\texttt[functioncolor]{#1}}
 \newcommand{\Robject}[1]{\Rcode{#1}}

@@ -68,18 +68,16 @@ latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
             
             # adjust width of plots not inserted as floats
             if (!length(options$fig.cap) || is.na(options$fig.cap)) {
-              `%n%` = function(x, y) if (is.null(x)) y else x
-              fig.cur = options$fig.cur %n% 1L
-              fig.num = options$fig.num %n% 1L
-              
               # multiple plots: begin at 1, end at fig.num
-              ai = options$fig.show != 'hold'
+              fig.cur = max(options$fig.cur, 1L)
+              fig.num = max(options$fig.num, 1L)
+              standalone = options$fig.show != 'hold'
               
-              # open adjustwidth env if this picture is standalone or first in set
-              adjustwidth[1L] = if (ai || fig.cur<=1L)
+              # open adjustwidth env if this plot is standalone or first in set
+              adjustwidth[1L] = if (standalone || fig.cur==1L)
                 '\\begin{adjustwidth}{\\fltoffset}{0mm}'
-              # close adjustwidth env if this picture is standalone or last in set
-              adjustwidth[2L] = if (ai || fig.cur==fig.num)
+              # close adjustwidth env if this plot is standalone or last in set
+              adjustwidth[2L] = if (standalone || fig.cur==fig.num)
                 '\\end{adjustwidth}'
             }
             

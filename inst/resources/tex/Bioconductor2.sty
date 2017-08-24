@@ -256,6 +256,10 @@
     {\Rpackage{#2}}}}
 %
 \RequirePackage{soul} %inline code highligting
+% 
+% make the use of soul transparent to the end user by mimicking regular behavior
+\soulregister{\newline}{0}
+%
 \sethlcolor{shadecolor}
 % fine-tune inline code highlighting
 \makeatletter

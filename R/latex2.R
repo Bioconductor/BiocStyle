@@ -64,7 +64,7 @@ latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
         # set hooks for special plot output
         knit_hooks$set(
           plot = function(x, options = list()) {
-            adjustwidth = NULL
+            adjustwidth1 = adjustwidth2 = NULL
             
             # adjust width of plots not inserted as floats
             if (!length(options$fig.cap) || is.na(options$fig.cap)) {
@@ -74,18 +74,18 @@ latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
               standalone = options$fig.show != 'hold'
               
               # open adjustwidth env if this plot is standalone or first in set
-              adjustwidth[1L] = if (standalone || fig.cur==1L)
-                '\\begin{adjustwidth}{\\fltoffset}{0mm}'
+              if (standalone || fig.cur==1L)
+                adjustwidth1 = '\\begin{adjustwidth}{\\fltoffset}{0mm}'
               # close adjustwidth env if this plot is standalone or last in set
-              adjustwidth[2L] = if (standalone || fig.cur==fig.num)
-                '\\end{adjustwidth}'
+              if (standalone || fig.cur==fig.num)
+                adjustwidth2 = '\\end{adjustwidth}'
             }
             
             # call the default knitr hook as defined in render_latex()
             paste0('\\end{kframe}',
-                   adjustwidth[1L],
+                   adjustwidth1,
                    hook_plot_tex(x, options),
-                   adjustwidth[2L],
+                   adjustwidth2,
                    '\\begin{kframe}')
           },
           

@@ -77,9 +77,14 @@ and add this code chunk to the preamble\footnote{before the {\ttfamily \textback
     @ 
 \end{verbatim}
 
-See \Rcode{?latex} for additional options. It is not necessary to include
-{\ttfamily \textbackslash usepackage\-\{Sweave\}} in your document preamble, as it is already inserted by \BiocStyle.
-See Appendix~\ref{sec:pkgs} for a list of other automatically attached \LaTeX\ packages.
+See \Rcode{?latex} for additional options. It is not necessary for Sweave 
+vignettes in general to include {\ttfamily\textbackslash usepackage\-\{Sweave\}}
+in the document preamble, and it will give you an error if it appears before 
+the call to the style function.\footnote{because \BiocStyle\ loads 
+{\ttfamily Sweave.sty} in order to override some defaults}
+Other \LaTeX\ packages attached by \BiocStyle\ are listed in Appendix~\ref{sec:pkgs}.
+Avoid loading these packages yourself, as doing so may cause unexpected side
+effects and often leads to document compilation errors.
 
 \subsubsection{\knitr{}}\label{sec:knitr} 
 

@@ -127,7 +127,7 @@ latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
       
       if (!is.null(src)) {
         fontsize = tryCatch({
-          lines = readLines(src)
+          lines = readLines(src, warn=FALSE)
           documentclass = grep("^[:blank:]*\\\\documentclass", lines, value = TRUE)[1L]
           sub(".+(1?[01289]pt).+","\\1", documentclass)
         }, error = function(e) NULL)

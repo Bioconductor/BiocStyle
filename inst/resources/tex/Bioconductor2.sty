@@ -444,11 +444,11 @@
 \RequirePackage{xstring}
 \newcommand\formatlabel[1]{%
  \noexpandarg%
- \IfSubStr{#1}{.}{%
-  \StrBefore{#1}{.}[\captiontitle]%
-  \StrBehind{#1}{.}[\captionbody]%
+ \IfSubStr{#1}{. }{% use trailing space to avoid capturing decimal separator in numbers
+  \StrBefore{#1}{. }[\captiontitle]%
+  \StrBehind{#1}{. }[\captionbody]%
  }{%
-  \def\captiontitle{#1}%
+  \IfEndWith{#1}{.}{\StrGobbleRight{#1}{1}[\captiontitle]}{\def\captiontitle{#1}}
   \def\captionbody{}%
  }%
  {{\bfhelvet\color{BiocBlue}\captiontitle}\\\captionbody}

@@ -10,8 +10,7 @@ Format for converting from R Markdown to an Bioconductor HTML document.
 
 \usage{
 html_document(toc = TRUE, number_sections = TRUE, fig_width = NA, fig_height = NA,
-              fig_retina = NULL, self_contained = TRUE, css = NULL, 
-              pandoc_args = NULL, ...)
+              self_contained = TRUE, css = NULL, pandoc_args = NULL, ...)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the output}
@@ -21,8 +20,6 @@ html_document(toc = TRUE, number_sections = TRUE, fig_width = NA, fig_height = N
 \item{fig_width}{numeric(1), default width (in inches) for figures}
 
 \item{fig_height}{numeric(1), default width (in inches) for figures}
-
-\item{fig_retina}{numeric(1), scaling to perform for retina displays}
 
 \item{self_contained}{numeric(1), \code{TRUE} to produce a standalone HTML file with no external
 dependencies, using data: URIs to incorporate the contents of linked

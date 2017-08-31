@@ -4,26 +4,16 @@ html_document2 <- function(...) {
 }
 
 html_document <- function(toc = TRUE,
-                           number_sections = TRUE,
-                           fig_width = NA,
-                           fig_height = NA,
-                           fig_retina = NULL,
-                           self_contained = TRUE,
-                           css = NULL,
-                           pandoc_args = NULL,
-                           ...) {
-  
-  ## load the package to expose macros
-  require(BiocStyle, quietly = TRUE)
-  
-  base_format <- function(toc = TRUE,
                           number_sections = TRUE,
                           fig_width = NA,
                           fig_height = NA,
-                          fig_retina = NULL,
-                          self_contained,
+                          self_contained = TRUE,
                           css = NULL,
+                          pandoc_args = NULL,
                           ...) {
+  
+  ## load the package to expose macros
+  require(BiocStyle, quietly = TRUE)
   
   ## customize the default rmarkdown template
   template <- create_html_template()
@@ -33,7 +23,7 @@ html_document <- function(toc = TRUE,
   
   post_processor = function(metadata, input, output, clean, verbose) {
     x = readUTF8(output)
-  
+    
     ## insert author affiliations
     x <- modifyLines(x, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
     
@@ -61,18 +51,34 @@ html_document <- function(toc = TRUE,
     )
   ))
   
-  # Call the rmarkdown::html_document function with `template="default"` and
+  # mask section numbering in bookdown in order to get a global rather than
+  # per-section numbering of figures/tables
+  
+  number_sections_override <- number_sections
+  
+  base_format <- function(..., number_sections) {
+    rmarkdown::html_document(..., number_sections = number_sections_override)
+  }
+  
+  # call the rmarkdown::html_document function with `template="default"` and
   # substitute the template only afterwards in order to retain some of the
   # original functionality such as mathjax, floating toc, and code folding.
-  
-  rmarkdown_html_document = rmarkdown::html_document(
-    toc = toc,
-    number_sections = TRUE,
-    fig_width = fig_width,
-    fig_height = fig_height,
-    self_contained = self_contained,
-    css = css,
-    ...)
+  config <- rmarkdown::output_format(
+    knitr = knitr,
+    pandoc = NULL,
+    clean_supporting = self_contained,
+    pre_processor = pre_processor,
+    post_processor = post_processor,
+    base_format = bookdown::html_document2(
+      base_format = base_format,
+      toc = toc,
+      number_sections = FALSE,
+      fig_width = fig_width,
+      fig_height = fig_height,
+      self_contained = self_contained,
+      css = css,
+      ...)
+  )
   
   ## override some default pandoc args; we use this low-level approach rather 
   ## than passing them in 'pandoc_args' to 'rmarkdown::html_document' because 
@@ -86,35 +92,14 @@ html_document <- function(toc = TRUE,
   idx = match(arg_names, pandoc_args)
   
   ## substitute arguments
-  rmarkdown_html_document$pandoc$args [
-    match(arg_names, rmarkdown_html_document$pandoc$args) + 1L
-  ] <- pandoc_args [idx + 1L]
+  config$pandoc$args [
+    match(arg_names, config$pandoc$args) + 1L 
+    ] <- pandoc_args[idx + 1L]
   
   ## append the rest
-  rmarkdown_html_document$pandoc$args <- 
-    c(rmarkdown_html_document$pandoc$args, pandoc_args[-c(idx, idx+1L)])
+  config$pandoc$args <- c(config$pandoc$args, pandoc_args[-c(idx, idx+1L)])
   
-  
-  rmarkdown::output_format(
-    knitr = knitr,
-    pandoc = NULL,
-    clean_supporting = self_contained,
-    pre_processor = pre_processor,
-    post_processor = post_processor,
-    base_format = rmarkdown_html_document)
-  }
-
-  bookdown::html_document2(
-    base_format = base_format,
-    toc = toc,
-    number_sections = FALSE,
-    fig_width = fig_width,
-    fig_height = fig_height,
-    fig_retina = fig_retina,
-    self_contained = self_contained,
-    css = css,
-    ...
-  )
+  config
 }
 
 # modify the default rmarkdown template

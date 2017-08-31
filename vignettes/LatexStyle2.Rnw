@@ -608,7 +608,7 @@ latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 
 \BiocStyle\ does not support tables produced by the \R\ package \CRANpkg{xtable} in plain \Sweave\ documents.
 This limitation does not apply to documents compiled with \knitr. If you would like to 
-use \Rpackage{xtable} in your \BiocStyle-enabled document, please consider using \knitr\footnote{see Sections~\ref{sec:knitr} and \ref{sec:figures} for details on using BiocStyle with \knitr} instead of \Sweave.
+continue using \Rpackage{xtable} in your \BiocStyle-enabled \Sweave\ document, please consider migrating it to \knitr. See \Rcode{?knitr::Sweave2knitr} for automatic conversion, and Sections~\ref{sec:knitr} and \ref{sec:figures} for details on using \BiocStyle\ with \knitr.
 
 
 \end{document}

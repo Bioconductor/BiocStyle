@@ -4,29 +4,19 @@ pdf_document2 <- function(...) {
 }
 
 pdf_document <- function(toc = TRUE,
-                          number_sections = TRUE,
-                          fig_width = NA,
-                          fig_height = NA,
-                          use.unsrturl = TRUE,
-                          keep_md = FALSE,
-                          toc_newpage = FALSE,
-                          titlecaps = TRUE,
-                          ...) {
+                         number_sections = TRUE,
+                         fig_width = NA,
+                         fig_height = NA,
+                         includes = NULL,
+                         ...,
+                         ## BiocStyle specific arguments:
+                         use.unsrturl = TRUE,
+                         toc_newpage = FALSE,
+                         titlecaps = TRUE) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  base_format <- function(toc,
-                          number_sections,
-                          fig_width,
-                          fig_height,
-                          use.unsrturl,
-                          includes,
-                          keep_md,
-                          toc_newpage,
-                          titlecaps,
-                          ...) {
-    
   template <- create_latex_template(if (isTRUE(titlecaps)) NULL else "notitlecaps")
   
   head = NULL
@@ -50,16 +40,16 @@ pdf_document <- function(toc = TRUE,
   
   inc = rmarkdown::includes(in_header = header)
   
-  if ( missing(includes) )
+  if ( is.null(includes) )
     includes = inc
   else
     includes$in_header = c(includes$in_header, inc$in_header)
   
-  
   # pandoc options
   pandoc_args = NULL
   
-  if (isTRUE(toc_newpage)) pandoc_args = c("-M", "toc-newpage")
+  if (isTRUE(toc_newpage))
+    pandoc_args = c("--variable", "toc-newpage")
   
   # knitr options
   knitr = merge_lists(.knitr_options(), list(
@@ -87,19 +77,6 @@ pdf_document <- function(toc = TRUE,
       }
     )
   ))
-
-  
-  pdf_document_base = rmarkdown::pdf_document(
-    toc = toc,
-    number_sections = number_sections,
-    fig_width = fig_width,
-    fig_height = fig_height,
-    template = template,
-    includes = includes,
-    pandoc_args = pandoc_args,
-    ...)
-  
-  pdf_document_base$inherits <- "pdf_document"
   
   post_processor = function(metadata, input, output, clean, verbose) {
     lines = readUTF8(output)
@@ -120,25 +97,44 @@ pdf_document <- function(toc = TRUE,
     output
   }
   
-  rmarkdown::output_format(knitr = knitr,
-                pandoc = NULL,
-                keep_md = keep_md,
-                pre_processor = pre_processor,
-                post_processor = post_processor,
-                base_format = pdf_document_base)
+  config <- rmarkdown::output_format(
+    knitr = knitr,
+    pandoc = list(args = pandoc_args),
+    pre_processor = pre_processor,
+    post_processor = post_processor,
+    # use bookdown::pdf_book for the added capability of cross-referencing
+    base_format = bookdown::pdf_book(
+      toc = toc,
+      number_sections = number_sections,
+      fig_width = fig_width,
+      fig_height = fig_height,
+      template = "default",
+      includes = includes,
+      base_format = rmarkdown::pdf_document,
+      ...)
+  )
+  
+  ## override the default document template which is used in order to retain
+  ## some original template-dependent rmarkdown functionality
+  config$pandoc$args[ match("--template", config$pandoc$args) + 1L ] <- template
+  
+  ## remove the obsolete default 'geometry' pandoc variable after it has beed
+  ## added by the default 'pdf_pre_processor' defined in rmarkdown::pdf_document
+  pre = config$pre_processor
+  config$pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
+    args = if ( is.function(pre) )
+      pre(metadata, input_file, runtime, knit_meta, files_dir, output_dir)
+    else
+      pre
+    
+    pos = match("geometry:margin=1in", args)
+    if (!is.na(pos))
+      args = args[-c(pos-1L, pos)]
+    
+    args
   }
-
-  bookdown::pdf_book(
-    toc = toc,
-    number_sections = number_sections,
-    fig_width = fig_width,
-    fig_height = fig_height,
-    use.unsrturl = use.unsrturl,
-    keep_md = keep_md,
-    toc_newpage = toc_newpage,
-    titlecaps = titlecaps,
-    ...,
-    base_format = base_format)
+  
+  config
 }
 
 
@@ -162,7 +158,6 @@ create_latex_template <- function(opts=NULL) {
   lines <- readUTF8(system.file("rmd", "latex", template, package = "rmarkdown"))
   
   template <- biocTempfile("template.tex")
-  
   
   # remove redundand hyperref definitions
   lines <- modifyLines(lines, from="\\usepackage[unicode=true]{hyperref}", to="\\urlstyle{same}", offset=c(-5L, 0L))

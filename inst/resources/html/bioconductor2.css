@@ -1,9 +1,6 @@
 body {
   margin: 0px auto;
   max-width: 1134px;
-}
-
-body, td {
   font-family: sans-serif;
   font-size: 10pt;
 }

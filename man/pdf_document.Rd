@@ -10,7 +10,7 @@
 \usage{
 pdf_document(toc = TRUE, number_sections = TRUE, fig_width = NA, fig_height = NA,
              includes = NULL, ...,
-             use.unsrturl = TRUE, toc_newpage = FALSE, titlecaps = TRUE)
+             use_unsrturl = TRUE, toc_newpage = FALSE, titlecaps = TRUE)
 }
 
 \arguments{
@@ -27,7 +27,7 @@ pdf_document(toc = TRUE, number_sections = TRUE, fig_width = NA, fig_height = NA
   
   \item{\dots}{Additional arguments passed to \code{\link[rmarkdown]{pdf_document}}.}
   
-  \item{use.unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
+  \item{use_unsrturl}{logical(1), indicating that the \sQuote{unsrturl}
     style will be used (\code{\\bibliographystyle} command \emph{not}
     required).}
   

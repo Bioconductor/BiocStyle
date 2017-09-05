@@ -10,7 +10,7 @@ pdf_document <- function(toc = TRUE,
                          includes = NULL,
                          ...,
                          ## BiocStyle specific arguments:
-                         use.unsrturl = TRUE,
+                         use_unsrturl = TRUE,
                          toc_newpage = FALSE,
                          titlecaps = TRUE) {
   
@@ -29,7 +29,7 @@ pdf_document <- function(toc = TRUE,
            knit_theme$get(thm)$highlight,
            readLines(file.path(resources, "tex", "highlighting-macros.def")))
   
-  if (use.unsrturl) {
+  if (use_unsrturl) {
     bst <- file.path(resources, "tex", "unsrturl")
     head = c(head, sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
   }

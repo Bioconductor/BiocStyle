@@ -85,7 +85,7 @@ pdf_document <- function(toc = TRUE,
     lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
     
     ## LaTeX soul hacks
-    r = "(?<=\\\\texttt{)(?:\\\\{|\\\\}|[^{}])*(?=})"
+    r = "(?<=\\\\texttt{)((?:\\\\{|\\\\}|[^{}]|{(?1)})*)(?=})"
     m <- gregexpr(r, lines, perl=TRUE)
     regmatches(lines, m) <- lapply(regmatches(lines, m), function(x) {
       # substitute all control spaces "\ " in \texttt by regular spaces

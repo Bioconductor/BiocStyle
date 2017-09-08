@@ -213,11 +213,12 @@ after the affiliation.
 
 In case of multiple authors, you can specify the author and affiliation information in different manners depending on 
 the number of affiliations. In the basic case, when you don't provide authors'
-affiliation, or all the authors share the same affiliation, you can just use the regular \verb+\author+ command:
+affiliation, or all the authors share the same affiliation, you can just use the regular \verb+\author+ command:%
+\footnote{the usual author separator {\ttfamily \textbackslash and} won't work because the affiliations are typeset in footnote mode}
 
 \begin{verbatim}
     \author{
-      First Author\thanks{\email{first@author.com}},
+      First Author\thanks{\email{first@author.com}} and
       Second Author\thanks{\email{second@author.com}}\\
       Shared Affiliation
     }

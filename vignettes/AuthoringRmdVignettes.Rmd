@@ -186,6 +186,13 @@ referring to _R_ packages:
 
 These are meant to be called inline, e.g., `r inline('Biocpkg("IRanges")')`.
 
+
+# Code chunks
+
+The line length of output code chunks is set to the optimal width of typically 
+80 characters, so it is not neccessary to adjust it manually through `options("width")`.
+
+
 # Figures
 
 _BiocStyle_ comes with three predefined figure sizes. Regular figures not otherwise specified appear indented with respect to the paragraph text, as in the example below.

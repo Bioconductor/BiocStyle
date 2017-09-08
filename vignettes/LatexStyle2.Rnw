@@ -329,9 +329,8 @@ General:
 
 %\BiocStyle\ changes the default setting of the \verb+error+ option
 
-\BiocStyle\ automatically adjusts the line length\footnote{\Rcode{options("width")}} 
-of output code chunks
-depending on the document's font size setting. Therefore, it shouldn't be necessary to set it manually.
+\BiocStyle\ uses some heuristics to automatically adjust the line length\footnote{\Rcode{options("width")}} 
+of output code chunks such that it matches the document font size setting.\footnote{for the default font size of 10pt the code width is 80 columns}
 If for some reason you wish to alter it, use the \Rcode{width} argument in the call to \Rfunction{BiocStyle::latex}.
 
 %---------------------------------------------------------

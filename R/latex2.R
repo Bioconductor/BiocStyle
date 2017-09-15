@@ -74,8 +74,12 @@ latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
               standalone = options$fig.show != 'hold'
               
               # open adjustwidth env if this plot is standalone or first in set
-              if (standalone || fig.cur==1L)
-                adjustwidth1 = '\\begin{adjustwidth}{\\fltoffset}{0mm}'
+              if (standalone || fig.cur==1L) {
+                offsets = switch(options$fig.env, '{\\fltoffset}{0mm}',# default
+                                 "smallfigure" = '{2\\fltoffset}{2\\fltoffset}',
+                                 "figure*" = '{0mm}{-\\fltoffset}')
+                adjustwidth1 = paste0('\\begin{adjustwidth}', offsets)
+              }
               # close adjustwidth env if this plot is standalone or last in set
               if (standalone || fig.cur==fig.num)
                 adjustwidth2 = '\\end{adjustwidth}'

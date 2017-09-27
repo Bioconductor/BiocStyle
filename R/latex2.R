@@ -11,8 +11,8 @@ copyResource <- function(file, dir) {
 }
 
 latex2 <- function(...) {
-  .Deprecated("latex", old="latex2")
   latex(...)
+  .Deprecated("latex", old="latex2")
 }
 
 latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,

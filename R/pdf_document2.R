@@ -75,6 +75,15 @@ pdf_document <- function(toc = TRUE,
                  adjustwidth[2L])
         }
       }
+    ),
+    opts_hooks = list(
+      # respect fig.pos, see https://github.com/rstudio/rmarkdown/issues/1012
+      fig.pos = function(options) {
+        if (is.null(options$out.extra)) {
+          options$out.extra = ''
+        }
+        options
+      }
     )
   ))
   

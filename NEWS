@@ -1,3 +1,33 @@
+CHANGES IN VERSION 2.6.0
+------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Rename 'latex2', 'pdf_document2' and 'html_document2' to 'latex', 'pdf_document' and 'html_document', respectively
+    o Rename argument to 'pdf_document' from 'use.unsrturl' to 'use_unsrturl' for consistency with rmarkdown naming scheme
+    o Split figure/table captions on ". " rather than "." in order to minimize chances of hitting decimal point in numbers, etc.
+
+BUG FIXES AND IMPROVEMENTS TO PDF STYLE
+
+    o Make knitr option 'fig.pos' functional in 'pdf_document'
+    o Improve formatting of TOC chapter entries (https://github.com/Bioconductor/BiocStyle/issues/35)
+    o Adjust width of non-floating figures according to the 'fig.wide'/'fig.small' setting (reported by Aaron Lun)
+    o Robustify \texttt, e.g.  by enabling backticks and fixing the substitution of control spaces
+    o Update LaTeX code highlighting macros for pandoc output (reported by Vince Carey)
+    o Silence spurious warning in 'latex()' emitted when the source file is missing a final EOL
+    o Fix broken code in knitr hook adjusting page width
+    o Include package version field in R Markdown documents even if they are missing an abstract (https://github.com/Bioconductor/BiocStyle/issues/29)
+    o Correct way of enclosing non-floating figures in LaTeX 'adjustwidth' environment (https://github.com/Bioconductor/BiocStyle/issues/28)
+
+BUG FIXES AND IMPROVEMENTS TO HTML STYLE
+
+    o Correct displaying of superscript text
+    o Allow modifying table layout in 'knitr::kable' (https://github.com/Bioconductor/BiocStyle/issues/30)
+    o Correct padding of nested lists, and indentation of document date and multi-line headings
+    o Fix a bug in the function matching author affiliations (https://support.bioconductor.org/p/98155/)
+    o Proper horizontal alignment of ggplotly graphics (https://support.bioconductor.org/p/97609/)
+    o Fix compatibility with 'runtime: shiny' document option
+
 CHANGES IN VERSION 2.4.0
 ------------------------
 

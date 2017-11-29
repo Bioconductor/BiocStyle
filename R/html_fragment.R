@@ -161,13 +161,14 @@ add_navigation = function(lines, top, level) {
   })
   
   ## join navigation for sections and their immediate subsections
-  section_fuse <- which(c(FALSE, idx[-length(idx)]+2L == idx[-1L]))
-  section_ids[section_fuse + isTRUE(top)] <- section_ids[section_fuse + isTRUE(top) - 1L]
-  idx <- idx[-section_fuse]
+  merged <- c(FALSE, idx[-length(idx)]+2L == idx[-1L])
+  merged_ids <- which(merged) + isTRUE(top)
+  section_ids[merged_ids] <- section_ids[merged_ids - 1L]
+  idx <- idx[!merged]
   
   ## move links to next subsections from fused sections up to their parents
   section_down <- rep(NA_integer_, sections_length)
-  section_down[section_fuse -1L] <- section_next[section_fuse]
+  section_down[c(merged[-1L], FALSE)] <- section_next[merged]
   
   ## create links
   create_link <- function(v=0L, id=section_ids[v], name=section_names[v], icon)
@@ -179,7 +180,7 @@ add_navigation = function(lines, top, level) {
     create_link(section_prev, icon="&#9666;"),
     create_link(section_up, icon="&#9652;"),
     create_link(section_down, icon="&#9662;")
-  )[-section_fuse]
+  )[!merged]
   
   ## preallocate the results vector and populate it with original lines
   idx_length <- length(idx)

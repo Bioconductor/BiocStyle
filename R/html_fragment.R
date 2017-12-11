@@ -52,6 +52,7 @@ html_fragment <- function(...,
     ))
   
   ## swap template afterwards in order to retain original mathjax functionality
+  ## and to include widget-enabling header scripts in document body
   template <- system.file("resources", "fragment.html", package="BiocStyle")
   idx <- which(config$pandoc$args=="--template") + 1L
   config$pandoc$args[idx] <- template

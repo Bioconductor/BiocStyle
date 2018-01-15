@@ -10,7 +10,7 @@ Format for converting from R Markdown to an Bioconductor HTML document.
 
 \usage{
 html_document(toc = TRUE, number_sections = TRUE, fig_width = NA, fig_height = NA,
-              self_contained = TRUE, css = NULL, pandoc_args = NULL, ...)
+              self_contained = TRUE, css = NULL, pandoc_args = NULL, ..., titlecaps = TRUE)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the output}
@@ -32,6 +32,8 @@ necessary because of it's size).}
 \item{pandoc_args}{character, additional command line options to pass to pandoc}
 
 \item{\dots}{Additional arguments passed to \code{\link[rmarkdown]{html_document}}}
+
+\item{titlecaps}{logical(1), \code{TRUE} to use the emphasize the first sentence in figure and table captions as title}
 }
 
 \value{

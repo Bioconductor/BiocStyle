@@ -9,7 +9,9 @@ html_document <- function(toc = TRUE,
                           self_contained = TRUE,
                           css = NULL,
                           pandoc_args = NULL,
-                          ...) {
+                          ...,
+                          ## BiocStyle specific arguments:
+                          titlecaps = TRUE) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
@@ -27,7 +29,8 @@ html_document <- function(toc = TRUE,
     x <- modifyLines(x, from='<!-- AUTH AFFIL -->', insert=auth_affil_html(metadata))
     
     ## format caption titles
-    x = caption_titles(x)
+    if (isTRUE(titlecaps))
+      x = caption_titles(x)
     
     ## replace footnotes with sidenotes
     x = process_footnotes(x)

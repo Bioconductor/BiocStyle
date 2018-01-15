@@ -1,6 +1,5 @@
 html_document2 <- function(...) {
-  .Deprecated("html_document", old = "html_document2")
-  html_document(...)
+  .defunct("html_document", old = "html_document2")
 }
 
 html_document <- function(toc = TRUE,

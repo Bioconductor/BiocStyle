@@ -14,7 +14,7 @@ export(doc_date, pkg_ver)
 export(html_document, pdf_document, md_document)
 export(output)
 
-# BiocStyle deprecated
+# BiocStyle defunct
 export(latex2)
 export(html_document2, pdf_document2)
 export(latex_old)

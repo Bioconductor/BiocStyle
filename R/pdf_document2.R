@@ -1,6 +1,5 @@
 pdf_document2 <- function(...) {
-  .Deprecated("pdf_document", old = "pdf_document2")
-  pdf_document(...)
+  .defunct("pdf_document", old = "pdf_document2")
 }
 
 pdf_document <- function(toc = TRUE,

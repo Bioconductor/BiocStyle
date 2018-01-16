@@ -60,7 +60,7 @@ latex(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
 
 \examples{
 ## location of the .sty file
-BiocStyle:::bioconductor2.sty
+BiocStyle:::bioconductor.sty
 }
 
 \keyword{ manip }

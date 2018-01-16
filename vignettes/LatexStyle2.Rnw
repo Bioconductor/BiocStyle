@@ -587,7 +587,7 @@ toLatex(sessionInfo())
 \section{Attached \LaTeX\ packages}\label{sec:pkgs}
 
 <<latexPkgs, echo=FALSE>>=
-bioconductor.sty = readLines(BiocStyle:::bioconductor2.sty)
+bioconductor.sty = readLines(BiocStyle:::bioconductor.sty)
 pattern = "^\\\\RequirePackage(\\[.*\\])?\\{([[:alnum:]]+)\\}.*"
 pkgs = sub(pattern, "\\2", grep(pattern, bioconductor.sty, value = TRUE))
 # add hyperref which is not captured by the regex

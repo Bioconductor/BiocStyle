@@ -1,3 +1,27 @@
+#' Convert to a BiocStyle markdown document
+#' 
+#' Enable BiocStyle macros and author affiliations in markdown documents.
+#' 
+#' The \code{BiocStyle::md_document} format extends the base
+#' \code{\link[rmarkdown]{md_document}} format by means of specifing complex
+#' author affiliations. It also loads the BiocStyle package namespace to enable
+#' the use of helper functions, such as \code{\link{Biocpkg}}.
+#' 
+#' @param toc \code{TRUE} to include a table of contents in the output
+#' @param ... Additional function arguments to pass to the base R Markdown
+#' \code{\link[rmarkdown]{md_document}} output formatter
+#' @return R Markdown output format to pass to \code{\link[rmarkdown]{render}}
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2015-2016
+#' @seealso \code{\link[BiocStyle]{html_document}},
+#' \code{\link[BiocStyle]{pdf_document}}
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' rmarkdown::render("input.Rmd", BiocStyle::md_document())
+#' }
+#' 
+#' @export md_document
 md_document <- function(toc = TRUE, ...) {
   
   ## load the package to expose macros
@@ -62,9 +86,9 @@ md_document <- function(toc = TRUE, ...) {
   knitr = knitr_options(opts_knit = list(width = 80L))
   
   # return format
-  rmarkdown::output_format(knitr = knitr,
-                           pandoc = list(args = "--atx-headers"),
-                           clean_supporting = FALSE,
-                           post_processor = post_processor,
-                           base_format = base_format)
+  output_format(knitr = knitr,
+                pandoc = list(args = "--atx-headers"),
+                clean_supporting = FALSE,
+                post_processor = post_processor,
+                base_format = base_format)
 }

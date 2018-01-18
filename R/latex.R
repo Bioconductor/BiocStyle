@@ -10,6 +10,49 @@ copyResource <- function(file, dir) {
   filename
 }
 
+
+
+#' Use Bioconductor style to format LaTeX vignettes
+#' 
+#' 
+#' This function inserts code into a document preamble to provide a consistent
+#' style to Bioconductor vignettes.
+#' 
+#' Use is described in the \sQuote{Bioconductor LaTeX Style 2.0} vignette.
+#' 
+#' By default the 'unsrturl' bibliography style is used, which automatically
+#' creates links to URL, DOIs, etc. Use a different \code{bibliographystyle}
+#' with \code{use.unsrturl=FALSE} and standard LaTeX commands for styling
+#' bibliographies.
+#' 
+#' @param \dots Additional arguments, passed to \code{\link{options}}.
+#' @param width integer(1), maximum number of columns on a line used in
+#' printing. See \code{\link{options}}.
+#' @param titlecaps logical(1), emphasize the first sentence of float captions
+#' @param short.fignames logical(1), indicates whether \code{\\incfig} figures
+#' should be inserted and referred to using short names equal to corresponding
+#' code chunk labels without any additional prefix.
+#' @param fig.path character(1), custom prefix to be used for figure file names
+#' when used with \code{knitr}; has no effect when compiled with \code{Sweave}.
+#' For details see \code{\link[knitr]{opts_chunk}}.
+#' @param use.unsrturl logical(1), indicating that the \sQuote{unsrturl} style
+#' will be used (\code{\\bibliographystyle} command \emph{not} required).
+#' @param relative.path logical(1), copy supporting LaTeX files and use
+#' relative paths rather than absolute paths to system files.
+#' @return
+#' 
+#' The return value is a character string directing LaTex to use the
+#' Bioconductor style file.
+#' 
+#' A side effect is setting any options specified as arguments.
+#' @author Andrzej Oleś, Martin Morgan, Wolfgang Huber
+#' @keywords manip
+#' @examples
+#' 
+#' ## location of the .sty file
+#' BiocStyle:::bioconductor.sty
+#' 
+#' @export latex
 latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
                    use.unsrturl=TRUE, relative.path = FALSE) {
   

@@ -37,7 +37,7 @@ html_fragment <- function(...,
     output
   }
   
-  config <- rmarkdown::output_format(
+  config <- output_format(
     knitr = knitr,
     pandoc = NULL,
     post_processor = post_processor,

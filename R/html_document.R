@@ -1,3 +1,46 @@
+#' Use Bioconductor style to format R Markdown HTML output
+#' 
+#' Format for converting from R Markdown to an Bioconductor HTML document.
+#' 
+#' \code{BiocStyle::html_document} format extends the
+#' \code{\link[rmarkdown]{html_document}} format. See the
+#' \href{http://rmarkdown.rstudio.com/html_document_format.html}{online
+#' documentation} and the package vignette "Authoring R Markdown Vignettes" for
+#' additional details on using the format,
+#' 
+#' @param toc logical(1), \code{TRUE} to include a table of contents in the
+#' output
+#' @param number_sections logical(1), \code{TRUE} to number section headings
+#' @param fig_width numeric(1), default width (in inches) for figures
+#' @param fig_height numeric(1), default width (in inches) for figures
+#' @param self_contained numeric(1), \code{TRUE} to produce a standalone HTML
+#' file with no external dependencies, using data: URIs to incorporate the
+#' contents of linked scripts, stylesheets, images, and videos. Note that even
+#' for self contained documents MathJax is still loaded externally (this is
+#' necessary because of it's size).
+#' @param css character, one or more css files to include
+#' @param pandoc_args character, additional command line options to pass to
+#' pandoc
+#' @param \dots Additional arguments passed to
+#' \code{\link[rmarkdown]{html_document}}
+#' @param titlecaps logical(1), \code{TRUE} to use the emphasize the first
+#' sentence in figure and table captions as title
+#' @return R Markdown output format to pass to \code{\link[rmarkdown]{render}}
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2017
+#' @seealso \code{\link[BiocStyle]{pdf_document}},
+#' \code{\link[BiocStyle]{md_document}}
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' # simple invocation
+#' render("input.Rmd", BiocStyle::html_document())
+#' 
+#' # specify options
+#' render("input.Rmd", BiocStyle::html_document(toc = FALSE))
+#' }
+#' 
+#' @export html_document
 html_document <- function(toc = TRUE,
                           number_sections = TRUE,
                           fig_width = NA,
@@ -61,7 +104,7 @@ html_document <- function(toc = TRUE,
   # call the rmarkdown::html_document function with `template="default"` and
   # substitute the template only afterwards in order to retain some of the
   # original functionality such as mathjax, floating toc, and code folding.
-  config <- rmarkdown::output_format(
+  config <- output_format(
     knitr = knitr,
     pandoc = NULL,
     clean_supporting = self_contained,

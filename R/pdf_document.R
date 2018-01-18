@@ -1,3 +1,41 @@
+#' Use Bioconductor style to format R Markdown PDF output
+#' 
+#' This function sets the Bioconductor style in PDF documents rendered using R
+#' Markdown v2.
+#' 
+#' 
+#' @param toc logical(1), \code{TRUE} to include a table of contents in the
+#' output
+#' @param number_sections logical(1), \code{TRUE} to number section headings
+#' @param fig_width numeric(1), default width (in inches) for figures
+#' @param fig_height numeric(1), default width (in inches) for figures
+#' @param includes Named list of additional content to include within the
+#' document (typically created using the \code{\link{includes}} function).
+#' @param \dots Additional arguments passed to
+#' \code{\link[rmarkdown]{pdf_document}}.
+#' @param use_unsrturl logical(1), indicating that the \sQuote{unsrturl} style
+#' will be used (\code{\\bibliographystyle} command \emph{not} required).
+#' @param toc_newpage logical(1), \code{TRUE} to start the table of contents on
+#' a new page.
+#' @param titlecaps logical(1), \code{TRUE} to use the emphasize the first
+#' sentence in figure and table captions as title
+#' @return R Markdown output format to pass to \code{\link[rmarkdown]{render}}.
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2017
+#' @seealso \code{\link[BiocStyle]{html_document}},
+#' \code{\link[BiocStyle]{md_document}}
+#' @keywords manip
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' # simple invocation
+#' render("input.Rmd", BiocStyle::pdf_document())
+#' 
+#' # specify an option for latex engine
+#' render("input.Rmd", BiocStyle::pdf_document(toc = FALSE))
+#' }
+#' 
+#' @export
 pdf_document <- function(toc = TRUE,
                          number_sections = TRUE,
                          fig_width = NA,
@@ -101,7 +139,7 @@ pdf_document <- function(toc = TRUE,
     output
   }
   
-  config <- rmarkdown::output_format(
+  config <- output_format(
     knitr = knitr,
     pandoc = list(args = pandoc_args),
     pre_processor = pre_processor,

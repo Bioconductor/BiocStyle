@@ -1,3 +1,28 @@
+#' Use Bioconductor CSS style to format HTML vignettes
+#' 
+#' This function sets the Bioconductor style sheet to provide a consistent
+#' style across Bioconductor HTML vignettes.
+#' 
+#' Use is described in the \sQuote{Bioconductor CSS Style} vignette.
+#' 
+#' @param css.files character vector containing the location of additional
+#' \code{.css} files.
+#' @param self.contained logical(1), should the content of the CSS
+#' \code{stylesheet} files be included into the html file or should they be
+#' saved as separate files.
+#' @param links.target logical(1), should external links open in new browser
+#' tab/window.
+#' @return No value is returned. The function is called for its side effect of
+#' setting the \code{markdown} and/or \code{knitr} specific options controlling
+#' the inclusion of the Bioconductor CSS style file in the HTML output.
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2015
+#' @keywords manip
+#' @examples
+#' 
+#' ## location of the .css file
+#' BiocStyle:::bioconductor.css
+#' 
+#' @export
 markdown <-
     function(css.files, self.contained = TRUE, links.target = TRUE)
 {
@@ -84,28 +109,75 @@ markdown <-
 
 ## macro definitions
 
+#' Link to packages on Bioconductor, CRAN and GitHub
+#' 
+#' Functions for adding links to Bioconductor, CRAN and GitHub packages into R
+#' Markdown documents.
+#' 
+#' Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
+#' packages. The function automatically includes a link to the release landing
+#' page or if the package is only in devel, to the devel landing page.
+#' 
+#' Use \code{CRANpkg} for R packages available on CRAN. The function
+#' automatically includes a link to the master CRAN landing page.
+#' 
+#' Use \code{Githubpkg} for R packages available on GitHub. The \code{repo}
+#' should include the repository address in the format username/repo[/subdir].
+#' If \code{package} is missing, the package name is assumed to be equal the
+#' repository name and is extracted from \code{repo}.
+#' 
+#' For R packages which are not available on Bioconductor, CRAN or GitHub use
+#' \code{Rpackage}.
+#' 
+#' @param pkg character(1), package name
+#' @param repo Repository address in the format username/repo[/subdir]
+#' @return Markdown-formatted character vector containing a hyperlinked package
+#' name.
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2015
+#' @examples
+#' 
+#' 
+#' ## link to a Bioconductor package
+#' Biocpkg("IRanges")
+#' 
+#' ## link to a CRAN package
+#' CRANpkg("data.table")
+#' 
+#' ## link to an R package on GitHub
+#' Githubpkg("rstudio/rmarkdown")
+#' 
+#' @name macros
+#' @aliases Biocpkg Biocannopkg Biocexptpkg CRANpkg Rpackage Githubpkg
+NULL
+
+#' @export
 Biocpkg <- function(pkg) {
     Rpackage( sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg) )
 }
 
+#' @export
 Biocannopkg <- function(pkg) {
     Biocpkg(pkg)
 }
 
+#' @export
 Biocexptpkg <- function(pkg) {
     Biocpkg(pkg)
 }
 
+#' @export
 CRANpkg <- function(pkg) {
     cran <- "https://CRAN.R-project.org/package"
     fmt <- '[%s](%s=%s)'
     Rpackage( sprintf(fmt, pkg, cran, pkg) )
 }
 
+#' @export
 Rpackage <- function(pkg) {
     sprintf('*%s*', pkg)
 }
 
+#' @export
 Githubpkg <- function(repo, pkg) {
     github <- "https://github.com"
     ## extract package name
@@ -116,25 +188,68 @@ Githubpkg <- function(repo, pkg) {
     Rpackage( sprintf('[%s](%s/%s)', pkg, github, repo) )
 }
 
+
 ## yaml header convenience functions
 
+#' Specify Rmarkdown document metadata
+#' 
+#' Helper functions for including metadata in the document header.
+#' 
+#' Use \code{doc_date} to include document compilation date in the document
+#' metadata field 'date', and \code{pkg_ver} for package version specification
+#' in the 'package' field.
+#' 
+#' @param pkg character(1), package name
+#' @return Markdown-formatted character string.
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2015
+#' @keywords manip
+#' @examples
+#' 
+#' 
+#' ## current date
+#' doc_date()
+#' 
+#' ## package name with version
+#' pkg_ver("BiocStyle")
+#' 
+#' @name helpers
+#' @aliases doc_date pkg_ver
+NULL
+
+#' @export
 pkg_ver <- function(pkg) {
   pkgVer <- if (pkg=="packageName") "X.Y.Z"  else packageVersion(pkg)
   paste(pkg, pkgVer)
 }
 
+#' @export
 doc_date <- function() {
   sub("^0", "", format(Sys.Date(), '%d %B %Y'))
 }
 
 ## 
 
+
+
+#' Output format of an R Markdown document
+#' 
+#' Helper function to determine the document's current pandoc output format.
+#' 
+#' The function is useful for defining different behavior depending on the
+#' output format, e.g. figure settings.
+#' 
+#' @return A character string specifying the pandoc output format.
+#' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2016
+#' @examples
+#' 
+#' \dontrun{
+#' ## Switch between SVG and PDF figures depending on document output format
+#' knitr::opts_chunk$set(
+#'   dev = switch(output(), html = "svg", latex = "pdf")
+#'   )
+#' }
+#' 
+#' @export output
 output = function () {
   opts_knit$get("rmarkdown.pandoc.to")
-}
-
-output_format <- function() {
-  output = metadata$output
-  if (is.list(output)) output = names(output)[[1L]]
-  output = regmatches(output, regexpr("html|pdf|word|md", output))[1L]
 }

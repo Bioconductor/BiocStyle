@@ -1,17 +1,3 @@
-loadBioconductorStyleFile <- function(file, opts=NULL) {
-  sprintf("\\RequirePackage[%s]{%s}",
-        paste(opts, collapse = ","),
-        sub(".sty$", "", file))
-}
-
-copyResource <- function(file, dir) {
-  filename <- basename(file)
-  file.copy(file, file.path(dir, filename))
-  filename
-}
-
-
-
 #' Use Bioconductor style to format LaTeX vignettes
 #' 
 #' 

@@ -3,12 +3,8 @@
 #' This function sets the Bioconductor style in PDF documents rendered using R
 #' Markdown v2.
 #' 
+#' @inheritParams html_document
 #' 
-#' @param toc logical(1), \code{TRUE} to include a table of contents in the
-#' output
-#' @param number_sections logical(1), \code{TRUE} to number section headings
-#' @param fig_width numeric(1), default width (in inches) for figures
-#' @param fig_height numeric(1), default width (in inches) for figures
 #' @param includes Named list of additional content to include within the
 #' document (typically created using the \code{\link{includes}} function).
 #' @param \dots Additional arguments passed to
@@ -17,8 +13,6 @@
 #' will be used (\code{\\bibliographystyle} command \emph{not} required).
 #' @param toc_newpage logical(1), \code{TRUE} to start the table of contents on
 #' a new page.
-#' @param titlecaps logical(1), \code{TRUE} to use the emphasize the first
-#' sentence in figure and table captions as title
 #' @return R Markdown output format to pass to \code{\link[rmarkdown]{render}}.
 #' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2017
 #' @seealso \code{\link[BiocStyle]{html_document}},
@@ -43,9 +37,9 @@ pdf_document <- function(toc = TRUE,
                          includes = NULL,
                          ...,
                          ## BiocStyle specific arguments:
-                         use_unsrturl = TRUE,
+                         titlecaps = TRUE,
                          toc_newpage = FALSE,
-                         titlecaps = TRUE) {
+                         use_unsrturl = TRUE) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
@@ -178,7 +172,6 @@ pdf_document <- function(toc = TRUE,
   
   config
 }
-
 
 create_latex_template <- function(opts=NULL) {
   ## get and modify the default pandoc template

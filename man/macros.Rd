@@ -9,6 +9,19 @@
 \alias{Rpackage}
 \alias{Githubpkg}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
+\usage{
+Biocpkg(pkg)
+
+Biocannopkg(pkg)
+
+Biocexptpkg(pkg)
+
+CRANpkg(pkg)
+
+Rpackage(pkg)
+
+Githubpkg(repo, pkg)
+}
 \arguments{
 \item{pkg}{character(1), package name}
 

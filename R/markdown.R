@@ -85,28 +85,6 @@ markdown <-
 }
 
 
-### print file content
-
-.print.file <- function(file, scoped = FALSE) {
-  type = unlist(strsplit(file, split=".", fixed=TRUE))
-  type = tolower(type[length(type)])
-  
-  paste(c(
-    switch(type, 
-           js  = '<script type="text/javascript">',
-           css = if (isTRUE(scoped)) '<style type="text/css" scoped>'
-                 else '<style type="text/css">',
-           NULL),
-    ## actual file content
-    readLines(file),
-    switch(type, 
-           js  = '</script>\n',
-           css = '</style>\n',
-           NULL)
-    ), collapse = '\n')
-}
-
-
 ## macro definitions
 
 #' Link to packages on Bioconductor, CRAN and GitHub
@@ -147,24 +125,27 @@ markdown <-
 #' Githubpkg("rstudio/rmarkdown")
 #' 
 #' @name macros
-#' @aliases Biocpkg Biocannopkg Biocexptpkg CRANpkg Rpackage Githubpkg
 NULL
 
+#' @rdname macros
 #' @export
 Biocpkg <- function(pkg) {
     Rpackage( sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg) )
 }
 
+#' @rdname macros
 #' @export
 Biocannopkg <- function(pkg) {
     Biocpkg(pkg)
 }
 
+#' @rdname macros
 #' @export
 Biocexptpkg <- function(pkg) {
     Biocpkg(pkg)
 }
 
+#' @rdname macros
 #' @export
 CRANpkg <- function(pkg) {
     cran <- "https://CRAN.R-project.org/package"
@@ -172,11 +153,13 @@ CRANpkg <- function(pkg) {
     Rpackage( sprintf(fmt, pkg, cran, pkg) )
 }
 
+#' @rdname macros
 #' @export
 Rpackage <- function(pkg) {
     sprintf('*%s*', pkg)
 }
 
+#' @rdname macros
 #' @export
 Githubpkg <- function(repo, pkg) {
     github <- "https://github.com"
@@ -213,22 +196,20 @@ Githubpkg <- function(repo, pkg) {
 #' pkg_ver("BiocStyle")
 #' 
 #' @name helpers
-#' @aliases doc_date pkg_ver
 NULL
 
+#' @rdname helpers
 #' @export
 pkg_ver <- function(pkg) {
   pkgVer <- if (pkg=="packageName") "X.Y.Z"  else packageVersion(pkg)
   paste(pkg, pkgVer)
 }
 
+#' @rdname helpers
 #' @export
 doc_date <- function() {
   sub("^0", "", format(Sys.Date(), '%d %B %Y'))
 }
-
-## 
-
 
 
 #' Output format of an R Markdown document

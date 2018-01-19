@@ -59,3 +59,35 @@ merge_lists <- function (base_list, overlay_list) {
     merged_list
   }
 }
+
+## print file content
+.print.file <- function(file, scoped = FALSE) {
+  type = unlist(strsplit(file, split=".", fixed=TRUE))
+  type = tolower(type[length(type)])
+  
+  paste(c(
+    switch(type, 
+           js  = '<script type="text/javascript">',
+           css = if (isTRUE(scoped)) '<style type="text/css" scoped>'
+           else '<style type="text/css">',
+           NULL),
+    ## actual file content
+    readLines(file),
+    switch(type, 
+           js  = '</script>\n',
+           css = '</style>\n',
+           NULL)
+  ), collapse = '\n')
+}
+
+loadBioconductorStyleFile <- function(file, opts=NULL) {
+  sprintf("\\RequirePackage[%s]{%s}",
+          paste(opts, collapse = ","),
+          sub(".sty$", "", file))
+}
+
+copyResource <- function(file, dir) {
+  filename <- basename(file)
+  file.copy(file, file.path(dir, filename))
+  filename
+}

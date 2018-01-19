@@ -2,9 +2,14 @@
 % Please edit documentation in R/markdown.R
 \name{helpers}
 \alias{helpers}
-\alias{doc_date}
 \alias{pkg_ver}
+\alias{doc_date}
 \title{Specify Rmarkdown document metadata}
+\usage{
+pkg_ver(pkg)
+
+doc_date()
+}
 \arguments{
 \item{pkg}{character(1), package name}
 }

@@ -5,8 +5,8 @@
 \title{Use Bioconductor style to format R Markdown PDF output}
 \usage{
 pdf_document(toc = TRUE, number_sections = TRUE, fig_width = NA,
-  fig_height = NA, includes = NULL, ..., use_unsrturl = TRUE,
-  toc_newpage = FALSE, titlecaps = TRUE)
+  fig_height = NA, includes = NULL, ..., titlecaps = TRUE,
+  toc_newpage = FALSE, use_unsrturl = TRUE)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the
@@ -24,14 +24,14 @@ document (typically created using the \code{\link{includes}} function).}
 \item{\dots}{Additional arguments passed to
 \code{\link[rmarkdown]{pdf_document}}.}
 
-\item{use_unsrturl}{logical(1), indicating that the \sQuote{unsrturl} style
-will be used (\code{\\bibliographystyle} command \emph{not} required).}
+\item{titlecaps}{logical(1), \code{TRUE} to use the emphasize the first
+sentence in figure and table captions as title}
 
 \item{toc_newpage}{logical(1), \code{TRUE} to start the table of contents on
 a new page.}
 
-\item{titlecaps}{logical(1), \code{TRUE} to use the emphasize the first
-sentence in figure and table captions as title}
+\item{use_unsrturl}{logical(1), indicating that the \sQuote{unsrturl} style
+will be used (\code{\\bibliographystyle} command \emph{not} required).}
 }
 \value{
 R Markdown output format to pass to \code{\link[rmarkdown]{render}}.

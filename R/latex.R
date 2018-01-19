@@ -42,7 +42,7 @@
 latex <- function(..., width, titlecaps = TRUE, short.fignames=FALSE, fig.path,
                    use.unsrturl=TRUE, relative.path = FALSE) {
   
-  sty <- file.path(resources, "tex", "Bioconductor.sty")
+  sty <- bioconductor.sty
   if ( isTRUE(relative.path) )
     sty <- copyResource(sty, getwd())
       

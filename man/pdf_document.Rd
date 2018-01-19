@@ -6,7 +6,7 @@
 \usage{
 pdf_document(toc = TRUE, number_sections = TRUE, fig_width = NA,
   fig_height = NA, includes = NULL, ..., titlecaps = TRUE,
-  toc_newpage = FALSE, use_unsrturl = TRUE)
+  toc_newpage = FALSE, use_unsrturl = TRUE, relative_path = FALSE)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the
@@ -32,6 +32,9 @@ a new page.}
 
 \item{use_unsrturl}{logical(1), indicating that the \sQuote{unsrturl} style
 will be used (\code{\\bibliographystyle} command \emph{not} required).}
+
+\item{relative_path}{logical(1), copy supporting LaTeX files and use
+relative paths rather than absolute paths to system files.}
 }
 \value{
 R Markdown output format to pass to \code{\link[rmarkdown]{render}}.

@@ -89,5 +89,5 @@ loadBioconductorStyleFile <- function(file, opts=NULL) {
 copyResource <- function(file, dir) {
   filename <- basename(file)
   file.copy(file, file.path(dir, filename))
-  filename
+  setNames(filename, names(file))
 }

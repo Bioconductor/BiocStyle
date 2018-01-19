@@ -9,10 +9,12 @@
 #' document (typically created using the \code{\link{includes}} function).
 #' @param \dots Additional arguments passed to
 #' \code{\link[rmarkdown]{pdf_document}}.
-#' @param use_unsrturl logical(1), indicating that the \sQuote{unsrturl} style
-#' will be used (\code{\\bibliographystyle} command \emph{not} required).
 #' @param toc_newpage logical(1), \code{TRUE} to start the table of contents on
 #' a new page.
+#' @param use_unsrturl logical(1), indicating that the \sQuote{unsrturl} style
+#' will be used (\code{\\bibliographystyle} command \emph{not} required).
+#' @param relative_path logical(1), copy supporting LaTeX files and use
+#' relative paths rather than absolute paths to system files.
 #' @return R Markdown output format to pass to \code{\link[rmarkdown]{render}}.
 #' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2017
 #' @seealso \code{\link[BiocStyle]{html_document}},
@@ -39,12 +41,40 @@ pdf_document <- function(toc = TRUE,
                          ## BiocStyle specific arguments:
                          titlecaps = TRUE,
                          toc_newpage = FALSE,
-                         use_unsrturl = TRUE) {
+                         use_unsrturl = TRUE,
+                         relative_path = FALSE) {
   
   ## load the package to expose macros
   require(BiocStyle, quietly = TRUE)
   
-  template <- create_latex_template(if (isTRUE(titlecaps)) NULL else "notitlecaps")
+  relative_path <- isTRUE(relative_path)
+  use_unsrturl <- isTRUE(use_unsrturl)
+  
+  sty <- bioconductor.sty
+  bst <- if (use_unsrturl) file.path(resources, "tex", "unsrturl.bst") else NULL
+  
+  template_files <- c(sty=sty, bst=bst)
+  
+  pre_knit <- intermediates_generator <- NULL
+  
+  if ( relative_path ) {
+    template_files <- copyResource(template_files, getwd())
+
+    # use `pre_knit` to copy template files as this seems to be the only
+    # function which is aware of the original input file name passed to `render`
+    pre_knit <- function(input, ...) {
+      file.copy(template_files, dirname(normalizePath(input)))
+    }
+
+    # run when document is rendered to a different directory than the input file
+    intermediates_generator <- function(original_input, encoding, intermediates_dir) {
+      file.copy(template_files, normalizePath(intermediates_dir))
+      basename(template_files)
+    }
+
+  }
+  
+  template <- create_latex_template(if (isTRUE(titlecaps)) NULL else "notitlecaps", template_files[["sty"]])
   
   head = NULL
   
@@ -56,10 +86,8 @@ pdf_document <- function(toc = TRUE,
            knit_theme$get(thm)$highlight,
            readLines(file.path(resources, "tex", "highlighting-macros.def")))
   
-  if (use_unsrturl) {
-    bst <- file.path(resources, "tex", "unsrturl")
-    head = c(head, sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n", bst))
-  }
+  if (use_unsrturl)
+    head = c(head, sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n",  sub(".bst$", "", template_files[["bst"]])))
   
   # dump to a header file which will be included in the template
   header = tempfile("", fileext = ".tex")
@@ -136,8 +164,10 @@ pdf_document <- function(toc = TRUE,
   config <- output_format(
     knitr = knitr,
     pandoc = list(args = pandoc_args),
+    pre_knit = pre_knit,
     pre_processor = pre_processor,
     post_processor = post_processor,
+    intermediates_generator = intermediates_generator,
     # use bookdown::pdf_book for the added capability of cross-referencing
     base_format = bookdown::pdf_book(
       toc = toc,
@@ -173,7 +203,7 @@ pdf_document <- function(toc = TRUE,
   config
 }
 
-create_latex_template <- function(opts=NULL) {
+create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   ## get and modify the default pandoc template
   
   # choose the rmarkdown template depending on pandoc version
@@ -206,7 +236,7 @@ create_latex_template <- function(opts=NULL) {
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
   lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
     "",
-    loadBioconductorStyleFile(bioconductor.sty, opts)))
+    loadBioconductorStyleFile(sty, opts)))
   
   # use \bioctitle to capture short title for page headings
   lines <- modifyLines(lines, from="\\title{$title$}", insert="\\bioctitle[$if(shorttitle)$$shorttitle$$endif$]{$title$}")

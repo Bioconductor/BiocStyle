@@ -1,3 +1,17 @@
+CHANGES IN VERSION 2.8.0
+------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Add 'relative_path' argument to 'pdf_document'
+    o Add argument 'titlecaps' to 'html_document'
+    o Defunct deprecated functions
+
+BUG FIXES
+
+    o Fix a bug in generating navigation links which resulted in an empty
+      document when there were no subsections to merge
+
 CHANGES IN VERSION 2.6.0
 ------------------------
 

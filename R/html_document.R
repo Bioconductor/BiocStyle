@@ -235,7 +235,7 @@ process_footnotes = function(lines) {
   j = min(j[j > i])
   
   ## extract footnotes and their ids
-  r = sprintf('<li id="%s([0-9]+)"><p>(.+)<a href="#%sref\\1">.</a></p></li>', fn_label, fn_label)
+  r = sprintf('<li id="%s([0-9]+)"><p>(.+)<a href="#%sref\\1"([^>]*)>.</a></p></li>', fn_label, fn_label)
   fns = grep(r, lines[i:j], value=TRUE)
   ids = as.integer(gsub(r, '\\1', fns))
   fns = gsub(r, '\\2', fns)
@@ -244,13 +244,14 @@ process_footnotes = function(lines) {
   lines = lines[-(i:j)]
   
   # replace footnotes with sidenotes
+  cls = if (pandoc_available('2.0')) 'footnote-ref' else 'footnoteRef'
   for (i in seq_along(ids)) {
     id = ids[i]
     fn = fns[i]
     lines = sub(
       sprintf(
-        '<a href="#%s%d" class="footnoteRef" id="%sref%d"><sup>%d</sup></a>',
-        fn_label, id, fn_label, id, id),
+        '<a href="#%s%d" class="%s" id="%sref%d"><sup>%d</sup></a>',
+        fn_label, id, cls, fn_label, id, id),
       sprintf(paste0(
         '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
         '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',

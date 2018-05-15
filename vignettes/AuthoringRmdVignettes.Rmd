@@ -292,7 +292,7 @@ which has the advantage that they appear close to the place where they are defin
 # Session info {.unnumbered}
 
 Here is the output of `sessionInfo()` on the system on which this
-document was compiled:
+document was compiled running pandoc `r rmarkdown::pandoc_version()`:
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()

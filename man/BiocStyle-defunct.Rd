@@ -2,12 +2,6 @@
 % Please edit documentation in R/BiocStyle-defunct.R
 \name{BiocStyle-defunct}
 \alias{BiocStyle-defunct}
-\alias{latex_old}
-\alias{latex2}
-\alias{pdf_document_old}
-\alias{pdf_document2}
-\alias{html_document_old}
-\alias{html_document2}
 \title{Defunct functions in package \sQuote{BiocStyle}}
 \description{
 These functions are defunct and no longer available.

@@ -5,6 +5,7 @@
 \alias{Biocpkg}
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
+\alias{Biocworkpkg}
 \alias{CRANpkg}
 \alias{Rpackage}
 \alias{Githubpkg}
@@ -16,6 +17,8 @@ Biocannopkg(pkg)
 
 Biocexptpkg(pkg)
 
+Biocworkpkg(pkg, vignette = NULL, section = NULL)
+
 CRANpkg(pkg)
 
 Rpackage(pkg)
@@ -25,11 +28,18 @@ Githubpkg(repo, pkg)
 \arguments{
 \item{pkg}{character(1), package name}
 
+\item{vignette}{character(1), vignette name for workflows}
+
+\item{section}{character(1), section link for workflows}
+
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }
 \value{
 Markdown-formatted character vector containing a hyperlinked package
 name.
+
+For \code{Biocworkpkg} with \code{vignette!=NULL}, an address to the 
+compiled vignette (optionally a specific section) is returned.
 }
 \description{
 Functions for adding links to Bioconductor, CRAN and GitHub packages into R
@@ -40,6 +50,12 @@ Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
 packages. The function automatically includes a link to the release landing
 page or if the package is only in devel, to the devel landing page.
 
+Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
+automatically includes a link to the package landing page. If 
+\code{vignette} is specified, the function returns the address of the 
+compiled vignette document. If \code{section} is also specified, the
+address will include an anchor to the requested section of the vignette.
+
 Use \code{CRANpkg} for R packages available on CRAN. The function
 automatically includes a link to the master CRAN landing page.
 
@@ -48,7 +64,7 @@ should include the repository address in the format username/repo[/subdir].
 If \code{package} is missing, the package name is assumed to be equal the
 repository name and is extracted from \code{repo}.
 
-For R packages which are not available on Bioconductor, CRAN or GitHub use
+For R packages which are not available on Bioconductor, CRAN or GitHub, use
 \code{Rpackage}.
 }
 \examples{

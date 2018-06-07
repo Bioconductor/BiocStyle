@@ -95,6 +95,12 @@ markdown <-
 #' Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
 #' packages. The function automatically includes a link to the release landing
 #' page or if the package is only in devel, to the devel landing page.
+#'
+#' Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
+#' automatically includes a link to the package landing page. If 
+#' \code{vignette} is specified, the function returns the address of the 
+#' compiled vignette document. If \code{section} is also specified, the
+#' address will include an anchor to the requested section of the vignette.
 #' 
 #' Use \code{CRANpkg} for R packages available on CRAN. The function
 #' automatically includes a link to the master CRAN landing page.
@@ -104,13 +110,19 @@ markdown <-
 #' If \code{package} is missing, the package name is assumed to be equal the
 #' repository name and is extracted from \code{repo}.
 #' 
-#' For R packages which are not available on Bioconductor, CRAN or GitHub use
+#' For R packages which are not available on Bioconductor, CRAN or GitHub, use
 #' \code{Rpackage}.
 #' 
 #' @param pkg character(1), package name
+#' @param vignette character(1), vignette name for workflows
+#' @param section character(1), section link for workflows
 #' @param repo Repository address in the format username/repo[/subdir]
 #' @return Markdown-formatted character vector containing a hyperlinked package
 #' name.
+#' 
+#' For \code{Biocworkpkg} with \code{vignette!=NULL}, an address to the 
+#' compiled vignette (optionally a specific section) is returned.
+#'
 #' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2015
 #' @examples
 #' 
@@ -118,12 +130,18 @@ markdown <-
 #' ## link to a Bioconductor package
 #' Biocpkg("IRanges")
 #' 
+#' ## link to a Bioconductor workflow
+#' Biocworkpkg("simpleSingleCell")
+#' Biocworkpkg("simpleSingleCell", vignette="work-0-intro")
+#' Biocworkpkg("simpleSingleCell", vignette="work-0-intro",
+#'     section="2_introduction")
+#'
 #' ## link to a CRAN package
 #' CRANpkg("data.table")
 #' 
 #' ## link to an R package on GitHub
 #' Githubpkg("rstudio/rmarkdown")
-#' 
+#'
 #' @name macros
 NULL
 
@@ -143,6 +161,30 @@ Biocannopkg <- function(pkg) {
 #' @export
 Biocexptpkg <- function(pkg) {
     Biocpkg(pkg)
+}
+
+#' @rdname macros
+#' @export
+Biocworkpkg <- function(pkg, vignette=NULL, section=NULL) {
+    mode <- if (is_devel()) "devel" else "release"
+
+    if (is.null(vignette)) {
+        url <- "[%s](http://bioconductor.org/packages/%s/workflows/html/%s.html)"
+        return(Rpackage(sprintf(url, pkg, mode, pkg)))
+    }
+
+    url <- sprintf("http://bioconductor.org/packages/%s/workflows/vignettes/%s/inst/doc/%s.html",
+        mode, pkg, vignette)
+    if (!is.null(section)) {
+        url <- paste0(url, "#", section)
+    }
+    return(url)
+}
+
+is_devel <- function() {
+    pkgver <- packageVersion("BiocStyle")
+    middle <- strsplit(as.character(pkgver), ".", fixed=TRUE)[[1]][2]
+    return(as.integer(middle)%%2==1L)
 }
 
 #' @rdname macros

@@ -3,6 +3,7 @@
 export(Biocannopkg)
 export(Biocexptpkg)
 export(Biocpkg)
+export(Biocworkpkg)
 export(CRANpkg)
 export(Githubpkg)
 export(Rpackage)

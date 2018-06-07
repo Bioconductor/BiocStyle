@@ -70,8 +70,20 @@ For R packages which are not available on Bioconductor, CRAN or GitHub, use
 \examples{
 
 
-## link to a Bioconductor package
+## link to a Bioconductor software package
 Biocpkg("IRanges")
+
+## link to a Bioconductor annotation package
+Biocannopkg("org.Mm.eg.db")
+
+## link to a Bioconductor experiment data package
+Biocexptpkg("affydata")
+
+## link to a Bioconductor workflow
+Biocworkpkg("simpleSingleCell")
+Biocworkpkg("simpleSingleCell", vignette="work-0-intro")
+Biocworkpkg("simpleSingleCell", vignette="work-0-intro",
+    section="2_introduction")
 
 ## link to a CRAN package
 CRANpkg("data.table")

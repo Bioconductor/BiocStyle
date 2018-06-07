@@ -93,8 +93,10 @@ markdown <-
 #' Markdown documents.
 #' 
 #' Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
-#' packages. The function automatically includes a link to the release landing
-#' page or if the package is only in devel, to the devel landing page.
+#' packages. The function automatically includes a link to the package landing
+#' page, the version of which depends on the current Bioconductor version (i.e.
+#' if run in a devel environment, it will point towards the devel landing page;
+#' otherwise it will point to the release landing page).
 #'
 #' Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
 #' automatically includes a link to the package landing page. If 
@@ -127,8 +129,14 @@ markdown <-
 #' @examples
 #' 
 #' 
-#' ## link to a Bioconductor package
+#' ## link to a Bioconductor software package
 #' Biocpkg("IRanges")
+#' 
+#' ## link to a Bioconductor annotation package
+#' Biocannopkg("org.Mm.eg.db")
+#'
+#' ## link to a Bioconductor experiment data package
+#' Biocexptpkg("affydata")
 #' 
 #' ## link to a Bioconductor workflow
 #' Biocworkpkg("simpleSingleCell")
@@ -148,33 +156,40 @@ NULL
 #' @rdname macros
 #' @export
 Biocpkg <- function(pkg) {
-    Rpackage( sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg) )
+    url <- "https://bioconductor.org/packages/%s/bioc/html/%s.html"
+    url <- sprintf(url, is_devel(), pkg) 
+    Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
 #' @rdname macros
 #' @export
 Biocannopkg <- function(pkg) {
-    Biocpkg(pkg)
+    url <- "https://bioconductor.org/packages/%s/data/annotation/html/%s.html"
+    url <- sprintf(url, is_devel(), pkg) 
+    Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
 #' @rdname macros
 #' @export
 Biocexptpkg <- function(pkg) {
-    Biocpkg(pkg)
+    url <- "https://bioconductor.org/packages/%s/data/experiment/html/%s.html"
+    url <- sprintf(url, is_devel(), pkg) 
+    Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
 #' @rdname macros
 #' @export
 Biocworkpkg <- function(pkg, vignette=NULL, section=NULL) {
-    mode <- if (is_devel()) "devel" else "release"
+    mode <- is_devel()
 
     if (is.null(vignette)) {
-        url <- "[%s](http://bioconductor.org/packages/%s/workflows/html/%s.html)"
-        return(Rpackage(sprintf(url, pkg, mode, pkg)))
+        url <- "https://bioconductor.org/packages/%s/workflows/html/%s.html"
+        url <- sprintf(url, mode, pkg)
+        return(Rpackage( sprintf("[%s](%s)", pkg, url) ))
     }
 
-    url <- sprintf("http://bioconductor.org/packages/%s/workflows/vignettes/%s/inst/doc/%s.html",
-        mode, pkg, vignette)
+    url <- sprintf(file.path("https://bioconductor.org/packages/%s/workflows",
+        "vignettes/%s/inst/doc/%s.html"), mode, pkg, vignette)
     if (!is.null(section)) {
         url <- paste0(url, "#", section)
     }
@@ -184,7 +199,7 @@ Biocworkpkg <- function(pkg, vignette=NULL, section=NULL) {
 is_devel <- function() {
     pkgver <- packageVersion("BiocStyle")
     middle <- strsplit(as.character(pkgver), ".", fixed=TRUE)[[1]][2]
-    return(as.integer(middle)%%2==1L)
+    if (as.integer(middle)%%2==1L) "devel" else "release"
 }
 
 #' @rdname macros

@@ -101,8 +101,7 @@ markdown <-
 #' Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
 #' automatically includes a link to the package landing page. If 
 #' \code{vignette} is specified, the function returns the address of the 
-#' compiled vignette document. If \code{section} is also specified, the
-#' address will include an anchor to the requested section of the vignette.
+#' compiled vignette document. 
 #' 
 #' Use \code{CRANpkg} for R packages available on CRAN. The function
 #' automatically includes a link to the master CRAN landing page.
@@ -117,7 +116,6 @@ markdown <-
 #' 
 #' @param pkg character(1), package name
 #' @param vignette character(1), vignette name for workflows
-#' @param section character(1), section link for workflows
 #' @param repo Repository address in the format username/repo[/subdir]
 #' @return Markdown-formatted character vector containing a hyperlinked package
 #' name.
@@ -141,8 +139,6 @@ markdown <-
 #' ## link to a Bioconductor workflow
 #' Biocworkpkg("simpleSingleCell")
 #' Biocworkpkg("simpleSingleCell", vignette="work-0-intro")
-#' Biocworkpkg("simpleSingleCell", vignette="work-0-intro",
-#'     section="2_introduction")
 #'
 #' ## link to a CRAN package
 #' CRANpkg("data.table")
@@ -179,7 +175,7 @@ Biocexptpkg <- function(pkg) {
 
 #' @rdname macros
 #' @export
-Biocworkpkg <- function(pkg, vignette=NULL, section=NULL) {
+Biocworkpkg <- function(pkg, vignette=NULL) {
     mode <- is_devel()
 
     if (is.null(vignette)) {
@@ -190,9 +186,6 @@ Biocworkpkg <- function(pkg, vignette=NULL, section=NULL) {
 
     url <- sprintf(file.path("https://bioconductor.org/packages/%s/workflows",
         "vignettes/%s/inst/doc/%s.html"), mode, pkg, vignette)
-    if (!is.null(section)) {
-        url <- paste0(url, "#", section)
-    }
     return(url)
 }
 

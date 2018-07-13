@@ -17,7 +17,7 @@ Biocannopkg(pkg)
 
 Biocexptpkg(pkg)
 
-Biocworkpkg(pkg, vignette = NULL, section = NULL)
+Biocworkpkg(pkg, vignette = NULL)
 
 CRANpkg(pkg)
 
@@ -29,8 +29,6 @@ Githubpkg(repo, pkg)
 \item{pkg}{character(1), package name}
 
 \item{vignette}{character(1), vignette name for workflows}
-
-\item{section}{character(1), section link for workflows}
 
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }
@@ -47,14 +45,15 @@ Markdown documents.
 }
 \details{
 Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
-packages. The function automatically includes a link to the release landing
-page or if the package is only in devel, to the devel landing page.
+packages. The function automatically includes a link to the package landing
+page, the version of which depends on the current Bioconductor version (i.e.
+if run in a devel environment, it will point towards the devel landing page;
+otherwise it will point to the release landing page).
 
 Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
 automatically includes a link to the package landing page. If 
 \code{vignette} is specified, the function returns the address of the 
-compiled vignette document. If \code{section} is also specified, the
-address will include an anchor to the requested section of the vignette.
+compiled vignette document.
 
 Use \code{CRANpkg} for R packages available on CRAN. The function
 automatically includes a link to the master CRAN landing page.
@@ -82,8 +81,6 @@ Biocexptpkg("affydata")
 ## link to a Bioconductor workflow
 Biocworkpkg("simpleSingleCell")
 Biocworkpkg("simpleSingleCell", vignette="work-0-intro")
-Biocworkpkg("simpleSingleCell", vignette="work-0-intro",
-    section="2_introduction")
 
 ## link to a CRAN package
 CRANpkg("data.table")

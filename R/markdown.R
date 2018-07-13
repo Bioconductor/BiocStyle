@@ -189,10 +189,10 @@ Biocworkpkg <- function(pkg, vignette=NULL) {
     return(url)
 }
 
+#' @import BiocVersion
+#' @importFrom utils packageVersion
 is_devel <- function() {
-    pkgver <- packageVersion("BiocStyle")
-    middle <- strsplit(as.character(pkgver), ".", fixed=TRUE)[[1]][2]
-    if (as.integer(middle)%%2==1L) "devel" else "release"
+    as.character(packageVersion("BiocVersion")[,1:2])
 }
 
 #' @rdname macros

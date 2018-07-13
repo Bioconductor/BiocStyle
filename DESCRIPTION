@@ -6,7 +6,8 @@ Description: Provides standard formatting styles for Bioconductor PDF
 Version: 2.9.3
 Author: Andrzej Oleś, Martin Morgan, Wolfgang Huber
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
-Imports: bookdown, knitr (>= 1.12), rmarkdown (>= 1.2), stats, utils, yaml
+Imports: bookdown, knitr (>= 1.12), rmarkdown (>= 1.2), stats, utils, yaml,
+    BiocVersion
 Suggests: BiocGenerics, RUnit, htmltools
 biocViews: Software
 License: Artistic-2.0

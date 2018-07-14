@@ -153,7 +153,7 @@ NULL
 #' @export
 Biocpkg <- function(pkg) {
     url <- "https://bioconductor.org/packages/%s/bioc/html/%s.html"
-    url <- sprintf(url, is_devel(), pkg) 
+    url <- sprintf(url, bioc_version(), pkg) 
     Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
@@ -161,7 +161,7 @@ Biocpkg <- function(pkg) {
 #' @export
 Biocannopkg <- function(pkg) {
     url <- "https://bioconductor.org/packages/%s/data/annotation/html/%s.html"
-    url <- sprintf(url, is_devel(), pkg) 
+    url <- sprintf(url, bioc_version(), pkg) 
     Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
@@ -169,14 +169,14 @@ Biocannopkg <- function(pkg) {
 #' @export
 Biocexptpkg <- function(pkg) {
     url <- "https://bioconductor.org/packages/%s/data/experiment/html/%s.html"
-    url <- sprintf(url, is_devel(), pkg) 
+    url <- sprintf(url, bioc_version(), pkg) 
     Rpackage( sprintf("[%s](%s)", pkg, url) )
 }
 
 #' @rdname macros
 #' @export
 Biocworkpkg <- function(pkg, vignette=NULL) {
-    mode <- is_devel()
+    mode <- bioc_version()
 
     if (is.null(vignette)) {
         url <- "https://bioconductor.org/packages/%s/workflows/html/%s.html"
@@ -191,7 +191,7 @@ Biocworkpkg <- function(pkg, vignette=NULL) {
 
 #' @import BiocVersion
 #' @importFrom utils packageVersion
-is_devel <- function() {
+bioc_version <- function() {
     as.character(packageVersion("BiocVersion")[,1:2])
 }
 

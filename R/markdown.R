@@ -177,16 +177,15 @@ Biocexptpkg <- function(pkg) {
 #' @export
 Biocworkpkg <- function(pkg, vignette=NULL) {
     mode <- bioc_version()
-
     if (is.null(vignette)) {
         url <- "https://bioconductor.org/packages/%s/workflows/html/%s.html"
         url <- sprintf(url, mode, pkg)
-        return(Rpackage( sprintf("[%s](%s)", pkg, url) ))
+        val <- Rpackage( sprintf("[%s](%s)", pkg, url) )
+    } else {
+        val <- sprintf(file.path("https://bioconductor.org/packages/%s/workflows",
+            "vignettes/%s/inst/doc/%s.html"), mode, pkg, vignette)
     }
-
-    url <- sprintf(file.path("https://bioconductor.org/packages/%s/workflows",
-        "vignettes/%s/inst/doc/%s.html"), mode, pkg, vignette)
-    return(url)
+    val
 }
 
 #' @import BiocVersion

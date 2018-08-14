@@ -92,11 +92,12 @@ markdown <-
 #' Functions for adding links to Bioconductor, CRAN and GitHub packages into R
 #' Markdown documents.
 #' 
-#' Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
-#' packages. When \code{vignette=NULL}, the function automatically includes a
-#' link to the package landing page, the version of which depends on the current
-#' Bioconductor version (i.e. if run in a devel environment, it will point 
-#' towards the devel landing page; otherwise it will point to the release 
+#' Use \code{Biocpkg} for Bioconductor software, annotation,
+#' experiment data, and workflow packages. When \code{vignette=NULL},
+#' the function automatically includes a link to the package landing
+#' page, the version of which depends on the current Bioconductor
+#' version (i.e. if run in a devel environment, it will point towards
+#' the devel landing page; otherwise it will point to the release
 #' landing page).
 #' 
 #' Use \code{CRANpkg} for R packages available on CRAN. The function
@@ -111,12 +112,14 @@ markdown <-
 #' \code{Rpackage}.
 #' 
 #' @param pkg character(1), package name
-#' @param vignette character(1), vignette name for workflows
+#' @param vignette character(1), basename of vignette link, including
+#'     html or pdf extension, e.g., "work-0-intro.html".
+#' @param label character(1) label used to identify the package or
+#'     vignette.
 #' @param repo Repository address in the format username/repo[/subdir]
-#' @return Markdown-formatted character vector containing a hyperlinked package
-#' name.
-#' 
-#' If \code{vignette!=NULL}, the address of the specified vignette is returned.
+#' @return Markdown-formatted character vector containing a
+#'     hyperlinked package name. If \code{vignette != NULL}, the
+#'     address of the specified vignette is returned.
 #'
 #' @author Andrzej Oleś <andrzej.oles@@embl.de>, 2014-2015
 #' @examples
@@ -130,10 +133,14 @@ markdown <-
 #'
 #' ## link to a Bioconductor experiment data package
 #' Biocpkg("affydata")
-#' 
+#'
 #' ## link to a Bioconductor workflow
 #' Biocpkg("simpleSingleCell")
-#' Biocpkg("simpleSingleCell", vignette="work-0-intro.html")
+#' Biocpkg(
+#'     "simpleSingleCell",
+#'     vignette = "work-0-intro.html",
+#'     label = "Episode 1: analyzing scRNA-seq data with R/Bioconductor"
+#' )
 #'
 #' ## link to a CRAN package
 #' CRANpkg("data.table")
@@ -145,15 +152,14 @@ markdown <-
 NULL
 
 #' @rdname macros
+#' @importFrom BiocManager version
 #' @export
-Biocpkg <- function(pkg, vignette=NULL) {
+Biocpkg <- function(pkg, vignette=NULL, label = pkg) {
     url <- "https://bioconductor.org/packages/%s/%s"
-    url <- sprintf(url, bioc_version(), pkg)
-    if (is.null(vignette)) { 
-        Rpackage( sprintf("[%s](%s)", pkg, url) )
-    } else {
-        sprintf("%s/vignettes/%s", url, vignette)
-    }
+    url <- sprintf(url, version(), pkg)
+    if (!is.null(vignette))
+        url <- sprintf("%s/vignettes/%s", url, vignette)
+    Rpackage(sprintf("[%s](%s)", label, url))
 }
 
 #' @rdname macros
@@ -166,12 +172,6 @@ Biocannopkg <- function(pkg) {
 #' @export
 Biocexptpkg <- function(pkg) {
     Biocpkg(pkg)
-}
-
-#' @import BiocVersion
-#' @importFrom utils packageVersion
-bioc_version <- function() {
-    as.character(packageVersion("BiocVersion")[,1:2])
 }
 
 #' @rdname macros

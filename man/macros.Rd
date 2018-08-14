@@ -5,19 +5,16 @@
 \alias{Biocpkg}
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
-\alias{Biocworkpkg}
 \alias{CRANpkg}
 \alias{Rpackage}
 \alias{Githubpkg}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
 \usage{
-Biocpkg(pkg)
+Biocpkg(pkg, vignette = NULL)
 
 Biocannopkg(pkg)
 
 Biocexptpkg(pkg)
-
-Biocworkpkg(pkg, vignette = NULL)
 
 CRANpkg(pkg)
 
@@ -36,8 +33,7 @@ Githubpkg(repo, pkg)
 Markdown-formatted character vector containing a hyperlinked package
 name.
 
-For \code{Biocworkpkg} with \code{vignette!=NULL}, an address to the 
-compiled vignette (optionally a specific section) is returned.
+If \code{vignette!=NULL}, the address of the specified vignette is returned.
 }
 \description{
 Functions for adding links to Bioconductor, CRAN and GitHub packages into R
@@ -45,15 +41,11 @@ Markdown documents.
 }
 \details{
 Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
-packages. The function automatically includes a link to the package landing
-page, the version of which depends on the current Bioconductor version (i.e.
-if run in a devel environment, it will point towards the devel landing page;
-otherwise it will point to the release landing page).
-
-Use \code{Biocworkpkg} for Bioconductor workflow packages. This function
-automatically includes a link to the package landing page. If 
-\code{vignette} is specified, the function returns the address of the 
-compiled vignette document.
+packages. When \code{vignette=NULL}, the function automatically includes a
+link to the package landing page, the version of which depends on the current
+Bioconductor version (i.e. if run in a devel environment, it will point 
+towards the devel landing page; otherwise it will point to the release 
+landing page).
 
 Use \code{CRANpkg} for R packages available on CRAN. The function
 automatically includes a link to the master CRAN landing page.
@@ -73,14 +65,14 @@ For R packages which are not available on Bioconductor, CRAN or GitHub, use
 Biocpkg("IRanges")
 
 ## link to a Bioconductor annotation package
-Biocannopkg("org.Mm.eg.db")
+Biocpkg("org.Mm.eg.db")
 
 ## link to a Bioconductor experiment data package
-Biocexptpkg("affydata")
+Biocpkg("affydata")
 
 ## link to a Bioconductor workflow
-Biocworkpkg("simpleSingleCell")
-Biocworkpkg("simpleSingleCell", vignette="work-0-intro")
+Biocpkg("simpleSingleCell")
+Biocpkg("simpleSingleCell", vignette="work-0-intro.html")
 
 ## link to a CRAN package
 CRANpkg("data.table")

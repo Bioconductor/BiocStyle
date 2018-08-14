@@ -10,7 +10,7 @@
 \alias{Githubpkg}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
 \usage{
-Biocpkg(pkg)
+Biocpkg(pkg, vignette = NULL, label = pkg)
 
 Biocannopkg(pkg)
 
@@ -25,20 +25,31 @@ Githubpkg(repo, pkg)
 \arguments{
 \item{pkg}{character(1), package name}
 
+\item{vignette}{character(1), basename of vignette link, including
+html or pdf extension, e.g., "work-0-intro.html".}
+
+\item{label}{character(1) label used to identify the package or
+vignette.}
+
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }
 \value{
-Markdown-formatted character vector containing a hyperlinked package
-name.
+Markdown-formatted character vector containing a
+    hyperlinked package name. If \code{vignette != NULL}, the
+    address of the specified vignette is returned.
 }
 \description{
 Functions for adding links to Bioconductor, CRAN and GitHub packages into R
 Markdown documents.
 }
 \details{
-Use \code{Biocpkg} for Bioconductor software, annotation and experiment data
-packages. The function automatically includes a link to the release landing
-page or if the package is only in devel, to the devel landing page.
+Use \code{Biocpkg} for Bioconductor software, annotation,
+experiment data, and workflow packages. When \code{vignette=NULL},
+the function automatically includes a link to the package landing
+page, the version of which depends on the current Bioconductor
+version (i.e. if run in a devel environment, it will point towards
+the devel landing page; otherwise it will point to the release
+landing page).
 
 Use \code{CRANpkg} for R packages available on CRAN. The function
 automatically includes a link to the master CRAN landing page.
@@ -48,14 +59,28 @@ should include the repository address in the format username/repo[/subdir].
 If \code{package} is missing, the package name is assumed to be equal the
 repository name and is extracted from \code{repo}.
 
-For R packages which are not available on Bioconductor, CRAN or GitHub use
+For R packages which are not available on Bioconductor, CRAN or GitHub, use
 \code{Rpackage}.
 }
 \examples{
 
 
-## link to a Bioconductor package
+## link to a Bioconductor software package
 Biocpkg("IRanges")
+
+## link to a Bioconductor annotation package
+Biocpkg("org.Mm.eg.db")
+
+## link to a Bioconductor experiment data package
+Biocpkg("affydata")
+
+## link to a Bioconductor workflow
+Biocpkg("simpleSingleCell")
+Biocpkg(
+    "simpleSingleCell",
+    vignette = "work-0-intro.html",
+    label = "Episode 1: analyzing scRNA-seq data with R/Bioconductor"
+)
 
 ## link to a CRAN package
 CRANpkg("data.table")

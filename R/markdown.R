@@ -155,11 +155,12 @@ NULL
 #' @importFrom BiocManager version
 #' @export
 Biocpkg <- function(pkg, vignette=NULL, label = pkg) {
-    url <- "https://bioconductor.org/packages/%s/%s"
-    url <- sprintf(url, version(), pkg)
-    if (!is.null(vignette))
-        url <- sprintf("%s/vignettes/%s", url, vignette)
-    Rpackage(sprintf("[%s](%s)", label, url))
+    url <- sprintf("https://bioconductor.org/packages/%s/%s", version(), pkg)
+    if (is.null(vignette)) {
+        Rpackage(sprintf("[%s](%s)", label, url))
+    } else {
+        sprintf("[%s](%s/vignettes/%s", label, url, vignette)
+    }
 }
 
 #' @rdname macros

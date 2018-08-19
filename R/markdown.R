@@ -159,7 +159,7 @@ Biocpkg <- function(pkg, vignette=NULL, label = pkg) {
     if (is.null(vignette)) {
         Rpackage(sprintf("[%s](%s)", label, url))
     } else {
-        sprintf("[%s](%s/vignettes/%s", label, url, vignette)
+        sprintf("[%s](%s/vignettes/%s)", label, url, vignette)
     }
 }
 

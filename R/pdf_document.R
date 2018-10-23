@@ -215,7 +215,7 @@ create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   template_versions <- numeric_version(template_versions, strict = FALSE)
   template_versions <- sort(template_versions, decreasing = TRUE)
   
-  idx <- match(TRUE, version >= template_versions)
+  idx <- match(TRUE, version >= template_versions, nomatch = 0)
   
   template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
   

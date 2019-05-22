@@ -103,7 +103,7 @@ tt, code, pre {
    font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
 }
 
-h1, h2, h3, h4, h5, h6 { 
+h1, h2, h3, h4, h5, h6 {
   font-family: Helvetica, Arial, sans-serif;
   margin: 1.2em 150px 0.6em 0em;
 /* hanging headings */
@@ -163,7 +163,7 @@ p.author-name {
 }
 
 /* formatting of inline code */
-code { 
+code {
   background-color: #f0f0f0;
   color: #404040;
   font-size: 90%;
@@ -171,7 +171,7 @@ code {
 
 /* figures */
 
-.figure { 
+.figure {
   margin: 0em 0px 0.5em;
 }
 
@@ -184,6 +184,12 @@ img {
 p > img {
   padding-left: 65px;
   padding-right: 0px;
+}
+
+td > img {
+  padding: 0px;
+  max-width: 100%;
+  display: inline;
 }
 
 img.smallfigure {
@@ -307,7 +313,7 @@ code > span.st { color: #40A040; } /* String */
 code > span.co { color: #808080; font-style: italic; } /* Comment */
 code > span.ot { color: #2020F0; } /* Keywords */
 code > span.al { color: #ff0000; font-weight: bold; } /* AlertToken */
-code > span.fu { color: #E07020; } /* Function calls */ 
+code > span.fu { color: #E07020; } /* Function calls */
 code > span.er { color: #FF0000; } /* ErrorTok */
 
 code > span.identifier { color: #404040; }

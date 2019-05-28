@@ -211,13 +211,13 @@ create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   
   template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
                                pattern = "\\.tex$")
-  template_versions <- sub("default-?([1-9.]*).tex", "\\1", template_files)
+  template_versions <- sub("default-?([0-9.]*).tex", "\\1", template_files)
   template_versions <- numeric_version(template_versions, strict = FALSE)
   template_versions <- sort(template_versions, decreasing = TRUE)
   
-  idx <- match(TRUE, version >= template_versions, nomatch = 0)
+  idx <- match(TRUE, version >= template_versions, nomatch = 0L)
   
-  template <- if (idx > 0) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
+  template <- if (idx > 0L) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
   
   # customize the template
   lines <- readUTF8(system.file("rmd", "latex", template, package = "rmarkdown"))

@@ -217,7 +217,7 @@ caption_titles = function(lines) {
   lines = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines, perl=TRUE)
   
   # figures: match to figure labels preceded by '<p class="caption'
-  regex = '(\\(#fig:[-/[:alnum:]]+\\))[[:space:]]*([^.]+).?'
+  regex = '(\\(#fig:[-/[:alnum:]]+\\))(.*?)((\\.[[:space:]])|(\\.$)|($)).?'
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
   lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines[idx])

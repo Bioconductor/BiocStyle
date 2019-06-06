@@ -212,15 +212,19 @@ create_html_template <- function() {
 }
 
 caption_titles = function(lines) {
+  regex_template = '%s(\\(#%s:[-/[:alnum:]]+\\))[[:space:]]*(.*?)([[:space:]]*((\\.[[:space:]])|(\\.$)|($)))'
+  replacement = '\\1<span class="caption-title">\\2</span><br>'
+  
   # tables: match to <caption>...</caption> lines
-  regex = '(?<=^<caption>)[[:space:]]*(\\(#tab:[-/[:alnum:]]+\\))(.*?)((\\.[[:space:]])|(\\.$)|($))'
-  lines = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines, perl=TRUE)
+  regex = sprintf(regex_template, '(?<=^<caption>)[[:space:]]*', 'tab')
+  lines = gsub(regex, replacement, lines, perl=TRUE)
   
   # figures: match to figure labels preceded by '<p class="caption'
-  regex = '(\\(#fig:[-/[:alnum:]]+\\))(.*?)((\\.[[:space:]])|(\\.$)|($))'
+  regex = sprintf(regex_template, '', 'fig')
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
-  lines[idx] = gsub(regex, '\\1<span class="caption-title">\\2</span><br>', lines[idx])
+  lines[idx] = gsub(regex, replacement, lines[idx])
+  
   lines
 }
 

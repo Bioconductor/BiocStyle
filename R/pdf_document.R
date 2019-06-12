@@ -100,11 +100,12 @@ pdf_document <- function(toc = TRUE,
   else
     includes$in_header = c(includes$in_header, inc$in_header)
   
-  # pandoc options
-  pandoc_args = NULL
+  # disable pandoc (sub)paragraph adjustment 
+  # https://github.com/Bioconductor/BiocStyle/issues/63
+  pandoc_args = c("--variable", "subparagraph")
   
   if (isTRUE(toc_newpage))
-    pandoc_args = c("--variable", "toc-newpage")
+    pandoc_args = c(pandoc_args, "--variable", "toc-newpage")
   
   # knitr options
   knitr = merge_lists(.knitr_options(), list(

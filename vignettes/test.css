@@ -1,0 +1,34 @@
+@media (max-width: 760px) {
+    body {
+        padding-left: 0;
+        margin-left: 0;
+        margin-right: 0;
+        width: auto;
+    }
+    p {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    h1, h2, h3 {
+        width: 100%;
+    }
+    ul {
+    	padding-left: 20px;
+    	padding-right: 0;
+    }
+    li pre {
+    	margin-left: -20px;
+    	padding-left: 10px;
+    }
+    pre {
+    	margin-right: 0;
+    	padding-left: 10px;
+    }
+    pre code {
+    	white-space: pre;
+    	overflow-x: scroll;
+    }
+    .table {
+    	margin: 0 0 0 0;
+    }
+}

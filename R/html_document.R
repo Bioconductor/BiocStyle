@@ -74,6 +74,9 @@ html_document <- function(toc = TRUE,
     ## replace footnotes with sidenotes
     x = process_footnotes(x)
     
+    ## wrap tables in a container
+    x = process_tables(x)
+    
     writeUTF8(x, output)
     output
   }
@@ -257,11 +260,19 @@ process_footnotes = function(lines) {
         '<a href="#%s%d" class="%s" id="%sref%d"><sup>%d</sup></a>',
         fn_label, id, cls, fn_label, id, id),
       sprintf(paste0(
-        '<label for="sidenote-%d" class="margin-toggle sidenote-number">%d</label>',
-        '<input type="checkbox" id="sidenote-%d" class="margin-toggle">',
-        '<span class="sidenote"><span class="sidenote-number">%d</span> %s</span>'
-        ), id, id, id, id, fns[i]),
+        '<label for="sidenote-%d" class="sidenote-number">%d</label>',
+        '<label for="sidenote-%d" class="margin-toggle" onclick="toggle_visibility(\'sidenote-%d\')">%d</label>',
+        '<span class="sidenote" id="sidenote-%d"><span class="sidenote-number">%d</span> %s</span>'
+        ), id, id, id, id, id, id, id, fns[i]),
       lines, fixed=TRUE)
   }
+  lines
+}
+
+## We wrap tables in a <div> so they can fill the screen on mobile
+## but also scroll if they overflow horizontally
+process_tables = function(lines) {
+  lines = gsub("<table", "<div class='horizontal-scroll'><table", lines, fixed = TRUE)
+  lines = gsub("</table>", "</table></div>", lines, fixed = TRUE)
   lines
 }

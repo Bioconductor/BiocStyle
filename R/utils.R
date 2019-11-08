@@ -91,3 +91,16 @@ copyResource <- function(file, dir) {
   file.copy(file, file.path(dir, filename))
   setNames(filename, names(file))
 }
+
+toggle_script <- function() {
+  
+  return(
+    "<link href=\"test.css\" rel=\"stylesheet\">
+    <script>
+function toggle_visibility(id1) {
+var e = document.getElementById(id1);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+}
+</script>"
+  )
+}

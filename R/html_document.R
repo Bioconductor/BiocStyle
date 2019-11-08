@@ -209,6 +209,15 @@ create_html_template <- function() {
     '  });',
     '</script>'))
   
+  lines <- modifyLines(lines = lines, from = "</head>", replace = FALSE, before = TRUE, 
+                       insert = c(
+                           '<script>',
+                           '    function toggle_visibility(id1) {',
+                           '        var e = document.getElementById(id1);',
+                           '        e.style.display = ((e.style.display!="none") ? "none" : "block");',
+                           '    }',
+                           '</script>'))
+  
   writeUTF8(lines, template)
   
   template

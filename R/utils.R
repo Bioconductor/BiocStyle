@@ -95,8 +95,7 @@ copyResource <- function(file, dir) {
 toggle_script <- function() {
   
   return(
-    "<link href=\"test.css\" rel=\"stylesheet\">
-    <script>
+    "<script>
 function toggle_visibility(id1) {
 var e = document.getElementById(id1);
 e.style.display = ((e.style.display!='none') ? 'none' : 'block');

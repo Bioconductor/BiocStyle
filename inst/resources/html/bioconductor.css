@@ -294,11 +294,11 @@ dd {
   line-height: normal;
 }
 
-input.margin-toggle { display: none; }
+/* input.margin-toggle { display: none; } */
 
-label.sidenote-number { display: inline; }
+/* label.sidenote-number { display: inline; } */
 
-label.margin-toggle:not(.sidenote-number) { display: none; }
+/* label.margin-toggle:not(.sidenote-number) { display: none; } */
 
 /* Class described in https://benjeffrey.com/posts/pandoc-syntax-highlighting-css
    Colours from https://gist.github.com/robsimmons/1172277 */
@@ -330,3 +330,92 @@ code > span.paren { color: #000000;}
 .js-plotly-plot .plotly {
   padding-left: 65px;
 }
+
+/* Styling specifically aimed at smaller screen on phones and tablets */
+
+.margin-toggle {
+    display: none;
+}
+
+@media screen and (max-width: 991px) {
+    body {
+        padding-left: 0;
+        margin-left: 0;
+        margin-right: 0;
+        width: auto;
+    }
+    p {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    h1, h2, h3, h4, h5, h6 {
+    	width: 100%;
+    	padding-left: 0;
+    	text-indent: 0;
+    }
+    ul {
+    	padding-left: 20px;
+    	padding-right: 0;
+    }
+    li pre {
+    	margin-left: -20px;
+    	padding-left: 10px;
+    }
+    pre {
+    	margin-right: 0;
+    	padding-left: 10px;
+    }
+    pre code {
+    	white-space: pre;
+    	overflow-x: scroll;
+    }
+    p img{
+    	padding-left: 0;
+    }
+    .horizontal-scroll {
+    	overflow-x: auto;
+    }
+    .table {
+    	min-width: 100%;
+    	margin: 0 0 0 0;
+    }
+    div.figure img {
+    	padding: 0 0 0 0;
+    }
+    div.figure p.caption {
+    	padding-left: 0;
+    	padding-right: 0;
+    }
+    .sidenote {
+        float: unset;
+        margin-top: 1rem;
+        margin-right: 0;
+        margin-left: 10%;
+        width: 80%;
+        font-size: 8pt;
+        line-height: 1.3;
+        text-align: left;
+        display: none;
+    }
+    .sidenote-number{
+        display: none;
+    }
+    .margin-toggle {
+        display: inline;
+        position: relative;
+    	vertical-align: super;
+    	font-size: 7.5pt;
+    	font-weight: normal;
+    	font-style: normal;
+    	line-height: normal;
+    	color: #337ab7;
+    }
+}
+
+/* hide the TOC on really small screens */
+@media screen and (max-width: 767px) {
+    #TOC {
+    	display: none;
+    }
+}
+

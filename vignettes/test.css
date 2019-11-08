@@ -2,7 +2,7 @@
     display: none;
 }
 
-@media (max-width: 760px) {
+@media screen and (max-width: 991px) {
     body {
         padding-left: 0;
         margin-left: 0;
@@ -13,8 +13,10 @@
         padding-left: 0;
         padding-right: 0;
     }
-    h1, h2, h3 {
-        width: 100%;
+    h1, h2, h3, h4, h5, h6 {
+    	width: 100%;
+    	padding-left: 0;
+    	text-indent: 0;
     }
     ul {
     	padding-left: 20px;
@@ -49,24 +51,34 @@
     	padding-left: 0;
     	padding-right: 0;
     }
-    .MathJax_Display {
-    	padding: 0 0 0 0;
-    }
     .sidenote {
         float: unset;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
         margin-right: 0;
         margin-left: 10%;
         width: 80%;
         font-size: 8pt;
         line-height: 1.3;
         text-align: left;
-        display: block;
+        display: none;
     }
     .sidenote-number{
         display: none;
     }
     .margin-toggle {
-        display: auto;
+        display: inline;
+        position: relative;
+    	vertical-align: super;
+    	font-size: 7.5pt;
+    	font-weight: normal;
+    	font-style: normal;
+    	line-height: normal;
+    	color: #337ab7;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #TOC {
+    	display: none;
     }
 }

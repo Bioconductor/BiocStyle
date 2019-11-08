@@ -28,7 +28,23 @@
     	white-space: pre;
     	overflow-x: scroll;
     }
+    p img{
+    	padding-left: 0;
+    }
     .table {
+    	display: block;
+    	overflow-x: auto;
+    	min-width: 100%;
     	margin: 0 0 0 0;
+    }
+    div.figure img {
+    	padding: 0 0 0 0;
+    }
+    div.figure p.caption {
+    	padding-left: 0;
+    	padding-right: 0;
+    }
+    .MathJax_Display {
+    	padding: 0 0 0 0;
     }
 }

@@ -191,8 +191,8 @@ pdf_document <- function(toc = TRUE,
   config$pandoc$args[ pos + 1L ] <- template
   
   ## do not include subtitle code as the template already provides it
-  pos <- grep("*rmd/latex/subtitle\\.tex$", config$pandoc$args)
-  if (!is.na(pos))
+  pos <- grep("*subtitle\\.tex$", config$pandoc$args)
+  if (length(pos)==1L)
     config$pandoc$args <- config$pandoc$args[-c(pos-1, pos)]
   
   ## remove the obsolete default 'geometry' pandoc variable after it has beed
@@ -209,8 +209,8 @@ pdf_document <- function(toc = TRUE,
       args = args[-c(pos-1L, pos)]
     
     # use titling package to change title format to be more compact by default
-    pos <- grep("*rmd/latex/compact-title\\.tex$", args)
-    if (!is.na(pos))
+    pos <- grep("*compact-title\\.tex$", args)
+    if (length(pos)==1L)
       args[c(pos-1, pos)] <- c("--variable", "compact-title:yes")
     
     args

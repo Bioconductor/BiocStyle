@@ -88,17 +88,6 @@
 %
 \RequirePackage{etoolbox}% provides \patchcmd
 \RequirePackage[newlinetospace,explicit]{titlesec}
-%
-% Patch the bug introduced in titlesec 2.10.1
-% http://tex.stackexchange.com/q/299969/102422
-%
-\makeatletter
-\@ifpackagelater{titlesec}{2016/03/15}{\@ifpackagelater{titlesec}{2016/03/21}{}{%
-  \patchcmd{\ttlh@hang}{\noindent}{}{}{}
-  \patchcmd{\ttlh@hang}{\sbox}{\noindent\sbox}{}{}
-}}{}
-\makeatother
-%
 %% Font definitions
 \def\mdhelvet{\fontfamily{phv}\selectfont\mdseries}
 \def\bfhelvet{\fontfamily{phv}\selectfont\bfseries}

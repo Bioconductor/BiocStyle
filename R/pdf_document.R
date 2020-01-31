@@ -210,8 +210,9 @@ pdf_document <- function(toc = TRUE,
     
     # use titling package to change title format to be more compact by default
     pos <- grep("*compact-title\\.tex$", args)
-    if (length(pos)==1L)
-      args[c(pos-1, pos)] <- c("--variable", "compact-title:yes")
+    if (length(pos)==0L)
+      pos = length(args) + 1L
+    args[c(pos-1, pos)] <- c("--variable", "compact-title:yes")
     
     args
   }
@@ -251,9 +252,9 @@ create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   
   # load BiocStyle after 'titling' to override title page formating, but before 
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
-  lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
-    "",
-    loadBioconductorStyleFile(sty, opts)))
+  lines <- modifyLines(lines, from="\\title{", replace=FALSE, before=TRUE, insert=c(
+    loadBioconductorStyleFile(sty, opts),
+    ""))
   
   # use \bioctitle to capture short title for page headings
   lines <- modifyLines(lines, from="\\title{$title$}", insert="\\bioctitle[$if(shorttitle)$$shorttitle$$endif$]{$title$}")

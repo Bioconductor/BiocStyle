@@ -183,7 +183,17 @@ pdf_document <- function(toc = TRUE,
   
   ## override the default document template which is used in order to retain
   ## some original template-dependent rmarkdown functionality
-  config$pandoc$args[ match("--template", config$pandoc$args) + 1L ] <- template
+  pos <- match("--template", config$pandoc$args)
+  if (is.na(pos)) {
+    config$pandoc$args <- c(config$pandoc$args, "--template")
+    pos <- length(config$pandoc$args)
+  }
+  config$pandoc$args[ pos + 1L ] <- template
+  
+  ## do not include subtitle code as the template already provides it
+  pos <- grep("*subtitle\\.tex$", config$pandoc$args)
+  if (length(pos)==1L)
+    config$pandoc$args <- config$pandoc$args[-c(pos-1, pos)]
   
   ## remove the obsolete default 'geometry' pandoc variable after it has beed
   ## added by the default 'pdf_pre_processor' defined in rmarkdown::pdf_document
@@ -198,6 +208,12 @@ pdf_document <- function(toc = TRUE,
     if (!is.na(pos))
       args = args[-c(pos-1L, pos)]
     
+    # use titling package to change title format to be more compact by default
+    pos <- grep("*compact-title\\.tex$", args)
+    if (length(pos)==0L)
+      pos = length(args) + 1L
+    args[c(pos-1, pos)] <- c("--variable", "compact-title:yes")
+    
     args
   }
   
@@ -206,11 +222,12 @@ pdf_document <- function(toc = TRUE,
 
 create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   ## get and modify the default pandoc template
+  #lines <- system2(rmarkdown::pandoc_exec(), "--print-default-template latex", stdout = TRUE, stderr = TRUE)
   
   # choose the rmarkdown template depending on pandoc version
   version <- pandoc_version()
   
-  template_files <- list.files(system.file("rmd", "latex", package="rmarkdown"),
+  template_files <- list.files(system.file("rmd", "latex", package="BiocStyle"),
                                pattern = "\\.tex$")
   template_versions <- sub("default-?([0-9.]*).tex", "\\1", template_files)
   template_versions <- numeric_version(template_versions, strict = FALSE)
@@ -221,7 +238,7 @@ create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   template <- if (idx > 0L) sprintf("default-%s.tex", template_versions[idx]) else "default.tex"
   
   # customize the template
-  lines <- readUTF8(system.file("rmd", "latex", template, package = "rmarkdown"))
+  lines <- readUTF8(system.file("rmd", "latex", template, package = "BiocStyle"))
   
   template <- biocTempfile("template.tex")
   
@@ -235,9 +252,9 @@ create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {
   
   # load BiocStyle after 'titling' to override title page formating, but before 
   # author specification to ensure 'hyperref' gets loaded before 'authblk'
-  lines <- modifyLines(lines, from="\\usepackage{titling}", replace=FALSE, insert=c(
-    "",
-    loadBioconductorStyleFile(sty, opts)))
+  lines <- modifyLines(lines, from="\\title{", replace=FALSE, before=TRUE, insert=c(
+    loadBioconductorStyleFile(sty, opts),
+    ""))
   
   # use \bioctitle to capture short title for page headings
   lines <- modifyLines(lines, from="\\title{$title$}", insert="\\bioctitle[$if(shorttitle)$$shorttitle$$endif$]{$title$}")

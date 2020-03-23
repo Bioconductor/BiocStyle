@@ -367,7 +367,6 @@ code > span.paren { color: #000000;}
     }
     pre code {
     	white-space: pre;
-    	overflow-x: scroll;
     }
     p img{
     	padding-left: 0;

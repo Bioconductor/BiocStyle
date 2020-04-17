@@ -258,11 +258,11 @@ process_footnotes = function(lines) {
   j = min(j[j > i])
   
   ## extract footnotes and their ids
-  r = sprintf('<li id="%s([0-9]+)"><p>(.+)<a href="#%sref\\1"([^>]*)>.</a></p></li>', fn_label, fn_label)
-  s = paste(lines[i:j], collapse = '\n')
-  fns = unlist(regmatches(s, gregexpr(r, s)))
-  ids = as.integer(gsub(r, '\\1', fns))
-  fns = gsub(r, '\\2', fns)
+  regex = sprintf('<li id="%s([0-9]+)"><p>(.+)<a href="#%sref\\1"([^>]*)>.{1,2}</a></p></li>', fn_label, fn_label)
+  footnote_lines = paste(lines[i:j], collapse = '\n')
+  fns = unlist(regmatches(footnote_lines, gregexpr(regex, footnote_lines)))
+  ids = as.integer(gsub(regex, '\\1', fns))
+  fns = gsub(regex, '\\2', fns)
   
   # remove footnotes at the bottom
   lines = lines[-(i:j)]

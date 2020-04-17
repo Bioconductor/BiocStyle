@@ -91,3 +91,4 @@ copyResource <- function(file, dir) {
   file.copy(file, file.path(dir, filename))
   setNames(filename, names(file))
 }
+

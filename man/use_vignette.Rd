@@ -5,20 +5,58 @@
 \alias{use_vignette_pdf}
 \title{Create 'Rmd' vignette templates for HTML or PDF output}
 \usage{
-use_vignette_html(destination = tempfile(fileext = ".Rmd"))
+use_vignette_html(
+  destination = tempfile(fileext = ".Rmd"),
+  package = "MyPackage",
+  title = paste("Introduction to", package),
+  abstract = "Describe your vignette with a paragraph-length summary.",
+  authors = person(),
+  bug_report_url = "https://support.bioconductor.org"
+)
 
-use_vignette_pdf(destination = tempfile(fileext = ".Rmd"))
+use_vignette_pdf(
+  destination = tempfile(fileext = ".Rmd"),
+  package = "MyPackage",
+  title = paste("Introduction to", package),
+  abstract = "Describe your vignette with a paragraph-length summary.",
+  authors = person(),
+  bug_report_url = "https://support.bioconductor.org"
+)
 }
 \arguments{
-\item{destination}{character(1) file path to destination. The 
-directory of the destination must already exist, and the file 
-must not. The default creates a file in the temporary 
-directory, and so is removed when the R session ends.}
+\item{destination}{character(1) file path to destination, usually
+inside the `"vignettes"` directory of `package`. The directory
+of the destination must already exist, and the file must
+not. The default creates a file in the temporary directory, and
+so is removed when the R session ends.}
+
+\item{package}{character(1) package name.}
+
+\item{title}{character(1) vignette title.}
+
+\item{abstract}{character(1) paragraph-length summary of the vignette.}
+
+\item{authors}{person() vignette authors. Use `person(comment =
+...)` to include author affiliation (see examples).}
+
+\item{bug_report_url}{character(1) url for bug reports (e.g.,
+`"https://github.com/Bioconductor/BiocStyle/issues"`)}
 }
 \description{
 Create 'Rmd' vignette templates for HTML or PDF output
 }
 \examples{
-use_vignette_html()
+vignette <- use_vignette_html(
+    authors = c(
+        person(
+            "Iman", "Author",
+            email = "iman.author@some.where",
+            comment = c(affiliation = "Prestigious Institution")
+        ),
+        person("Iman", "Other")
+    )
+)
+vignette
+cat(readLines(vignette), "\n")
 
 }

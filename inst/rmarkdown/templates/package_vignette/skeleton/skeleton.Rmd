@@ -1,0 +1,76 @@
+---
+title: "Introduction to MyPackage"
+author:
+- name: Given Family
+  email: your@email.address
+  affiliation: Institutional Affiliation
+package: MyPackage
+output:
+  BiocStyle::html_document
+abstract: |
+  Describe your vignette with a paragraph-length summary.
+vignette: |
+  %\VignetteIndexEntry{ Introduction to MyPackage }
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!--
+To enable the _Bioconductor_ style in your R Markdown vignette you
+need to include the following in the `DESCRIPTION` file:
+
+    VignetteBuilder: knitr
+    Suggests: BiocStyle, knitr
+-->
+
+# Installation
+
+Install the _MyPackage_ package with
+
+```{r, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager", repos = "https://cran.r-project.org")
+BiocManager::install("MyPackage")
+```
+
+Once installed, load the package with
+
+```{r, message = FALSE}
+library(MyPackage)
+```
+
+# Quick start
+
+# Common work flows
+
+# Interoperability with other _Bioconductor_ packages
+
+# Support, bug reports, and source code availability
+
+Please ask for help about using this package on the [support
+site][]. Remember to tag your question with 'MyPackage', so that
+the maintainer is notified.
+
+Retrieve the source code for this package from it's cannonical location
+
+```
+git clone https://git.bioconductor.org/packages/MyPackage
+```
+
+Use the [bug report url][] to report bugs in _MyPackage_; remember
+to reduce your bug report to a simple reproducible example.
+
+[support site]: https://support.bioconductor.org
+[bug report url]: https://support.bioconductor.org
+
+# Appendix {.unnumbered}
+
+## Acknowldegements {.unnumbered}
+
+<!-- acknowledge funding and other sources of support here -->
+
+## Session info {.unnumbered}
+
+```{r sessionInfo, echo = FALSE}
+sessionInfo()
+```

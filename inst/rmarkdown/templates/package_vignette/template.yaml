@@ -1,0 +1,4 @@
+name: Bioconductor Package Vignette
+description: >
+  Template for Bioconductor package vignettes.
+create_dir: false

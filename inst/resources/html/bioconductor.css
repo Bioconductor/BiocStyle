@@ -85,6 +85,7 @@ pre code {
   background-color: inherit;
   display: block;
   padding: 10px 10px 10px 0px;
+  white-space: pre;
   overflow-x: inherit;
   font-size: 100%;
 }

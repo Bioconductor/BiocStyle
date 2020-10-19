@@ -99,7 +99,11 @@ markdown <-
 #' version (i.e. if run in a devel environment, it will point towards
 #' the devel landing page; otherwise it will point to the release
 #' landing page).
-#' 
+#'
+#' Use \code{Biocbook} for Bioconductor webbooks. This will create a
+#' link to the index page of the book rather than to the landing page
+#' of the package used for the book's deployment.
+#'
 #' Use \code{CRANpkg} for R packages available on CRAN. The function
 #' automatically includes a link to the master CRAN landing page.
 #' 
@@ -201,6 +205,11 @@ Githubpkg <- function(repo, pkg) {
     Rpackage( sprintf('[%s](%s/%s)', pkg, github, repo) )
 }
 
+#' @rdname macros
+#' @export
+Biocbook <- function(pkg) {
+    sprintf("http://bioconductor.org/books/%s/%s", version(), pkg)
+}
 
 ## yaml header convenience functions
 

@@ -119,7 +119,7 @@ markdown <-
 #' @param vignette character(1), basename of vignette link, including
 #'     html or pdf extension, e.g., "work-0-intro.html".
 #' @param label character(1) label used to identify the package or
-#'     vignette.
+#'     vignette. If \code{NULL}, defaults to \code{pkg}.
 #' @param repo Repository address in the format username/repo[/subdir]
 #' @return Markdown-formatted character vector containing a
 #'     hyperlinked package name. If \code{vignette != NULL}, the
@@ -158,13 +158,27 @@ NULL
 #' @rdname macros
 #' @importFrom BiocManager version
 #' @export
-Biocpkg <- function(pkg, vignette=NULL, label = pkg) {
-    url <- sprintf("https://bioconductor.org/packages/%s/%s", version(), pkg)
-    if (is.null(vignette)) {
-        Rpackage(sprintf("[%s](%s)", label, url))
-    } else {
-        sprintf("[%s](%s/vignettes/%s)", label, url, vignette)
+Biocpkg <- function(pkg, vignette = NULL, label = NULL) {
+    url <- file.path("https://bioconductor.org/packages", version(), pkg)
+    if (!is.null(vignette)) {
+        url <- file.path(url, "vignettes", vignette)
     }
+    labelled_link(pkg, label, url)
+}
+
+labelled_link <- function(pkg, label, url) {
+    if (is.null(label)) {
+        Rpackage(sprintf("[%s](%s)", pkg, url))
+    } else {
+        sprintf("[%s](%s)", label, url)
+    }
+}
+
+#' @rdname macros
+#' @export
+Biocbook <- function(pkg, label = NULL) {
+    url <- file.path("http://bioconductor.org/books", version(), pkg)
+    labelled_link(pkg, label, url)
 }
 
 #' @rdname macros
@@ -203,12 +217,6 @@ Githubpkg <- function(repo, pkg) {
       pkg = names[length(names)]
     }
     Rpackage( sprintf('[%s](%s/%s)', pkg, github, repo) )
-}
-
-#' @rdname macros
-#' @export
-Biocbook <- function(pkg) {
-    sprintf("http://bioconductor.org/books/%s/%s", version(), pkg)
 }
 
 ## yaml header convenience functions

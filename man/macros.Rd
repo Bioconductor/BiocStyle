@@ -3,15 +3,17 @@
 \name{macros}
 \alias{macros}
 \alias{Biocpkg}
+\alias{Biocbook}
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
 \alias{CRANpkg}
 \alias{Rpackage}
 \alias{Githubpkg}
-\alias{Biocbook}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
 \usage{
-Biocpkg(pkg, vignette = NULL, label = pkg)
+Biocpkg(pkg, vignette = NULL, label = NULL)
+
+Biocbook(pkg, label = NULL)
 
 Biocannopkg(pkg)
 
@@ -22,8 +24,6 @@ CRANpkg(pkg)
 Rpackage(pkg)
 
 Githubpkg(repo, pkg)
-
-Biocbook(pkg)
 }
 \arguments{
 \item{pkg}{character(1), package name}
@@ -32,7 +32,7 @@ Biocbook(pkg)
 html or pdf extension, e.g., "work-0-intro.html".}
 
 \item{label}{character(1) label used to identify the package or
-vignette.}
+vignette. If \code{NULL}, defaults to \code{pkg}.}
 
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }

@@ -3,6 +3,7 @@
 \name{macros}
 \alias{macros}
 \alias{Biocpkg}
+\alias{Biocbook}
 \alias{Biocannopkg}
 \alias{Biocexptpkg}
 \alias{CRANpkg}
@@ -10,7 +11,9 @@
 \alias{Githubpkg}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
 \usage{
-Biocpkg(pkg, vignette = NULL, label = pkg)
+Biocpkg(pkg, vignette = NULL, label = NULL)
+
+Biocbook(pkg, label = NULL)
 
 Biocannopkg(pkg)
 
@@ -29,7 +32,7 @@ Githubpkg(repo, pkg)
 html or pdf extension, e.g., "work-0-intro.html".}
 
 \item{label}{character(1) label used to identify the package or
-vignette.}
+vignette. If \code{NULL}, defaults to \code{pkg}.}
 
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }
@@ -50,6 +53,10 @@ page, the version of which depends on the current Bioconductor
 version (i.e. if run in a devel environment, it will point towards
 the devel landing page; otherwise it will point to the release
 landing page).
+
+Use \code{Biocbook} for Bioconductor webbooks. This will create a
+link to the index page of the book rather than to the landing page
+of the package used for the book's deployment.
 
 Use \code{CRANpkg} for R packages available on CRAN. The function
 automatically includes a link to the master CRAN landing page.

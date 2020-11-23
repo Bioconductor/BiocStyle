@@ -241,7 +241,7 @@ produce Figure \@ref(fig:plot).
     plot(cars)
     ```
 
-```{r plot, fig.cap="Regular figure. The first sentence of the figure caption is automatically emphasized to serve as figure title.", echo=FALSE, out.width="500px"}
+```{r plot, fig.cap="Regular figure. The first sentence of the figure caption is automatically emphasized to serve as figure title.", echo=FALSE}
 plot(cars)
 ```
 

@@ -49,8 +49,11 @@
     }
     
     # re-evaluate code from knitr:::fix_options which is called before the hook
-    if ( !is.null(options$out.width) && is.na(options$out.width) )
-      options$out.width = "100%"
+    #if ( !is.null(options$out.width) && is.na(options$out.width) )
+    #  options$out.width = "100%"
+    
+    if(is.null(options$out.width) && grepl(x = options$fig.env, pattern = "*figure*"))
+      options$out.width = "100%" 
     
     options
   },

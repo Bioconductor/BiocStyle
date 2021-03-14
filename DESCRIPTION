@@ -4,8 +4,16 @@ Description: Provides standard formatting styles for Bioconductor PDF
     and HTML documents. Package vignettes illustrate use and
     functionality.
 Version: 2.19.2
-Author: Andrzej Oleś, Martin Morgan, Wolfgang Huber
-Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
+Authors@R: c(
+        person("Andrzej", "Oleś", role = "aut"), 
+        person("Mike", "Smith", role = "ctb",
+            comment = c(ORCID = "0000-0002-7800-3848")
+        ),
+        person("Martin", "Morgan", role = "ctb"),
+        person("Wolfgang", "Huber", role = "ctb"),
+        person("Bioconductor Package", role = "Maintainer", 
+            email = "maintainer@bioconductor.org", role = "cre")
+        )
 Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 1.2), stats, utils, yaml,
     BiocManager
 Suggests: BiocGenerics, RUnit, htmltools

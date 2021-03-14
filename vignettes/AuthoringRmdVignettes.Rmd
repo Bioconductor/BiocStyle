@@ -23,8 +23,8 @@ vignette: |
 
 # Prerequisites
 
-_Bioconductor_ R Markdown format is build on top of _R_ package `r
-CRANpkg("bookdown")`, which in turn relies on `r CRANpkg("rmarkdown")` and
+_Bioconductor_ R Markdown format is build on top of _R_ package 
+`r CRANpkg("bookdown")`, which in turn relies on `r CRANpkg("rmarkdown")` and
 [pandoc](http://johnmacfarlane.net/pandoc/) to compile the final output
 document. Therefore, unless you are using RStudio, you will need a recent
 version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.17.2). See the

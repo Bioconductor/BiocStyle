@@ -77,6 +77,9 @@ html_document <- function(toc = TRUE,
     ## wrap tables in a container
     x = process_tables(x)
     
+    ## remove css that hardcodes <pre> tag styling
+    x = modify_css(x)
+    
     writeUTF8(x, output)
     output
   }
@@ -99,7 +102,7 @@ html_document <- function(toc = TRUE,
   # per-section numbering of figures/tables
   
   number_sections_override <- number_sections
-  
+
   base_format <- function(..., number_sections) {
     rmarkdown::html_document(..., number_sections = number_sections_override)
   }
@@ -290,5 +293,12 @@ process_footnotes = function(lines) {
 process_tables = function(lines) {
   lines = gsub("<table", "<div class='horizontal-scroll'><table", lines, fixed = TRUE)
   lines = gsub("</table>", "</table></div>", lines, fixed = TRUE)
+  lines
+}
+
+modify_css = function(lines) {
+  ## Since rmarkdown v 2.7.0 the CSS below gets injected during HTML creation, 
+  ## rather than being taken from the template.html. We remove it again here.
+  lines = gsub("       pre:not([class]) { background-color: white }", "", lines, fixed = TRUE)
   lines
 }

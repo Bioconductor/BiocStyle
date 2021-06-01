@@ -3,10 +3,11 @@ Title: Standard styles for vignettes and other Bioconductor documents
 Description: Provides standard formatting styles for Bioconductor PDF
     and HTML documents. Package vignettes illustrate use and
     functionality.
-Version: 2.21.0
+Version: 2.21.1
 Authors@R: c(
         person("Andrzej", "Oleś", role = "aut",
-            comment = c(ORCID = "0000-0003-0285-2787")), 
+            comment = c(ORCID = "0000-0003-0285-2787")
+        ), 
         person("Mike", "Smith", role = "ctb",
             comment = c(ORCID = "0000-0002-7800-3848")
         ),

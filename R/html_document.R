@@ -300,5 +300,6 @@ modify_css = function(lines) {
   ## Since rmarkdown v 2.7.0 the CSS below gets injected during HTML creation, 
   ## rather than being taken from the template.html. We remove it again here.
   lines = gsub("       pre:not([class]) { background-color: white }", "", lines, fixed = TRUE)
+  lines = modifyLines(lines = lines, from = "pre code {", to = "}", insert = "", fixed = TRUE)
   lines
 }

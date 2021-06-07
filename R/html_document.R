@@ -300,5 +300,11 @@ modify_css = function(lines) {
   ## Since rmarkdown v 2.7.0 the CSS below gets injected during HTML creation, 
   ## rather than being taken from the template.html. We remove it again here.
   lines = gsub("       pre:not([class]) { background-color: white }", "", lines, fixed = TRUE)
+
+  ## "pre code {" appears multiple times, so modifyLines() isn't appropriate here
+  lines_collapsed = paste0(lines, collapse = "\n")
+  lines_collapsed = gsub("pre code {\n  padding: 0;\n}\n", replacement = "", x = lines_collapsed, fixed = TRUE)
+  lines = strsplit(lines_collapsed, split = "\n")[[1]]
+  
   lines
 }

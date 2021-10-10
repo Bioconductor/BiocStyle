@@ -218,7 +218,7 @@ _BiocStyle_ comes with three predefined figure sizes. Regular figures not
 otherwise specified appear indented with respect to the paragraph text, as in
 the example below.
 
-```{r no-cap}
+```{r no-cap, fig.alt="A figure without a caption."}
 plot(cars)
 ```
 

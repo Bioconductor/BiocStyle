@@ -80,6 +80,9 @@ html_document <- function(toc = TRUE,
     ## remove css that hardcodes <pre> tag styling
     x = modify_css(x)
     
+    ## js that adds accessibility tools to TOC
+    x = add_toc_nav_js(x)
+    
     writeUTF8(x, output)
     output
   }
@@ -308,3 +311,25 @@ modify_css = function(lines) {
   
   lines
 }
+
+add_toc_nav_js = function(lines) {
+  lines = modifyLines(lines = lines, from = "</body>", replace = FALSE, before = TRUE,
+                      insert = c(
+                        '<script>',
+                        '$(document).ready(function ()  {',
+                        'function navigateLink(e) {',
+                        'if (e.key === "Enter") {',
+                        '$(this).trigger("click");',
+                        '}',
+                        '}',
+                        'var toc_items = document.querySelectorAll(".tocify-item");',
+                        'for (var i = 0; i < toc_items.length; i++) {',
+                        'toc_items.item(i).setAttribute("role", "link");',
+                        'toc_items.item(i).setAttribute("tabindex", "0");',
+                        'toc_items.item(i).addEventListener("keydown", navigateLink);',
+                        '}',
+                        '});',
+                        '</script>'))
+  lines
+}
+

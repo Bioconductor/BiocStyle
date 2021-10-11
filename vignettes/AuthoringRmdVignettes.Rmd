@@ -230,8 +230,8 @@ Figures which have no captions, like the one above, are just placed wherever the
 the _R_ code. If you assign a caption to a figure via the code chunk option
 `fig.cap`, the plot will be automatically labeled and numbered^[for PDF output
 it will be placed in a floating figure environment], and it will be also
-possible to reference it. These features are provided by `r
-CRANpkg("bookdown")`, which defines a format-independent syntax for specifying
+possible to reference it. These features are provided by `r CRANpkg("bookdown")`,
+which defines a format-independent syntax for specifying
 cross-references, see Section \@ref(cross-references). The figure label is
 generated from the code chunk label^[for cross-references to work the chunk
 label may only contain alphanumeric characters (a-z, A-Z, 0-9), slashes (/), or
@@ -273,7 +273,7 @@ image to visual impaired readers.  If you provide a figure caption with
 image.  However, if you want to include an image without a caption, or you wish
 to provide different information in the alt text to the caption, this can be
 done via the `fig.alt` code chunk option.  As an example, the code chunk below
-was use to include the first image shown in this section, so that its intention
+was used to include the first image shown in this section, so that its intention
 could be conveyed to someone using a screen reader.
 
     ```{r no-cap, fig.alt="A default sized example figure without a caption."}`r ''`
@@ -283,9 +283,9 @@ could be conveyed to someone using a screen reader.
 You may also want to consider the colour palette used in your figures, to ensure
 they are accessible to colour impaired readers.  *BiocStyle* doesn't provide a
 specific colour palette, but many options are available in packages from CRAN.
-There have also been
-[https://developer.r-project.org/Blog/public/2019/11/21/a-new-palette-for-r/](significant
-efforts) made to improve the default colours provided by `palette()` in R-4.0.0.
+There have also been [significant
+efforts](https://developer.r-project.org/Blog/public/2019/11/21/a-new-palette-for-r/)
+made to improve the default colours provided by `palette()` in R-4.0.0.
 Bioconductor contains some domain specific packages that focus on colour blind
 friendly visualisations e.g. `r Biocpkg("dittoSeq")` for single-cell and bulk
 RNA-sequencing data.

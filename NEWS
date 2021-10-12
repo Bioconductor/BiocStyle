@@ -1,8 +1,17 @@
 CHANGES IN VERSION 2.22.0
 ------------------------
 
-BUG FIXES
+USER-VISIBLE CHANGES
 
+    o Added section to HTML vignette regarding accessibility considerations
+    when creating plots and figures.
+
+BUG FIXES AND IMPROVEMENTS TO HTML STYLE
+
+    o Improved navigation for screen readers by adding role='link' and 
+    tabindex='0' to elements in the table of contents.  TOC navigation can also
+    be followed by pressing "Enter" when selected in addition to clicking with 
+    the cursor.
     o Addressed further styling issues for code blocks, introduced by changes
     in rmarkdown.  This time re-introducing padding around <pre> tags.
 

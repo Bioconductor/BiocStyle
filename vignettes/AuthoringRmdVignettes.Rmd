@@ -111,7 +111,7 @@ function. To include `custom.css` file use
 
 ## Author affiliations
 
-The `author` field allows for specifing author names along with affiliation and
+The `author` field allows for specifying author names along with affiliation and
 email information.
 
 In the basic case, when no additional information apart from author names is
@@ -251,7 +251,7 @@ plot(cars)
 
 ## Alternative figure sizes
 
-In addition to regular figures, *BiocStyle* provides small and wide figures
+In addition to regular figures, _BiocStyle_ provides small and wide figures
 which can be specified by `fig.small` and `fig.wide` code chunk options. Wide
 figures are left-aligned with the paragraph and extend on the right margin, as
 Figure \@ref(fig:wide). Small figures are meant for possibly rectangular plots
@@ -268,7 +268,7 @@ plot(cars)
 ## Accessibility considerations
 
 Alt (alternative) text is used by screen readers to provide a description of an
-image to visual impaired readers.  If you provide a figure caption with
+image to visually impaired readers.  If you provide a figure caption with
 `fig.cap` the same text will automatically be used as the alt text for the
 image.  However, if you want to include an image without a caption, or you wish
 to provide different information in the alt text to the caption, this can be
@@ -280,14 +280,14 @@ could be conveyed to someone using a screen reader.
     plot(cars)
     ```
     
-You may also want to consider the colour palette used in your figures, to ensure
-they are accessible to colour impaired readers.  *BiocStyle* doesn't provide a
-specific colour palette, but many options are available in packages from CRAN.
+You may also want to consider the color palette used in your figures, to ensure
+they are accessible to color impaired readers.  _BiocStyle_ doesn't provide a
+specific color palette, but many options are available in packages from CRAN.
 There have also been [significant
 efforts](https://developer.r-project.org/Blog/public/2019/11/21/a-new-palette-for-r/)
-made to improve the default colours provided by `palette()` in R-4.0.0.
-Bioconductor contains some domain specific packages that focus on colour blind
-friendly visualisations e.g. `r Biocpkg("dittoSeq")` for single-cell and bulk
+made to improve the default colors provided by `palette()` in R-4.0.0.
+Bioconductor contains some domain specific packages that focus on color blind
+friendly visualizations e.g. `r Biocpkg("dittoSeq")` for single-cell and bulk
 RNA-sequencing data.
 
 # Tables

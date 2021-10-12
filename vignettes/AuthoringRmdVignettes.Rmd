@@ -111,7 +111,7 @@ function. To include `custom.css` file use
 
 ## Author affiliations
 
-The `author` field allows for specifing author names along with affiliation and
+The `author` field allows for specifying author names along with affiliation and
 email information.
 
 In the basic case, when no additional information apart from author names is
@@ -214,20 +214,24 @@ The line length of output code chunks is set to the optimal width of typically
 
 # Figures
 
+## Simple figures
+
 _BiocStyle_ comes with three predefined figure sizes. Regular figures not
 otherwise specified appear indented with respect to the paragraph text, as in
 the example below.
 
-```{r no-cap}
+```{r no-cap, fig.alt="A default sized example figure without a caption."}
 plot(cars)
 ```
 
-Figures which have no captions are just placed wherever they were generated in
+## Figure captions
+
+Figures which have no captions, like the one above, are just placed wherever they were generated in
 the _R_ code. If you assign a caption to a figure via the code chunk option
 `fig.cap`, the plot will be automatically labeled and numbered^[for PDF output
 it will be placed in a floating figure environment], and it will be also
-possible to reference it. These features are provided by `r
-CRANpkg("bookdown")`, which defines a format-independent syntax for specifying
+possible to reference it. These features are provided by `r CRANpkg("bookdown")`,
+which defines a format-independent syntax for specifying
 cross-references, see Section \@ref(cross-references). The figure label is
 generated from the code chunk label^[for cross-references to work the chunk
 label may only contain alphanumeric characters (a-z, A-Z, 0-9), slashes (/), or
@@ -245,7 +249,9 @@ produce Figure \@ref(fig:plot).
 plot(cars)
 ```
 
-In addition to regular figures, *BiocStyle* provides small and wide figures
+## Alternative figure sizes
+
+In addition to regular figures, _BiocStyle_ provides small and wide figures
 which can be specified by `fig.small` and `fig.wide` code chunk options. Wide
 figures are left-aligned with the paragraph and extend on the right margin, as
 Figure \@ref(fig:wide). Small figures are meant for possibly rectangular plots
@@ -259,6 +265,30 @@ plot(cars)
 plot(cars)
 ```
 
+## Accessibility considerations
+
+Alt (alternative) text is used by screen readers to provide a description of an
+image to visually impaired readers.  If you provide a figure caption with
+`fig.cap` the same text will automatically be used as the alt text for the
+image.  However, if you want to include an image without a caption, or you wish
+to provide different information in the alt text to the caption, this can be
+done via the `fig.alt` code chunk option.  As an example, the code chunk below
+was used to include the first image shown in this section, so that its intention
+could be conveyed to someone using a screen reader.
+
+    ```{r no-cap, fig.alt="A default sized example figure without a caption."}`r ''`
+    plot(cars)
+    ```
+    
+You may also want to consider the color palette used in your figures, to ensure
+they are accessible to color impaired readers.  _BiocStyle_ doesn't provide a
+specific color palette, but many options are available in packages from CRAN.
+There have also been [significant
+efforts](https://developer.r-project.org/Blog/public/2019/11/21/a-new-palette-for-r/)
+made to improve the default colors provided by `palette()` in R-4.0.0.
+Bioconductor contains some domain specific packages that focus on color blind
+friendly visualizations e.g. `r Biocpkg("dittoSeq")` for single-cell and bulk
+RNA-sequencing data.
 
 # Tables
 

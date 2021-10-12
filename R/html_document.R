@@ -80,6 +80,9 @@ html_document <- function(toc = TRUE,
     ## remove css that hardcodes <pre> tag styling
     x = modify_css(x)
     
+    ## js that adds accessibility tools to TOC
+    x = add_toc_nav_js(x)
+    
     writeUTF8(x, output)
     output
   }
@@ -227,7 +230,7 @@ create_html_template <- function() {
                            '}',
                            '</script>',
                            ''))
-  
+
   writeUTF8(lines, template)
   
   template
@@ -308,3 +311,10 @@ modify_css = function(lines) {
   
   lines
 }
+
+add_toc_nav_js = function(lines) {
+  lines = modifyLines(lines = lines, from = "</body>", replace = FALSE, before = TRUE,
+                      insert = .print.file( file.path(resources, "html", "addTocAccessibility.js")))
+  lines
+}
+

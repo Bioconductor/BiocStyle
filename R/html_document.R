@@ -230,7 +230,7 @@ create_html_template <- function() {
                            '}',
                            '</script>',
                            ''))
-  
+
   writeUTF8(lines, template)
   
   template
@@ -314,22 +314,7 @@ modify_css = function(lines) {
 
 add_toc_nav_js = function(lines) {
   lines = modifyLines(lines = lines, from = "</body>", replace = FALSE, before = TRUE,
-                      insert = c(
-                        '<script>',
-                        '$(document).ready(function ()  {',
-                        'function navigateLink(e) {',
-                        'if (e.key === "Enter") {',
-                        '$(this).trigger("click");',
-                        '}',
-                        '}',
-                        'var toc_items = document.querySelectorAll(".tocify-item");',
-                        'for (var i = 0; i < toc_items.length; i++) {',
-                        'toc_items.item(i).setAttribute("role", "link");',
-                        'toc_items.item(i).setAttribute("tabindex", "0");',
-                        'toc_items.item(i).addEventListener("keydown", navigateLink);',
-                        '}',
-                        '});',
-                        '</script>'))
+                      insert = .print.file( file.path(resources, "html", "addTocAccessibility.js")))
   lines
 }
 

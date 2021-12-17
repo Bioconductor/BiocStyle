@@ -548,12 +548,13 @@
 \makeatother
 %
 % apply longtable patch from http://www.latex-project.org/cgi-bin/ltxbugs2html?pr=tools/3512
+% This now appears to be included in longtable directly and is only needed for older versions
 %
 \makeatletter
 \@ifpackageloaded{longtable}{
-%\@ifpackagelater{<name>}{<date>}{<yes>}{<no>}
+% Usage \@ifpackagelater{<name>}{<date>}{<yes>}{<no>}
   \@ifpackagelater{longtable}{2020/01/07}{
-    {\wlog{Skipping patch longtable}}
+    {\wlog{Skipping longtable patch}}
   }{
     \patchcmd{\LT@start}{\advance\vsize}{\global\advance\vsize}
       {\wlog{Patching longtable .}}{Cannot patch longtable \LT@start}

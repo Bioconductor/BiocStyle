@@ -1,3 +1,14 @@
+CHANGES IN VERSION 2.24.0
+------------------------
+
+BUG FIXES
+
+    o Fixed incompatibility with recent versions of the longtable latex package
+    when producing a PDF vignette.  This bug manifested with the message
+    'LaTeX Error: Missing \begin{document}.' when attempting to knit.
+    (https://github.com/Bioconductor/BiocStyle/issues/89)
+
+
 CHANGES IN VERSION 2.22.0
 ------------------------
 

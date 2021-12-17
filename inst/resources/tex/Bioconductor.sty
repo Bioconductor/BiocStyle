@@ -548,48 +548,54 @@
 \makeatother
 %
 % apply longtable patch from http://www.latex-project.org/cgi-bin/ltxbugs2html?pr=tools/3512
+% This now appears to be included in longtable directly and is only needed for older versions
 %
 \makeatletter
 \@ifpackageloaded{longtable}{
-\patchcmd{\LT@start}{\advance\vsize}{\global\advance\vsize}
-  {\wlog{Patching longtable .}}{Cannot patch longtable \LT@start}
-\patchcmd{\endlongtable}{\endgraf\penalty -\LT@end@pen}{\endgraf\penalty -\LT@end@pen
-  \ifvoid\LT@foot\else
-    \global\advance\vsize\ht\LT@foot
-    \global\advance\@colroom\ht\LT@foot
-    \dimen@\pagegoal\advance\dimen@\ht\LT@foot\pagegoal\dimen@
-  \fi}
-  {\wlog{Patching longtable ..}}{Cannot patch longtable \endlongtable}
-\patchcmd{\endlongtable}{\pagegoal\vsize}{}
-  {\wlog{Patching longtable ...}}{Cannot patch longtable \endlongtable}
-\def\LT@output{%
-  \ifnum\outputpenalty <-\@Mi
-    \ifnum\outputpenalty > -\LT@end@pen
-      \LT@err{floats and marginpars not allowed in a longtable}\@ehc
-    \else
-      \setbox\z@\vbox{\unvbox\@cclv}%
-      \ifdim \ht\LT@lastfoot>\ht\LT@foot
-        \dimen@\pagegoal
-        \advance\dimen@\ht\LT@foot
-        \advance\dimen@-\ht\LT@lastfoot
-        \ifdim\dimen@<\ht\z@
-          \setbox\@cclv\vbox{\unvbox\z@\copy\LT@foot\vss}%
-          \@makecol
-          \@outputpage
-          \global\vsize\@colroom
-          \setbox\z@\vbox{\box\LT@head}%
+% Usage \@ifpackagelater{<name>}{<date>}{<yes>}{<no>}
+  \@ifpackagelater{longtable}{2020/01/07}{
+    {\wlog{Skipping longtable patch}}
+  }{
+    \patchcmd{\LT@start}{\advance\vsize}{\global\advance\vsize}
+      {\wlog{Patching longtable .}}{Cannot patch longtable \LT@start}
+    \patchcmd{\endlongtable}{\endgraf\penalty -\LT@end@pen}{\endgraf\penalty -\LT@end@pen
+      \ifvoid\LT@foot\else
+        \global\advance\vsize\ht\LT@foot
+        \global\advance\@colroom\ht\LT@foot
+        \dimen@\pagegoal\advance\dimen@\ht\LT@foot\pagegoal\dimen@
+      \fi}
+      {\wlog{Patching longtable ..}}{Cannot patch longtable \endlongtable}
+    \patchcmd{\endlongtable}{\pagegoal\vsize}{}
+      {\wlog{Patching longtable ...}}{Cannot patch longtable \endlongtable}
+    \def\LT@output{%
+      \ifnum\outputpenalty <-\@Mi
+        \ifnum\outputpenalty > -\LT@end@pen
+          \LT@err{floats and marginpars not allowed in a longtable}\@ehc
+        \else
+          \setbox\z@\vbox{\unvbox\@cclv}%
+          \ifdim \ht\LT@lastfoot>\ht\LT@foot
+            \dimen@\pagegoal
+            \advance\dimen@\ht\LT@foot
+            \advance\dimen@-\ht\LT@lastfoot
+            \ifdim\dimen@<\ht\z@
+              \setbox\@cclv\vbox{\unvbox\z@\copy\LT@foot\vss}%
+              \@makecol
+              \@outputpage
+              \global\vsize\@colroom
+              \setbox\z@\vbox{\box\LT@head}%
+            \fi
+          \fi
+          \unvbox\z@\ifvoid\LT@lastfoot\copy\LT@foot\else\box\LT@lastfoot\fi
         \fi
-      \fi
-      \unvbox\z@\ifvoid\LT@lastfoot\copy\LT@foot\else\box\LT@lastfoot\fi
-    \fi
-  \else
-    \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}%
-    \@makecol
-    \@outputpage
-      \global\vsize\@colroom
-    \copy\LT@head\nobreak
-  \fi}
-\wlog{Patching longtable done!}
+      \else
+        \setbox\@cclv\vbox{\unvbox\@cclv\copy\LT@foot\vss}%
+        \@makecol
+        \@outputpage
+          \global\vsize\@colroom
+        \copy\LT@head\nobreak
+      \fi}
+    \wlog{Patching longtable done!}
+  }
 }{}
 %
 %

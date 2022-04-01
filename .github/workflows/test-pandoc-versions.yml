@@ -19,6 +19,9 @@ jobs:
         pandoc: [2.4, 2.6, 2.7, 2.8, 2.14, 2.17]
     
     steps:
+    
+      - run: sudo -yqq apt-get update && apt-get -yqq install ghostscript 
+    
       - uses: actions/checkout@v2
           
       - name: Setup R and Bioconductor
@@ -59,3 +62,9 @@ jobs:
         working-directory: vignettes
         shell: Rscript {0}
         
+      - name: upload 
+        uses: actions/upload-artifact@v3
+        with:
+          name: pandoc-v${{ matrix.pandoc }}-vignette
+          path: |
+            vignettes/*.pdf

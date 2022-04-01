@@ -36,3 +36,9 @@ jobs:
       - name: Print pandoc version
         run: rmarkdown::pandoc_version()
         shell: Rscript {0}
+        
+      - name: Build Rmd vignette
+        run: rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::pdf_document")
+        working-directory: vignettes
+        shell: Rscript {0}
+        

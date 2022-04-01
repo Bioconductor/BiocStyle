@@ -23,7 +23,7 @@ jobs:
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
         with:
-          bioc-version: devel
+          bioc-version: release
           
       - uses: r-lib/actions/setup-pandoc@v2
         with: 

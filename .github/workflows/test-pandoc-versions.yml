@@ -30,6 +30,9 @@ jobs:
         with: 
           pandoc-version: ${{ matrix.pandoc }}
           
+      - name: Install TinyTex
+        uses: r-lib/actions/setup-tinytex@v2
+      
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
 

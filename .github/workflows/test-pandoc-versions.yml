@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pandoc: [2.1, 2.8, 2.14.0.3]
+        pandoc: [2.4, 2.6, 2.7, 2.8, 2.14, 2.17]
     
     steps:
       - uses: actions/checkout@v2
@@ -36,10 +36,8 @@ jobs:
       - name: Install Latex Packages
         run: |
           tlmgr update --self
-          tlmgr install titling \
-            bera \
-            titlesec \
-            fancyhdr \
+          tlmgr install \
+            pdfcrop titling bera titlesec fancyhdr \
             enumitem parskip nowidow parnotes preprint soul \
             placeins ragged2e footmisc marginfix changepage \
             caption xstring mathtools

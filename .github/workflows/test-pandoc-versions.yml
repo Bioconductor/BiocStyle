@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  
+name: Test Vignette Creation
+
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  create-rmd:
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        pandoc: [1.17.2, 2.8, 2.14.0.3]
+    
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: Setup R and Bioconductor
+        uses: grimbough/bioc-actions/setup-bioc@v1
+        with:
+          bioc-version: devel
+          
+      - uses: r-lib/actions/setup-pandoc@v2
+        with: 
+          pandoc-version: ${{ matrix.pandoc }}
+          
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        
+      - name: Print pandoc version
+        run: rmarkdown::pandoc_version()
+        shell: Rscript{0}

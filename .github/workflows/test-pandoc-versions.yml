@@ -32,6 +32,10 @@ jobs:
           
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
+
+      - name: Install this BiocStyle
+        run: R CMD INSTALL ../BiocStyle
+        shell: bash
         
       - name: Print pandoc version
         run: rmarkdown::pandoc_version()

@@ -34,7 +34,15 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v2
         
       - name: Install Latex Packages
-        run: tlmgr update --self && tlmgr install courier makeindex
+        run: |
+          tlmgr update --self
+          tlmgr install titling \
+            bera \
+            titlesec \
+            fancyhdr \
+            enumitem parskip nowidow parnotes preprint soul \
+            placeins ragged2e footmisc marginfix changepage \
+            caption xstring mathtools
         shell: bash
       
       - name: Install dependencies

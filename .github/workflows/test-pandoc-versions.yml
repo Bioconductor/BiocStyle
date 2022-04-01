@@ -20,7 +20,7 @@ jobs:
     
     steps:
     
-      - run: sudo -yqq apt-get update && apt-get -yqq install ghostscript 
+      - run: sudo apt-get update && sudo apt-get -y -qq install ghostscript 
     
       - uses: actions/checkout@v2
           

@@ -43,7 +43,6 @@ jobs:
         
       - name: Install Latex Packages
         run: |
-          tlmgr update --self
           tlmgr install \
             pdfcrop titling bera titlesec fancyhdr \
             enumitem parskip nowidow parnotes preprint soul \

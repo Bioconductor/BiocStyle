@@ -17,11 +17,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
+        ## A small set of pandoc and tinytex versions.
+        ## TinyTex versions selected to match the release date of the pandoc version
+        ## Note that TinyTex version years do not perfectly map to TexLive release years!
         - { pandoc: '2.8',  tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
         - { pandoc: '2.10', tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
-        - { pandoc: '2.12', tinytex: '2021.03', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
+        - { pandoc: '2.12', tinytex: '2021.03', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
         - { pandoc: '2.14', tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
-        - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'http://mirror.ctan.org/systems/texlive/tlnet'}
+        - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
 
     steps:
     

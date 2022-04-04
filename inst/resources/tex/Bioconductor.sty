@@ -44,7 +44,7 @@
 \RequirePackage{geometry}
 %
 \newlength\hfskip
-\setlength\hfskip{18mm}
+\setlength\hfskip{15mm}
 \newlength\layoutw
 \setlength\layoutw{210mm}% width of A4 paper which is smaller than US Letter (8.5in=216mm)
 \newlength\layouth
@@ -159,7 +159,8 @@
 \RequirePackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
+\setlength{\headheight}{46pt}
+\fancyhead[LO]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
 \fancyhfoffset[L]{\overhang}
 \fancyhfoffset[R]{\rightoffset}
 \renewcommand{\headrule}{}

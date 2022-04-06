@@ -1,4 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
+% Disable warning "you have requested package /foo/bar/Bioconductor but the package provides Bioconductor"
+\RequirePackage{silence}
+\robustify\@latex@warning@no@line
+\WarningFilter{latex}{You have requested package}
+%
 \ProvidesPackage{Bioconductor}[2016/06/22 Bioconductor LaTeX Style]
 %
 \RequirePackage{ifthen}

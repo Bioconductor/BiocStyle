@@ -47,10 +47,9 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v2
         env: 
           TINYTEX_VERSION: ${{ matrix.config.tinytex }}
-        
-      - name: Install Latex Packages
-        env: |
           CTAN_REPO: ${{ matrix.config.tlmgr-repo }}
+          
+      - name: Install Latex Packages
         run: |
           tlmgr update --self
           tlmgr install \

@@ -49,8 +49,9 @@ jobs:
           TINYTEX_VERSION: ${{ matrix.config.tinytex }}
         
       - name: Install Latex Packages
+        env: |
+          CTAN_REPO: ${{ matrix.config.tlmgr-repo }}
         run: |
-          tlmgr option repository ${{ matrix.config.tlmgr-repo }}
           tlmgr update --self
           tlmgr install \
             pdfcrop titling bera titlesec fancyhdr silence \

@@ -26,6 +26,8 @@ jobs:
         - { pandoc: '2.14', tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
         - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
 
+    name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: $${{ matrix.config.tinytex }}"
+
     steps:
     
       - name: Install ghostscript
@@ -77,6 +79,6 @@ jobs:
       - name: upload 
         uses: actions/upload-artifact@v3
         with:
-          name: pandoc-v${{ matrix.pandoc }}-vignette
+          name: pandoc-v${{ matrix.config.pandoc }}-vignette
           path: |
             vignettes/*.pdf

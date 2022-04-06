@@ -4,13 +4,13 @@ on:
       - master
   workflow_dispatch:
   
-name: Test Vignette Creation
+name: PDF vignette from R Markdown
 
 env:
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  create-rmd:
+  create-vignette:
     runs-on: ubuntu-20.04
     
     strategy:
@@ -26,21 +26,20 @@ jobs:
         - { pandoc: '2.14', tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
         - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
 
-    name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: $${{ matrix.config.tinytex }}"
+    name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: ${{ matrix.config.tinytex }}"
 
     steps:
     
       - name: Install ghostscript
         run: sudo apt-get update && sudo apt-get -y -qq install ghostscript 
     
-      - uses: actions/checkout@v2
-          
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
         with:
           bioc-version: release
           
-      - uses: r-lib/actions/setup-pandoc@v2
+      - name: Install Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
         with: 
           pandoc-version: ${{ matrix.config.pandoc }}
           
@@ -54,11 +53,14 @@ jobs:
           tlmgr option repository ${{ matrix.config.tlmgr-repo }}
           tlmgr update --self
           tlmgr install \
-            pdfcrop titling bera titlesec fancyhdr \
+            pdfcrop titling bera titlesec fancyhdr mktexlsr \
             enumitem parskip nowidow parnotes preprint soul \
             placeins ragged2e footmisc marginfix changepage \
             caption xstring mathtools
         shell: bash
+        
+      - name: Checkout BiocStyle repository
+        uses: actions/checkout@v2
       
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
@@ -67,18 +69,15 @@ jobs:
         run: R CMD INSTALL ../BiocStyle
         shell: bash
         
-      - name: Print pandoc version
-        run: rmarkdown::pandoc_version()
-        shell: Rscript {0}
-        
-      - name: Build Rmd vignette
+      - name: Build PDF from RMD
         run: rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::pdf_document", quiet = TRUE)
         working-directory: vignettes
         shell: Rscript {0}
         
-      - name: upload 
+      - name: Upload PDF vignette
         uses: actions/upload-artifact@v3
         with:
           name: pandoc-v${{ matrix.config.pandoc }}-vignette
+          if-no-files-found: error
           path: |
             vignettes/*.pdf

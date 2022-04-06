@@ -26,6 +26,9 @@ jobs:
         - { pandoc: '2.14', tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
         - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
 
+    env:
+      CTAN_REPO: ${{ matrix.config.tlmgr-repo }}
+
     name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: ${{ matrix.config.tinytex }}"
 
     steps:
@@ -47,7 +50,6 @@ jobs:
         uses: r-lib/actions/setup-tinytex@v2
         env: 
           TINYTEX_VERSION: ${{ matrix.config.tinytex }}
-          CTAN_REPO: ${{ matrix.config.tlmgr-repo }}
           
       - name: Install Latex Packages
         run: |

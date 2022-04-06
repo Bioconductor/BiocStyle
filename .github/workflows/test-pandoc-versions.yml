@@ -53,7 +53,7 @@ jobs:
           tlmgr option repository ${{ matrix.config.tlmgr-repo }}
           tlmgr update --self
           tlmgr install \
-            pdfcrop titling bera titlesec fancyhdr mktexlsr \
+            pdfcrop titling bera titlesec fancyhdr \
             enumitem parskip nowidow parnotes preprint soul \
             placeins ragged2e footmisc marginfix changepage \
             caption xstring mathtools

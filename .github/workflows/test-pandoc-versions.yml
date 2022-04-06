@@ -20,12 +20,12 @@ jobs:
         ## A small set of pandoc and tinytex versions.
         ## TinyTex versions selected to match the release date of the pandoc version
         ## Note that TinyTex version years do not perfectly map to TexLive release years!
-        - { pandoc: '2.8',  tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
-        - { pandoc: '2.10', tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
-        - { pandoc: '2.12', tinytex: '2021.03', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
-        - { pandoc: '2.14', tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
-        - { pandoc: '2.17', tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
-        - { pandoc: ''    , tinytex: ''       , tlmgr-repo: ''}
+        - { pandoc: '2.8',     tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.10',    tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.12',    tinytex: '2021.03', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.14',    tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
+        - { pandoc: '2.17',    tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
+        - { pandoc: 'default', tinytex: ''       , tlmgr-repo: 'https://mirror.ctan.org/systems/texlive/tlnet'}
 
     name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: ${{ matrix.config.tinytex }}"
 
@@ -40,9 +40,14 @@ jobs:
           bioc-version: release
           
       - name: Install Pandoc
+        if: ${{ matrix.config.pandoc != 'default' }}
         uses: r-lib/actions/setup-pandoc@v2
         with: 
           pandoc-version: ${{ matrix.config.pandoc }}
+          
+      - name: Install Pandoc
+        if: ${{ matrix.config.pandoc == 'default' }}
+        uses: r-lib/actions/setup-pandoc@v2
           
       - name: Install TinyTex
         uses: r-lib/actions/setup-tinytex@v2

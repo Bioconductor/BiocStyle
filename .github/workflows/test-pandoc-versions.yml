@@ -53,10 +53,10 @@ jobs:
           tlmgr option repository ${{ matrix.config.tlmgr-repo }}
           tlmgr update --self
           tlmgr install \
-            pdfcrop titling bera titlesec fancyhdr \
+            pdfcrop titling bera titlesec fancyhdr silence \
             enumitem parskip nowidow parnotes preprint soul \
             placeins ragged2e footmisc marginfix changepage \
-            caption xstring mathtools
+            caption xstring mathtools everysel
         shell: bash
         
       - name: Checkout BiocStyle repository

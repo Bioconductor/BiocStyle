@@ -37,7 +37,7 @@ jobs:
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
         with:
-          bioc-version: release
+          bioc-version: devel
           
       - name: Install Pandoc
         if: ${{ matrix.config.pandoc != 'default' }}
@@ -87,3 +87,7 @@ jobs:
           if-no-files-found: error
           path: |
             vignettes/*.pdf
+            
+      - name: Build, Install, Check
+        uses: grimbough/bioc-actions/build-install-check@v1
+

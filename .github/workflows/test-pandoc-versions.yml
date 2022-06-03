@@ -32,7 +32,7 @@ jobs:
     steps:
     
       - name: Install ghostscript
-        run: sudo apt-get update && sudo apt-get -y -qq install ghostscript libavfilter-dev
+        run: sudo apt-get update && sudo apt-get -y -qq install ghostscript libavfilter-dev libmagick++-dev
     
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
@@ -92,5 +92,5 @@ jobs:
             vignettes/*.pdf
             
       - name: Build, Install, Check
-        uses: grimbough/bioc-actions/build-install-check@v1
+        uses: grimbough/bioc-actions/build-install-check@devel
 

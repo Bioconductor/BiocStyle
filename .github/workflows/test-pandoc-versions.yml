@@ -32,7 +32,7 @@ jobs:
     steps:
     
       - name: Install ghostscript
-        run: sudo apt-get update && sudo apt-get -y -qq install ghostscript 
+        run: sudo apt-get update && sudo apt-get -y -qq install ghostscript libavfilter-dev
     
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1

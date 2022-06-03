@@ -62,7 +62,7 @@ jobs:
             pdfcrop titling bera titlesec fancyhdr silence \
             enumitem parskip nowidow parnotes preprint soul \
             placeins ragged2e footmisc marginfix changepage \
-            caption xstring mathtools everysel
+            caption xstring mathtools everysel bera
         shell: bash
         
       - name: Checkout BiocStyle repository
@@ -70,6 +70,9 @@ jobs:
       
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            magick
 
       - name: Install this BiocStyle
         run: R CMD INSTALL ../BiocStyle

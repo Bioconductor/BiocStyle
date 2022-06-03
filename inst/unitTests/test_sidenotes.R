@@ -10,8 +10,8 @@ rmarkdown::pandoc_convert(input = tf_md, to = "html", output = tf_html, options 
 lines <- BiocStyle:::process_footnotes(BiocStyle:::readUTF8(tf_html))
 
 checkTrue(
-  grepl("sidenote", lines), msg = "Sidenote not found in HTML output"
+  any(grepl("sidenote", lines)), msg = "Sidenote not found in HTML output"
 )
 checkTrue(
-  !grepl("footnote", lines), msg = "Footnote found in HTML output"
+  !any(grepl("footnote-ref", lines)), msg = "Footnote found in HTML output"
 )

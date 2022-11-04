@@ -15,6 +15,7 @@ vignette: |
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+link-citations: yes
 ---
 
 # Getting started

@@ -373,6 +373,17 @@ Footnotes are displayed as side notes on the right margin^[this is a side note
 entered as a footnote], which has the advantage that they appear close to the
 place where they are defined.
 
+# Bibliography
+
+If you wish to include a list of references you can use the special section title
+`# References`^[it must be exactly this!], and provide a bibtex file in the vignette header.
+A list of all references used in the text will be automatically
+inserted after this heading. Everything after the list of references will be considered as 
+appendices. See below for an example of the formatting change.  
+For more details on include a bibligraphy please see the relevant chapter of
+[bookdown.org](https://bookdown.org/yihui/rmarkdown-cookbook/bibliography.html#bibliography).
+
+
 # References {.unnumbered}
 
 # Session info

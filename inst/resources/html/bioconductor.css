@@ -326,6 +326,12 @@ code > span.paren { color: #000000;}
   padding-left: 65px;
 }
 
+/* styling references / bibliography */
+
+.references {
+  padding-right: 150px;
+}
+
 /* Styling specifically aimed at smaller screen on phones and tablets */
 
 .margin-toggle {
@@ -341,6 +347,9 @@ code > span.paren { color: #000000;}
     }
     p {
         padding-left: 0;
+        padding-right: 0;
+    }
+    .references { 
         padding-right: 0;
     }
     h1, h2, h3, h4, h5, h6 {

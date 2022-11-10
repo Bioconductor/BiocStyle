@@ -7,6 +7,7 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
   lines <- readUTF8(input_file)
   lines <- rmarkdown:::partition_yaml_front_matter(lines)
   front_matter <- lines$front_matter
+  body <- lines$body
   
   ## process the package field
   idx = grep("^package:", front_matter)
@@ -29,7 +30,20 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
                     entries,
                     front_matter[l])
   
-  writeUTF8(c(front_matter, lines$body), input_file)
+  ## identify a references section
+  refs_header_exists <- any(grepl(pattern = "^# References", x = body, fixed = FALSE))
+  if(refs_header_exists) {
+    ## only insert an Appendix header if there's anything after the references
+    idx <- which(grepl(pattern = "^# References", x = body, fixed = FALSE))
+    refs_is_last_element <- idx == length(body) || all(nzchar(body[(idx+1):length(body)]) == FALSE) 
+    if(!refs_is_last_element) {
+      body <- modifyLines(lines = body, from = "^# References", 
+                          replace = FALSE, fixed = FALSE,
+                          insert = '<div id="refs"></div>\n\n# (APPENDIX) Appendix {-}\n')
+    }
+  }
+  
+  writeUTF8(c(front_matter, body), input_file)
   
   NULL
 }

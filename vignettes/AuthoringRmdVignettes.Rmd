@@ -72,10 +72,10 @@ true` to obtain a floating TOC as in this vignette.
 
 ## Use with R markdown v1
 
-Apart from the default markdown engine implemented in the `r
-CRANpkg('rmarkdown')` package, it is also possible to compile _Bioconductor_
-documents with the older markdown v1 engine from the package `r
-CRANpkg('markdown')`. There are some differences in setup and the resulting
+Apart from the default markdown engine implemented in the
+`r CRANpkg('rmarkdown')` package, it is also possible to compile _Bioconductor_
+documents with the older markdown v1 engine from the package
+`r CRANpkg('markdown')`. There are some differences in setup and the resulting
 output between these two engines.
 
 To use the `r CRANpkg('markdown')` vignette builder engine:

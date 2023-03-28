@@ -229,7 +229,8 @@ p.caption {
 caption {
   padding: 0px;
   margin-bottom: 10px;
-  min-width: 583;
+  min-width: 583px;
+  text-align: justify;
 }
 span.caption-title {
   color: #1a81c2;

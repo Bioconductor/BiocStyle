@@ -90,7 +90,7 @@ Footnotes are displayed as side notes on the right margin^[this is a side note e
 # References {.unnumbered}
 
 
-# Session info {.unnumbered}
+# Session info
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()

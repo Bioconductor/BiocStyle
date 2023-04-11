@@ -31,10 +31,10 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
                     front_matter[l])
   
   ## identify a references section
-  refs_header_exists <- any(grepl(pattern = "^# References", x = body, fixed = FALSE))
-  if(refs_header_exists) {
+  refs_header_loc <- grepl(pattern = "^# References", x = body, fixed = FALSE)
+  if(any(refs_header_loc)) {
     ## only insert an Appendix header if there's anything after the references
-    idx <- which(grepl(pattern = "^# References", x = body, fixed = FALSE))
+    idx <- which(refs_header_loc)
     refs_is_last_element <- idx == length(body) || all(nzchar(body[(idx+1):length(body)]) == FALSE) 
     if(!refs_is_last_element) {
       body <- modifyLines(lines = body, from = "^# References", 

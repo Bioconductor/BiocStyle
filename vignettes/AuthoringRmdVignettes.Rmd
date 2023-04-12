@@ -13,7 +13,6 @@ output:
   BiocStyle::pdf_document: default
 package: BiocStyle
 bibliography: Bioc.bib
-link-citations: yes
 abstract: |
   Instructions on enabling _Bioconductor_ style in R Markdown vignettes.
 vignette: |

@@ -24,6 +24,9 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
   if ( is.null(metadata$date) )
     entries <- c(entries, sprintf("date: %s", doc_date()))
   
+  if( is.null(metadata$`link-citations`) )
+    entries <- c(entries, "link-citations: true")
+  
   ## append new metadata entries to yaml front matter
   l = length(front_matter)
   front_matter <- c(front_matter[-l],

@@ -109,8 +109,10 @@ pdf_document <- function(toc = TRUE,
   
   # knitr options
   knitr = merge_lists(.knitr_options(), list(
+    opts_knit = list(
+    ),
     opts_chunk = list(
-      collapse = TRUE
+      collapse = TRUE, R.options = list(width = 80L)
     ),
     knit_hooks = list(
       plot = function(x, options = list()) {

@@ -257,7 +257,7 @@ process_footnotes = function(lines) {
   fn_label = paste0(knitr::opts_knit$get("rmarkdown.pandoc.id_prefix"), "fn")
   
   ## match to footnotes block
-  i = which(lines == '<div class="footnotes">')
+  i = grep(pattern = '^<div class="footnotes[^"]*"[^>]*>', x = lines)
   if (length(i) == 0L)
     return(lines)
   j = which(lines == '</div>')

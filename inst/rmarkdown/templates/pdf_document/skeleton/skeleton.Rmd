@@ -86,8 +86,10 @@ Apart from referencing figures (Section \@ref(figures)), tables (Section \@ref(t
 
 Footnotes are displayed as side notes on the right margin^[this is a side note entered as a footnote], which has the advantage that they appear close to the place where they are defined.
 
+# References {.unnumbered}
 
-# Session info {.unnumbered}
+
+# Session info
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()

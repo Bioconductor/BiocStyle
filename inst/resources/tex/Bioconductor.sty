@@ -1,4 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
+% Disable warning "you have requested package /foo/bar/Bioconductor but the package provides Bioconductor"
+%\RequirePackage{silence}
+%\robustify\@latex@warning@no@line
+%\WarningFilter{latex}{You have requested package}
+%
 \ProvidesPackage{Bioconductor}[2016/06/22 Bioconductor LaTeX Style]
 %
 \RequirePackage{ifthen}
@@ -61,7 +66,8 @@
  layoutsize={\layoutw,\layouth},
  layouthoffset=.5\layouthoff,
  layoutvoffset=.5\layoutvoff,
- width=135mm,
+ % This line leads to "Over-specification in `h'-direction. `width' (384.1122pt) is ignored."
+ %width=135mm,
  marginparsep=5mm,
  marginparwidth=30mm,
  hmargin={30mm,45mm},
@@ -159,7 +165,8 @@
 \RequirePackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-\fancyhead[LO,RE]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
+\setlength{\headheight}{47pt}
+\fancyhead[LO]{\parbox[b][\hfskip][t]{\headwidth}{\bfhelvet\@bioctitle}}
 \fancyhfoffset[L]{\overhang}
 \fancyhfoffset[R]{\rightoffset}
 \renewcommand{\headrule}{}

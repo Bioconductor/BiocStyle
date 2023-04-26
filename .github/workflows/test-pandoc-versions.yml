@@ -1,0 +1,96 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  
+name: PDF vignette from R Markdown
+
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  create-vignette:
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        ## A small set of pandoc and tinytex versions.
+        ## TinyTex versions selected to match the release date of the pandoc version
+        ## Note that TinyTex version years do not perfectly map to TexLive release years!
+        - { pandoc: '2.8',     tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.10',    tinytex: '2020.10', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.12',    tinytex: '2021.03', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/tlnet-final'}
+        - { pandoc: '2.14',    tinytex: '2021.05', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
+        - { pandoc: '2.17',    tinytex: '2022.01', tlmgr-repo: 'https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2021/tlnet-final'}
+        - { pandoc: 'default', tinytex: ''       , tlmgr-repo: 'https://mirror.ctan.org/systems/texlive/tlnet'}
+
+    name: "Pandoc: ${{ matrix.config.pandoc }}, TinyTex: ${{ matrix.config.tinytex }}"
+
+    steps:
+    
+      - name: Install ghostscript
+        run: sudo apt-get update && sudo apt-get -y -qq install ghostscript libavfilter-dev libmagick++-dev
+    
+      - name: Setup R and Bioconductor
+        uses: grimbough/bioc-actions/setup-bioc@v1
+        with:
+          bioc-version: devel
+          
+      - name: Install Pandoc
+        if: ${{ matrix.config.pandoc != 'default' }}
+        uses: r-lib/actions/setup-pandoc@v2
+        with: 
+          pandoc-version: ${{ matrix.config.pandoc }}
+          
+      - name: Install Pandoc
+        if: ${{ matrix.config.pandoc == 'default' }}
+        uses: r-lib/actions/setup-pandoc@v2
+          
+      - name: Install TinyTex
+        uses: r-lib/actions/setup-tinytex@v2
+        env: 
+          TINYTEX_VERSION: ${{ matrix.config.tinytex }}
+          
+      - name: Install Latex Packages
+        run: |
+          tlmgr option repository ${{ matrix.config.tlmgr-repo }}
+          tlmgr update --self
+          tlmgr install \
+            pdfcrop titling bera titlesec fancyhdr silence \
+            enumitem parskip nowidow parnotes preprint soul \
+            placeins ragged2e footmisc marginfix changepage \
+            caption xstring mathtools everysel bera
+        shell: bash
+        
+      - name: Checkout BiocStyle repository
+        uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            magick
+
+      - name: Install this BiocStyle
+        run: R CMD INSTALL ../BiocStyle
+        shell: bash
+        
+      - name: Build PDF from RMD
+        run: rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::pdf_document", quiet = TRUE)
+        working-directory: vignettes
+        shell: Rscript {0}
+        
+      - name: Upload PDF vignette
+        uses: actions/upload-artifact@v3
+        with:
+          name: pandoc-v${{ matrix.config.pandoc }}-vignette
+          if-no-files-found: error
+          path: |
+            vignettes/*.pdf
+            
+      - name: Build, Install, Check
+        uses: grimbough/bioc-actions/build-install-check@devel
+

@@ -295,13 +295,13 @@ process_footnotes = function(lines) {
 ## but also scroll if they overflow horizontally
 process_tables = function(lines) {
     
-  ## this will inadvertantly mess up some javascript e.g. from Glimma
+  ## this will inadvertently mess up some javascript e.g. from Glimma
   ## so we only modify the body of the html
   body_start = grep(pattern = "<body>", x = lines, fixed = TRUE)
   body_end = grep(pattern = "</body>", x = lines, fixed = TRUE)
     
-  lines[body_start:body_start] = gsub("<table", "<div class='horizontal-scroll'><table", lines[body_start:body_start], fixed = TRUE)
-  lines[body_start:body_start] = gsub("</table>", "</table></div>", lines[body_start:body_start], fixed = TRUE)
+  lines[body_start:body_end] = gsub("<table", "<div class='horizontal-scroll'><table", lines[body_start:body_end], fixed = TRUE)
+  lines[body_start:body_end] = gsub("</table>", "</table></div>", lines[body_start:body_end], fixed = TRUE)
   lines
 }
 

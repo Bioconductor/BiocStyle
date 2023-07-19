@@ -302,7 +302,7 @@ process_tables = function(lines) {
 modify_css = function(lines) {
   ## Since rmarkdown v 2.7.0 the CSS below gets injected during HTML creation, 
   ## rather than being taken from the template.html. We remove it again here.
-  lines = gsub("       pre:not([class]) { background-color: white }", "", lines, fixed = TRUE)
+  lines = gsub("pre:not\\(\\[class\\]\\) \\{ background-color: white \\}", "", lines, fixed = FALSE)
   
   ## "pre code {" appears multiple times, so modifyLines() isn't appropriate here
   lines_collapsed = paste0(lines, collapse = "\n")

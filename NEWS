@@ -1,3 +1,11 @@
+CHANGES IN VERSION 2.30.0
+
+BUG FIXES
+
+    o BiocStyle no longer breaks Javascript inserted by the Glimma package to
+    produce interactive plots.
+    (https://github.com/Bioconductor/BiocStyle/issues/97)
+
 CHANGES IN VERSION 2.28.0
 ------------------------
 

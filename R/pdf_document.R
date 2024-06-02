@@ -80,12 +80,14 @@ pdf_document <- function(toc = TRUE,
   
   ## code chunks and code highlighting
   thm <- system.file("themes", "default.css", package = "BiocStyle")
-  opts_knit$set(out.format="latex");
+  out_fmt <- opts_knit$get("out.format")
+  opts_knit$set(out.format="latex")
   head = c(head,
            "% code highlighting",
            knit_theme$get(thm)$highlight,
            readLines(file.path(resources, "tex", "highlighting-macros.def")))
-  
+  opts_knit$set(out.format=out_fmt)
+
   if (use_unsrturl)
     head = c(head, sprintf("\\AtBeginDocument{\\bibliographystyle{%s}}\n",  sub(".bst$", "", template_files[["bst"]])))
   

@@ -120,6 +120,9 @@ markdown <-
 #'     html or pdf extension, e.g., "work-0-intro.html".
 #' @param label character(1) label used to identify the package or
 #'     vignette. If \code{NULL}, defaults to \code{pkg}.
+#' @param versioned logical(1), determines the creation of links to Bioconductor
+#'     packages including the version number (default) or not, using the general
+#'     "short form" of the link. Applies to \code{Biocpkg} and \code{Biocbook}.
 #' @param repo Repository address in the format username/repo[/subdir]
 #' @return Markdown-formatted character vector containing a
 #'     hyperlinked package name. If \code{vignette != NULL}, the
@@ -158,8 +161,13 @@ NULL
 #' @rdname macros
 #' @importFrom BiocManager version
 #' @export
-Biocpkg <- function(pkg, vignette = NULL, label = NULL) {
-    url <- file.path("https://bioconductor.org/packages", version(), pkg)
+Biocpkg <- function(pkg, vignette = NULL, label = NULL, versioned = TRUE) {
+    url <- ifelse(
+        versioned,
+        file.path("https://bioconductor.org/packages", version(), pkg),
+        file.path("https://bioconductor.org/packages", pkg)
+    )
+        
     if (!is.null(vignette)) {
         url <- file.path(url, "vignettes", vignette)
     }
@@ -176,8 +184,12 @@ labelled_link <- function(pkg, label, url) {
 
 #' @rdname macros
 #' @export
-Biocbook <- function(pkg, label = NULL) {
-    url <- file.path("http://bioconductor.org/books", version(), pkg)
+Biocbook <- function(pkg, label = NULL, versioned = TRUE) {
+    url <- ifelse(
+        versioned,
+        file.path("https://bioconductor.org/books", version(), pkg),
+        file.path("https://bioconductor.org/books", pkg)
+    )
     labelled_link(pkg, label, url)
 }
 

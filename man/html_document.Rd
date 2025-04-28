@@ -4,9 +4,17 @@
 \alias{html_document}
 \title{Use Bioconductor style to format R Markdown HTML output}
 \usage{
-html_document(toc = TRUE, number_sections = TRUE, fig_width = NA,
-  fig_height = NA, self_contained = TRUE, css = NULL,
-  pandoc_args = NULL, ..., titlecaps = TRUE)
+html_document(
+  toc = TRUE,
+  number_sections = TRUE,
+  fig_width = NA,
+  fig_height = NA,
+  self_contained = TRUE,
+  css = NULL,
+  pandoc_args = NULL,
+  ...,
+  titlecaps = TRUE
+)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the

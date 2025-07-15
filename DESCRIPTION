@@ -18,12 +18,12 @@ Authors@R: c(
         )
 Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 1.2), stats, utils, yaml,
     BiocManager
-Suggests: BiocGenerics, RUnit, htmltools
+Suggests: BiocGenerics, RUnit, htmltools, quarto
 biocViews: Software
 License: Artistic-2.0
 VignetteBuilder: knitr
+SystemRequirements: quarto
 Encoding: UTF-8
 URL: https://github.com/Bioconductor/BiocStyle
 BugReports: https://github.com/Bioconductor/BiocStyle/issues
-RoxygenNote: 6.1.0
-Date: 2025-08-01
+RoxygenNote: 7.3.2

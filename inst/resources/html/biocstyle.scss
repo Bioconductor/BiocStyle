@@ -1,0 +1,119 @@
+/*-- scss:defaults --*/
+
+// Color Palette
+$bioc-primary: #1a81c2;
+$bioc-secondary: #005C7A;
+$bioc-text-dark: #333333;
+$bioc-text-light: #556B7F;
+$bioc-background: #FFFFFF;
+$bioc-sidebar-bg: #F0F4F8;
+$bioc-border-light: #D9E6F0;
+$bioc-title-color: #87b13f;
+// $bioc-reference-hover: #666666;
+$bioc-reference-hover: lighten($bioc-secondary, 20%); // Lighter tone of secondary color for reference hover
+
+// Typography
+$font-stack-primary: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+/*-- scss:mixins --*/
+@mixin bioc-heading {
+    color: $bioc-primary;
+    font-weight: 500;
+    border-bottom: 1px solid $bioc-border-light;
+    padding-bottom: 0.3em;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+}
+
+/*-- scss:rules --*/
+h1, h2, h3, h4, h5, h6 {
+    @include bioc-heading;
+}
+
+h1 {
+    font-size: 2em;
+    border-bottom: 2px solid $bioc-primary;
+    &.title { //target h1 with class title.
+        color: $bioc-title-color; //apply custom color.
+    }
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.3em;
+}
+
+h4 {
+    font-size: 1.2em;
+}
+
+// Links
+a {
+    color: $bioc-primary;
+    text-decoration: none;
+
+    &:hover {
+        color: darken($bioc-primary, 10%);
+        text-decoration: underline;
+    }
+}
+
+// Code blocks
+pre, code {
+    border-color: lighten($bioc-primary, 40%);
+}
+
+div.sourceCode {
+  background-color: #f0f0f0;
+  padding-left: 65px;
+  border: 0px none;
+}
+
+li div.sourceCode {
+  margin-left: -35px;
+}
+
+img {
+  padding: 0px 150px 0px 130px;
+}
+
+p > img {
+  padding-left: 65px;
+  padding-right: 0px;
+}
+
+div.cell-output pre {
+  padding-left: 0px;
+}
+
+div.cell-output pre code {
+  padding-left: 65px;
+}
+
+// References styling
+.citation, .citation a {
+    &:hover {
+        color: $bioc-reference-hover !important;
+    }
+}
+
+// Bibliography/References section
+#refs .csl-entry a {
+    &:hover {
+        color: $bioc-reference-hover !important;
+    }
+}
+
+// Cross-references (figures, tables, etc.)
+.quarto-xref {
+    &:hover {
+        color: $bioc-reference-hover !important;
+    }
+}
+
+/*-- scss:uses --*/
+// Additional customizations
+

@@ -4,9 +4,18 @@
 \alias{pdf_document}
 \title{Use Bioconductor style to format R Markdown PDF output}
 \usage{
-pdf_document(toc = TRUE, number_sections = TRUE, fig_width = NA,
-  fig_height = NA, includes = NULL, ..., titlecaps = TRUE,
-  toc_newpage = FALSE, use_unsrturl = TRUE, relative_path = FALSE)
+pdf_document(
+  toc = TRUE,
+  number_sections = TRUE,
+  fig_width = NA,
+  fig_height = NA,
+  includes = NULL,
+  ...,
+  titlecaps = TRUE,
+  toc_newpage = FALSE,
+  use_unsrturl = TRUE,
+  relative_path = FALSE
+)
 }
 \arguments{
 \item{toc}{logical(1), \code{TRUE} to include a table of contents in the

@@ -4,8 +4,15 @@
 \alias{latex}
 \title{Use Bioconductor style to format LaTeX vignettes}
 \usage{
-latex(..., width, titlecaps = TRUE, short.fignames = FALSE, fig.path,
-  use.unsrturl = TRUE, relative.path = FALSE)
+latex(
+  ...,
+  width,
+  titlecaps = TRUE,
+  short.fignames = FALSE,
+  fig.path,
+  use.unsrturl = TRUE,
+  relative.path = FALSE
+)
 }
 \arguments{
 \item{\dots}{Additional arguments, passed to \code{\link{options}}.}

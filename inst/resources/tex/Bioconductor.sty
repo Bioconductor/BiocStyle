@@ -43,9 +43,11 @@
  urlbordercolor={.7 .7 .7},%
  raiselinks,%
  pdfusetitle,%
- pdftex]{hyperref}
+ xetex]{hyperref}
 \urlstyle{same}  % don't use monospace font for urls
+\ifdefined\pdfpageattr
 \pdfpageattr{/Group << /S /Transparency /I true /CS /DeviceRGB>>} %fixes incorrect color rendering in acroread
+\fi
 % Define page layout
 \RequirePackage{geometry}
 %

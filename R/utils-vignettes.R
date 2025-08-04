@@ -2,6 +2,7 @@
 ## Adapted from github.com/quarto-dev/quarto-r/blob/main/R/utils-vignettes.R
 register_vignette_engines <- function(pkg) {
     vig_engine("html", quarto_format = "html")
+    vig_engine("pdf", quarto_format = "pdf")
 }
 
 vig_engine <- function(..., quarto_format) {
@@ -72,10 +73,60 @@ get_meta <- function(format) {
 }
 
 get_meta_for_pdf <- function() {
+    temp_dir <- tempfile(pattern = "quarto-biocstyle")
+    dir.create(temp_dir)
+
+    resources_path <- system.file("resources", "tex", package = "BiocStyle")
+    highlighting_macros_path <-
+        file.path(resources_path, "highlighting-macros.def")
+
+    template_path <- system.file(
+        "resources", "tex", "template.tex",
+        package = "BiocStyle", mustWork = TRUE
+    )
+    if (!file.exists(template_path))
+        cli::cli_abort("Missing custom BiocStyle LaTeX template.")
+
+    bst <-
+        system.file("resources", "tex", "unsrturl.bst", package = "BiocStyle")
+    # 3. Create a temporary header file for the highlighting macros
+    # This is like the `head` creation in BiocStyle's R Markdown function.
+    header_file <- file.path(temp_dir, "header.tex")
+    highlight_content <- readLines(highlighting_macros_path)
+    head <- c(
+        "% code highlighting for BiocStyle",
+        highlight_content
+    )
+    head <- c(
+        head,
+        sprintf(
+            "\\AtBeginDocument{\\bibliographystyle{%s}}\n",
+            sub(".bst$", "", bst)
+        )
+    )
+    writeLines(head, con = header_file)
+
+    # 4. Copy the .sty and .bst files to the temporary directory so LaTeX can find them
+    file.copy(
+        system.file(
+            "resources", "tex", "Bioconductor.sty", package = "BiocStyle"
+        ),
+        temp_dir
+    )
+    file.copy(bst, temp_dir)
     meta <- list()
     meta$format$pdf <- list(
+        toc = TRUE,
+        `number-sections` = TRUE,
+        template = template_path,
         # don't try to install CTAN package on CRAN environment
-        `latex-auto-install` = !is_cran_check()
+        `latex-auto-install` = !is_cran_check(),
+        `keep-tex` = TRUE,
+        # `biblio-style` = "unstrurl",
+        `include-in-header` = header_file
+        # linkcolor = "BiocStyle-Link",
+        # citecolor = "BiocStyle-Cite",
+        # urlcolor = "BiocStyle-URL"
     )
     meta
 }

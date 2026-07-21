@@ -19,22 +19,19 @@ vig_engine <- function(..., quarto_format) {
 vweave_quarto <- function(format) {
     meta <- get_meta(format)
     function(file, driver, syntax, encoding, quiet = FALSE, ...) {
+        has_quarto_pkg <- nzchar(system.file(package = "quarto"))
+        has_quarto_bin <- has_quarto_pkg && !is.null(quarto::quarto_path())
         # protect if Quarto is not installed
-        if (is.null(quarto::quarto_path())) {
-            msg <- c(
-                paste(
-                    "Quarto binary is required to build Quarto vignettes",
-                    "but is not available.",
-                ),
-                i = paste(
-                    "Please make sure it is installed and found",
-                    "by {.code find_quarto()}."
-                )
+        if (!has_quarto_bin) {
+            msg <- paste(
+                "Quarto is required to build Quarto vignettes but it is",
+                "not available. Install the 'quarto' R pacakge and the",
+                "Quarto binary and ensure it is on PATH."
             )
             if (is_R_CMD_check()) {
-                cli::cli_inform(msg)
+                warning(msg, call. = FALSE)
             } else {
-                cli::cli_abort(msg, call = NULL)
+                stop(msg, call. = FALSE)
             }
             return(vweave_empty(file))
         }

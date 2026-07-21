@@ -117,7 +117,7 @@ is_cran_check <- function() {
 }
 
 is_cran <- function() {
-    !rlang::is_interactive() &&
+    !interactive() &&
         !isTRUE(as.logical(Sys.getenv("NOT_CRAN", "false")))
 }
 

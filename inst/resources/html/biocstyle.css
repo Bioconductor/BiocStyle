@@ -16,7 +16,7 @@ div#TOC ul {
   padding: 0px 0px 0px 45px;
   list-style: none;
   background-image: none;
-  background-repeat: none;
+  background-repeat: no-repeat;
   background-position: 0;
   font-size: 10pt;
   font-family: Helvetica, Arial, sans-serif;
@@ -272,7 +272,7 @@ p.caption {
 caption {
   padding: 0px;
   margin-bottom: 10px;
-  min-width: 583;
+  min-width: 583px;
 }
 span.caption-title {
   color: #1a81c2;

@@ -177,6 +177,7 @@ code {
 }
 
 img {
+  box-sizing: border-box;
   max-width: 100%;
   display: block;
   padding: 0px 150px 0px 130px;
@@ -221,8 +222,9 @@ p.caption, caption {
 }
 
 p.caption {
+  overflow-wrap: break-word;
   padding-left: 130px;
-  padding-right: 85px;
+  padding-right: 150px;
   margin-bottom: 20px;
 }
 

@@ -242,15 +242,19 @@ create_html_template <- function() {
 }
 
 caption_titles = function(lines) {
-  regex_template = '%s(\\(#%s:[-/[:alnum:]]+\\))[[:space:]]*(.*?)([[:space:]]*((\\.[[:space:]])|(\\.$)|($)))'
+  ## the last two '%s' match where a caption without a sentence break ends
+  regex_template = '%s(\\(#%s:[-/[:alnum:]]+\\))[[:space:]]*(.*?)([[:space:]]*((\\.[[:space:]])|(\\.%s)|(%s)))'
   replacement = '\\1<span class="caption-title">\\2</span><br>'
   
-  # tables: match to <caption>...</caption> lines
-  regex = sprintf(regex_template, '(?<=^<caption>)[[:space:]]*', 'tab')
+  # tables: match to <caption>...</caption> lines; the title must stop before
+  # a closing </caption> on the same line so that the tags nest properly
+  caption_end = '(?:(?=</caption>)|$)'
+  regex = sprintf(regex_template, '(?<=^<caption>)[[:space:]]*', 'tab',
+                  caption_end, caption_end)
   lines = gsub(regex, replacement, lines, perl=TRUE)
   
   # figures: match to figure labels preceded by '<p class="caption'
-  regex = sprintf(regex_template, '', 'fig')
+  regex = sprintf(regex_template, '', 'fig', '$', '$')
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
   lines[idx] = gsub(regex, replacement, lines[idx])
@@ -321,7 +325,10 @@ modify_css = function(lines) {
   
   ## "pre code {" appears multiple times, so modifyLines() isn't appropriate here
   lines_collapsed = paste0(lines, collapse = "\n")
-  lines_collapsed = gsub("pre code {\n  padding: 0;\n}\n", replacement = "", x = lines_collapsed, fixed = TRUE)
+  ## pandoc >= 3 drops the indentation when it embeds the CSS (#103), so
+  ## match the rule with any whitespace
+  lines_collapsed = gsub("pre code \\{\\s*padding: 0;\\s*\\}\\s*",
+                         replacement = "", x = lines_collapsed, perl = TRUE)
   lines = strsplit(lines_collapsed, split = "\n", fixed = TRUE)[[1]]
   
   lines

@@ -216,6 +216,28 @@ p > img.widefigure {
   margin-right: -65px;
 }
 
+/* Images with an explicit width other than 100%, e.g. out.width = "30%" with
+   fig.show = "hold" or several raw <img width="30%"> tags (#52, #54). The
+   image padding above would eat into that width under border-box (down to
+   nothing), so indent the container instead and let the images flow inline,
+   side by side. Full-width figures keep the rules above. */
+.figure > img[width]:not([width="100%"]),
+p > img[width]:not([width="100%"]) {
+  display: inline-block;
+  padding: 0px;
+}
+
+.figure:has(> img[width]:not([width="100%"])),
+p:has(> img[width]:not([width="100%"])) {
+  padding-left: 130px;
+  padding-right: 150px;
+}
+
+.figure:has(> img[width]:not([width="100%"])) > p.caption {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 p.caption, caption {
   color: inherit;
   font-size: 8pt;
@@ -388,6 +410,11 @@ code > span.paren { color: #000000;}
     	padding: 0 0 0 0;
     }
     div.figure p.caption {
+    	padding-left: 0;
+    	padding-right: 0;
+    }
+    .figure:has(> img[width]:not([width="100%"])),
+    p:has(> img[width]:not([width="100%"])) {
     	padding-left: 0;
     	padding-right: 0;
     }

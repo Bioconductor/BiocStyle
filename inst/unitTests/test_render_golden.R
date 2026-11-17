@@ -219,6 +219,23 @@ test_html_golden_code_chunk <- function() {
     .golden_check_match("## [1] 55", body, "chunk output", fixed = TRUE)
 }
 
+## rmarkdown's 'pre code { padding: 0; }' rule, in any whitespace layout
+.golden_pre_code_padding_0 <- "pre code \\{\\s*padding: 0;\\s*\\}"
+
+test_html_golden_code_block_padding <- function() {
+    ## Regression test for #103: modify_css() must remove rmarkdown's rule,
+    ## which overrides the code block padding in bioconductor.css, both from
+    ## self-contained output (where pandoc >= 3 strips the CSS indentation)
+    ## and from output with external resources.
+    html <- paste(.golden_html()$lines, collapse = "\n")
+    checkTrue(!grepl(.golden_pre_code_padding_0, html, perl = TRUE),
+              msg = "pre code padding: 0 rule removed (self-contained)")
+    output <- .golden_render(BiocStyle::html_document(self_contained = FALSE))
+    html <- paste(BiocStyle:::readUTF8(output), collapse = "\n")
+    checkTrue(!grepl(.golden_pre_code_padding_0, html, perl = TRUE),
+              msg = "pre code padding: 0 rule removed (not self-contained)")
+}
+
 test_html_golden_css <- function() {
     ## self-contained output inlines bioconductor.css; every selector line of
     ## the stylesheet must be present

@@ -29,6 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           Rscript -e 'BiocManager::install(ask = FALSE, update = FALSE)'
+          Rscript -e 'install.packages("remotes")'
           Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never", repos = BiocManager::repositories())'
 
       - name: Build

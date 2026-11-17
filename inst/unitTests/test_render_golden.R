@@ -66,20 +66,9 @@
     gsub("[[:space:]]+", " ", paste(txt, collapse = " "))
 }
 
-## Citations make BiocStyle::pdf_document fail with pandoc >= 3.1.8: the LaTeX
-## template lacks the \citeproc command and the list-based CSLReferences
-## environment newer pandoc emits (see issue #94). The main PDF tests
-## therefore render the fixture without its bibliography and citation;
-## test_pdf_golden_citations covers the full fixture.
-.golden_strip_citations <- function(lines) {
-    lines <- lines[!grepl("^bibliography:", lines)]
-    gsub("[@golden2024]", "", lines, fixed = TRUE)
-}
-
 .golden_pdf <- function() {
     if (is.null(.golden_env$pdf)) {
-        pdf <- .golden_render(BiocStyle::pdf_document(keep_tex = TRUE),
-                              transform = .golden_strip_citations)
+        pdf <- .golden_render(BiocStyle::pdf_document(keep_tex = TRUE))
         tex <- BiocStyle:::readUTF8(sub("[.]pdf$", ".tex", pdf))
         .golden_env$pdf <- list(
             pdf = pdf,
@@ -310,11 +299,9 @@ test_pdf_golden_subtitle_text <- function() {
 }
 
 test_pdf_golden_citations <- function() {
-    DEACTIVATED("citeproc CSLReferences bug, see #94")
+    ## Regression test for #94 (pandoc >= 3.1.8 citeproc output)
     if (!.golden_has_latex()) return(invisible())
-    pdf <- .golden_render(BiocStyle::pdf_document())
-    checkTrue(file.exists(pdf), msg = "PDF with citations exists")
-    txt <- .golden_pdf_text(pdf)
+    txt <- .golden_pdf()$text
     if (!is.null(txt))
         .golden_check_match("Delta", txt, "PDF text citation", fixed = TRUE)
 }

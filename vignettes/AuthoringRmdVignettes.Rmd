@@ -361,6 +361,14 @@ knitr::kable(
 )
 ```
 
+Tables from plain `kableExtra::kbl()` are not styled, and `kbl()` ignores the
+`tab.cap` chunk option. With `r CRANpkg("kableExtra")`, use either
+
+- `kbl(..., format = "pipe")`, which gives the same table as `knitr::kable()`, or
+- `kbl(...) |> kable_styling()`,
+
+and set the caption with `caption =`.
+
 
 # Equations
 

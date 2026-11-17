@@ -1,0 +1,44 @@
+title: BiocStyle
+author: Bioconductor
+version: 1.0.0
+quarto-required: ">=1.4.0"
+contributes:
+  formats:
+    common:
+      toc: true
+      toc-depth: 3
+      toc-title: Contents
+      number-sections: true
+      date: today
+      date-format: "D MMMM YYYY"
+      filters:
+        - biocstyle.lua
+        - path: biocstyle-post.lua
+          at: post-render
+    html:
+      theme: [default, biocstyle.scss]
+      toc-location: left
+      reference-location: margin
+      embed-resources: true
+      format-links: false
+      fig-width: 8
+      fig-height: 5
+      template-partials:
+        - title-block.html
+    pdf:
+      documentclass: article
+      pdf-engine: pdflatex
+      fig-width: 8
+      fig-height: 5
+      colorlinks: true
+      linkcolor: BiocBlue
+      urlcolor: BiocBlue
+      citecolor: BiocBlue
+      format-resources:
+        - Bioconductor.sty
+      include-in-header:
+        - biocstyle-header.tex
+      template-partials:
+        - title.tex
+        - before-body.tex
+        - toc.tex

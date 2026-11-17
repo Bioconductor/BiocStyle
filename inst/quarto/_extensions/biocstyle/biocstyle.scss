@@ -1,0 +1,241 @@
+/*-- scss:defaults --*/
+
+// Bioconductor palette, from inst/resources/html/bioconductor.css and
+// Bioconductor/BiocStyle#114.
+$bioc-blue: #1a81c2;
+$bioc-green: #87b13f;
+$bioc-dark-blue: #005c7a;
+$bioc-text: #333333;
+$bioc-light-gray: #f7f7f7;
+$bioc-code-bg: #f0f0f0;
+
+$primary: $bioc-blue;
+$body-color: $bioc-text;
+$link-color: $bioc-blue;
+$link-decoration: none;
+$link-hover-decoration: underline;
+
+$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-monospace: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace;
+$font-size-root: 15px;
+$headings-font-weight: 400;
+$headings-color: $bioc-blue;
+
+$code-color: #404040;
+$code-bg: $bioc-code-bg;
+$code-block-bg: $bioc-code-bg;
+$code-block-border-left: false;
+
+$toc-color: $bioc-text;
+$toc-active-border: $bioc-blue;
+
+$table-border-color: #dddddd;
+
+/*-- scss:rules --*/
+
+// Title block --------------------------------------------------------------
+
+#title-block-header.biocstyle-title-block {
+  margin-bottom: 1em;
+
+  h1.title {
+    color: $bioc-green;
+    font-size: 2.4rem;
+    border-bottom: none;
+    margin-bottom: 0.4em;
+  }
+
+  .subtitle {
+    color: $bioc-blue;
+    font-size: 1.2rem;
+    margin-top: 0;
+  }
+
+  .author-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 0.5em;
+  }
+
+  .author-affiliation,
+  .author-email {
+    margin-bottom: 0.5em;
+  }
+
+  .date {
+    font-weight: bold;
+    margin-top: 1em;
+  }
+
+  .abstract-title,
+  .package-title {
+    color: $bioc-text;
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: none;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+  }
+}
+
+.affil-mark {
+  vertical-align: super;
+  font-size: 0.7em;
+  font-weight: normal;
+  font-style: normal;
+  line-height: normal;
+}
+
+// Headings -----------------------------------------------------------------
+
+h1,
+h2,
+h3,
+h4 {
+  color: $bioc-blue;
+}
+
+#quarto-content main {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 400;
+  }
+}
+
+#quarto-content main h1:not(.title) {
+  font-size: 2rem;
+  border-bottom: 1px solid $bioc-blue;
+  padding-bottom: 0.15em;
+  margin-top: 1.6em;
+}
+
+#quarto-content main h2 {
+  font-size: 1.5rem;
+  border-bottom: 4px solid $bioc-light-gray;
+  padding-bottom: 0.15em;
+  margin-top: 1.4em;
+}
+
+#quarto-content main h3 {
+  font-size: 1.25rem;
+  border-bottom: 2px solid $bioc-light-gray;
+  margin-top: 1.2em;
+}
+
+#quarto-content main h4 {
+  font-size: 1.05rem;
+  border-bottom: 1px solid $bioc-light-gray;
+}
+
+// Hanging section numbers, as in BiocStyle::html_document.
+#quarto-content main .header-section-number {
+  display: inline-block;
+  min-width: 3.25rem;
+  color: $bioc-blue;
+}
+
+// Table of contents ----------------------------------------------------------
+
+#TOC {
+  #toc-title {
+    color: $bioc-blue;
+    font-weight: bold;
+  }
+
+  .nav-link.active {
+    color: $bioc-blue;
+    font-weight: bold;
+  }
+}
+
+// Code ---------------------------------------------------------------------
+
+div.sourceCode,
+div.cell-output pre {
+  background-color: $bioc-code-bg;
+  border: none;
+  border-radius: 3px;
+}
+
+div.cell-output pre {
+  padding: 0.4em 0.6em;
+}
+
+p code:not(.sourceCode),
+li code:not(.sourceCode),
+td code:not(.sourceCode) {
+  background-color: $bioc-code-bg;
+  color: #404040;
+  padding: 0.1em 0.25em;
+  border-radius: 3px;
+}
+
+// Figures ------------------------------------------------------------------
+//
+// `fig-small` and `fig-wide` are the counterparts of the R Markdown chunk
+// options `fig.small` and `fig.wide`. The Lua filter maps `fig-wide` to
+// Quarto's `column-page-right` layout so it extends into the right margin.
+
+.fig-small img,
+img.fig-small {
+  max-width: 60%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fig-wide img,
+img.fig-wide {
+  width: 100%;
+}
+
+figcaption,
+.figure-caption,
+caption {
+  font-size: 0.85rem;
+  color: $bioc-text;
+}
+
+// Tables -------------------------------------------------------------------
+
+.horizontal-scroll {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.horizontal-scroll > table,
+.horizontal-scroll table {
+  width: auto;
+  min-width: 50%;
+}
+
+table {
+  thead {
+    background-color: $bioc-light-gray;
+  }
+
+  th,
+  td {
+    padding: 0.3em 0.5em;
+  }
+}
+
+// Margin notes (footnotes with `reference-location: margin`) --------------
+
+.column-margin,
+.margin-aside,
+#quarto-margin-sidebar .footnote {
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+// Misc ---------------------------------------------------------------------
+
+blockquote {
+  background-color: $bioc-light-gray;
+  padding: 0.25em 0.75em;
+  border-left-color: $bioc-blue;
+}

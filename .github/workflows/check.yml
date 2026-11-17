@@ -23,6 +23,14 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
+      ## Quarto CLI for the Quarto vignette (BiocStyle::quarto_html) and
+      ## inst/unitTests/test_quarto.R. quarto-actions/setup needs sudo, jq
+      ## and wget, which the container may not have.
+      - name: Install Quarto prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends sudo jq wget curl
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
       - name: Install TinyTeX and LaTeX packages used by Bioconductor.sty
         run: Rscript .github/scripts/install-tex.R
 

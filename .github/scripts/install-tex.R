@@ -6,7 +6,9 @@ pkgs <- c(
     "everysel", "fancyhdr", "footmisc", "framed", "geometry", "marginfix",
     "mathtools", "nowidow", "parnotes", "parskip", "pdfcrop", "placeins",
     "preprint", "ragged2e", "sectsty", "silence", "soul", "titlesec",
-    "titling", "xcolor", "xstring"
+    "titling", "xcolor", "xstring",
+    ## used by Quarto's LaTeX template (biocstyle-pdf)
+    "bookmark", "footnotehyper", "marginnote", "sidenotes", "xurl"
 )
 tinytex::tlmgr_install(pkgs)
 

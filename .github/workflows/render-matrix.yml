@@ -32,6 +32,14 @@ jobs:
         with:
           pandoc-version: ${{ matrix.pandoc }}
 
+      ## Quarto CLI for the Quarto vignette (BiocStyle::quarto_html) and
+      ## inst/unitTests/test_quarto.R. quarto-actions/setup needs sudo, jq
+      ## and wget, which the container may not have.
+      - name: Install Quarto prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends sudo jq wget curl
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
       - name: Install TinyTeX and LaTeX packages
         run: Rscript .github/scripts/install-tex.R
 
@@ -60,6 +68,27 @@ jobs:
             library(RUnit)
             library(BiocStyle)
             res <- runTestFile("inst/unitTests/test_render_golden.R")
+            printTextProtocol(res, showDetails = TRUE)
+            err <- getErrors(res)
+            if (err$nErr + err$nFail > 0L) quit(status = 1L)
+          '
+
+      ## Quarto renders with its own bundled pandoc, so these steps check the
+      ## biocstyle Quarto formats rather than the matrix pandoc version.
+      - name: Render the Quarto vignette
+        if: ${{ !cancelled() }}
+        working-directory: vignettes
+        run: |
+          quarto --version
+          Rscript -e 'library(BiocStyle); tools::buildVignette("AuthoringQuartoVignettes.qmd", tangle = FALSE, quiet = FALSE)'
+
+      - name: Quarto tests
+        if: ${{ !cancelled() }}
+        run: |
+          Rscript -e '
+            library(RUnit)
+            library(BiocStyle)
+            res <- runTestFile("inst/unitTests/test_quarto.R")
             printTextProtocol(res, showDetails = TRUE)
             err <- getErrors(res)
             if (err$nErr + err$nFail > 0L) quit(status = 1L)

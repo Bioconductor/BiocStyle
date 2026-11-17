@@ -160,8 +160,16 @@ div.cell-output pre {
   border-radius: 3px;
 }
 
-div.cell-output pre {
+div.cell-output pre,
+#quarto-content main pre:not(.sourceCode) {
   padding: 0.4em 0.6em;
+}
+
+// Plain (indented) code blocks, shaded like code chunks.
+#quarto-content main pre:not(.sourceCode) {
+  background-color: $bioc-code-bg;
+  border: none;
+  border-radius: 3px;
 }
 
 p code:not(.sourceCode),

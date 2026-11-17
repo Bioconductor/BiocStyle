@@ -34,7 +34,7 @@ md_document <- function(toc = TRUE, ...) {
     base_format$pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
       lines <- readUTF8(input_file)
       
-      doc <- rmarkdown:::partition_yaml_front_matter(lines)
+      doc <- partition_yaml_front_matter(lines)
       lines <- c(doc$front_matter, "{:toc}", doc$body)
       
       writeUTF8(lines, input_file)
@@ -87,8 +87,14 @@ md_document <- function(toc = TRUE, ...) {
   
   # return format
   output_format(knitr = knitr,
-                pandoc = list(args = "--atx-headers"),
+                pandoc = list(args = atx_headers_arg()),
                 clean_supporting = FALSE,
                 post_processor = post_processor,
                 base_format = base_format)
+}
+
+## pandoc 2.11.2 replaced --atx-headers with --markdown-headings=atx, and
+## pandoc 3 removed the old flag
+atx_headers_arg <- function() {
+  if (pandoc_available("2.11.2")) "--markdown-headings=atx" else "--atx-headers"
 }

@@ -278,6 +278,7 @@ $if(csl-refs)$
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
+\newcounter{none} % pandoc 3.8.1 and later uses a counter for unnamed tables.
 
 $for(header-includes)$
 $header-includes$
@@ -331,6 +332,7 @@ $if(biblatex)$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 
 $endif$
+
 $for(include-after)$
 $include-after$
 

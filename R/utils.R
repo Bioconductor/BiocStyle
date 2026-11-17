@@ -92,3 +92,22 @@ copyResource <- function(file, dir) {
   setNames(filename, names(file))
 }
 
+
+## Split document lines into YAML front matter (including its '---'
+## delimiters) and body. Same contract as rmarkdown's internal
+## partition_yaml_front_matter(), which is not exported (#18).
+partition_yaml_front_matter <- function(lines) {
+  delimiters <- grep("^(---|\\.\\.\\.)\\s*$", lines)
+  valid <- length(delimiters) >= 2L &&
+    delimiters[2L] - delimiters[1L] > 1L &&
+    grepl("^---\\s*$", lines[delimiters[1L]]) &&
+    (delimiters[1L] == 1L ||
+       all(grepl("^\\s*(<!-- rnb-\\w*-(begin|end) -->)?\\s*$",
+                 lines[seq_len(delimiters[1L] - 1L)])))
+  if (!valid)
+    return(list(front_matter = NULL, body = lines))
+  body <- c(lines[seq_len(delimiters[1L] - 1L)],
+            lines[-seq_len(delimiters[2L])])
+  list(front_matter = lines[delimiters[1L]:delimiters[2L]],
+       body = if (length(body)) body)
+}

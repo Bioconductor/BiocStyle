@@ -41,3 +41,34 @@ test_pdf_document_uncaptioned_table <- function() {
   checkTrue(file.exists(output_file))
   unlink(c(filename, output_file))
 }
+
+test_pdf_document_csl_citation <- function() {
+  ## Regression test for https://github.com/Bioconductor/BiocStyle/issues/94
+  ##
+  ## pandoc >= 3.1.8 emits \citeproc{} and \bibitem inside a list-based
+  ## CSLReferences environment. The frozen pandoc-2.8 template only defined
+  ## the older environment, so any PDF with a CSL bibliography failed with
+  ## "Undefined control sequence \citeproc" or "Lonely \item".
+  dir <- tempfile(); dir.create(dir)
+  writeLines(c(
+    "@book{xie2018,",
+    "  title = {R Markdown: The Definitive Guide},",
+    "  author = {Xie, Yihui and Allaire, J. J. and Grolemund, Garrett},",
+    "  publisher = {Chapman and Hall/CRC}, year = {2018}}"
+  ), file.path(dir, "refs.bib"))
+  rmd <- file.path(dir, "cite.Rmd")
+  writeLines(c(
+    '---',
+    'title: "Citation"',
+    'bibliography: refs.bib',
+    'output: BiocStyle::pdf_document',
+    '---',
+    '',
+    'See @xie2018 and [@xie2018, p. 3].',
+    '',
+    '# References'
+  ), rmd)
+  out <- rmarkdown::render(rmd, quiet = TRUE)
+  checkTrue(file.exists(out))
+  unlink(dir, recursive = TRUE)
+}

@@ -1,0 +1,67 @@
+---
+title: "Golden Render Fixture"
+subtitle: "Structural Reference Document"
+author:
+- name: Ada Alpha
+  affiliation: Institute of Alpha Studies
+  email: ada.alpha@example.org
+- name: Bram Beta
+  affiliation: Beta University
+- name: Cleo Gamma
+  affiliation:
+  - Institute of Alpha Studies
+  - Gamma Research Center
+  email: cleo.gamma@example.org
+package: BiocStyle
+abstract: |
+  This abstract marks the golden fixture abstract block.
+bibliography: golden.bib
+vignette: |
+  %\VignetteIndexEntry{Golden Render Fixture}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Package macros
+
+Packages: `r Biocpkg("IRanges")`, `r CRANpkg("data.table")` and
+`r Githubpkg("rstudio/rmarkdown")`.
+
+# Code
+
+```{r code-chunk}
+golden_sum <- sum(1:10)
+golden_sum
+```
+
+# Figures
+
+Figure \@ref(fig:regular) is a default figure.
+
+```{r regular, fig.cap="Regular figure. Default-size figure caption.", echo=FALSE, fig.height=3}
+plot(1:10)
+```
+
+```{r small, fig.cap="Small figure. Produced with fig.small.", fig.small=TRUE, echo=FALSE, fig.height=3}
+plot(1:10)
+```
+
+```{r wide, fig.cap="Wide figure. Produced with fig.wide.", fig.wide=TRUE, echo=FALSE, fig.height=3}
+plot(1:10)
+```
+
+# Tables
+
+Fruit   | Price
+------- | -----
+bananas | 1.2
+apples  | 1.0
+
+: (\#tab:fruit) Fruit prices. A simple table.
+
+# Notes and citations
+
+This sentence has a side note^[golden side note text] and a citation
+[@golden2024].
+
+# References {.unnumbered}

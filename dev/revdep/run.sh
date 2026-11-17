@@ -77,6 +77,7 @@ build_image() {
     local t0=$SECONDS
     docker build -q ${platform:+--platform "$platform"} \
         --build-context scripts="$repo/.github/scripts" \
+        --build-context tex="$repo/inst/resources/tex" \
         -t "$image" "$here" >/dev/null
     echo $((SECONDS - t0))
 }

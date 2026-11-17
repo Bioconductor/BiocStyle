@@ -82,7 +82,7 @@ test_pdf_document_patch_latex_output <- function() {
   out <- BiocStyle:::patch_latex_output(lines, metadata)
   checkTrue(!any(grepl("AUTH AFFIL", out, fixed = TRUE)),
             "affiliation placeholder replaced")
-  checkTrue(any(grepl("\\affil[1]{Some Institute}", out, fixed = TRUE)),
+  checkTrue(any(grepl("\\affil{Some Institute}", out, fixed = TRUE)),
             "affiliation inserted")
   checkTrue(any(grepl("\\texttt{images = \"lowres\"}", out, fixed = TRUE)),
             "control spaces in \\texttt replaced by regular spaces")
@@ -126,7 +126,7 @@ test_pdf_document_output_file <- function() {
                      paste(".tex file kept only with keep_tex:", what))
       if (keep_tex) {
         lines <- readLines(tex)
-        checkTrue(any(grepl("\\affil[1]{Some Institute}", lines, fixed = TRUE)),
+        checkTrue(any(grepl("\\affil{Some Institute}", lines, fixed = TRUE)),
                   paste("affiliation in .tex:", what))
         checkTrue(any(grepl("\\texttt{images = \"lowres\"}", lines,
                             fixed = TRUE)),

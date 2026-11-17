@@ -3,3 +3,5 @@
 ^.*\.md$
 ^\.git$
 ^\.github$
+^vignettes/_extensions$
+^vignettes/Bioconductor\.sty$

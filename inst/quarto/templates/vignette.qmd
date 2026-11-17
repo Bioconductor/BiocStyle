@@ -1,0 +1,84 @@
+---
+title: "{{title}}"
+author:
+  - name: First Last
+    affiliation: Institutional Affiliation
+    email: your@email.address
+package: {{package}}
+abstract: |
+  Describe your vignette with a paragraph-length summary.
+format: biocstyle-{{format}}
+vignette: >
+  %\VignetteIndexEntry{{{title}}}
+  %\VignetteEngine{BiocStyle::quarto_{{format}}}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!--
+This vignette is built by BiocStyle's Quarto vignette engine. The
+package's DESCRIPTION file needs
+
+    VignetteBuilder: BiocStyle
+    Suggests: BiocStyle, knitr, quarto
+
+(use `VignetteBuilder: BiocStyle, knitr` if the package also has
+R Markdown vignettes), and the Quarto command line tool must be
+installed (https://quarto.org).
+
+To preview the vignette, render it with `quarto render` or the RStudio
+"Render" button. Both use the copy of the BiocStyle Quarto extension in
+vignettes/_extensions, created by BiocStyle::use_quarto_extension().
+-->
+
+# Installation
+
+Install the _{{package}}_ package with
+
+```{r}
+#| eval: false
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("{{package}}")
+```
+
+Once installed, load the package with
+
+```{r}
+#| message: false
+library({{package}})
+```
+
+# Quick start
+
+# Common workflows
+
+# Interoperability with other _Bioconductor_ packages
+
+# Support, bug reports, and source code availability
+
+Please ask for help about using this package on the
+[Bioconductor support site](https://support.bioconductor.org). Remember to
+tag your question with '{{package}}', so that the maintainer is notified.
+
+Retrieve the source code for this package from its canonical location
+
+```
+git clone https://git.bioconductor.org/packages/{{package}}
+```
+
+Use the [bug report URL]({{bug_reports}}) to report bugs in _{{package}}_;
+remember to reduce your bug report to a simple reproducible example.
+
+# Appendix {.unnumbered}
+
+## Acknowledgements {.unnumbered}
+
+<!-- acknowledge funding and other sources of support here -->
+
+## Session info {.unnumbered}
+
+```{r}
+#| label: session-info
+#| echo: false
+sessionInfo()
+```

@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pandoc: ['2.19.2', '3.1.13', '3.6.4', '3.8.2', 'latest']
+        pandoc: ['2.19.2', '3.1.13', '3.6.4', '3.8.2', '3.10', 'latest']
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -37,6 +37,7 @@ jobs:
 
       - name: Install dependencies and this BiocStyle
         run: |
+          Rscript -e 'install.packages("remotes")'
           Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never", repos = BiocManager::repositories())'
           Rscript -e 'install.packages("magick")'
           R CMD INSTALL .

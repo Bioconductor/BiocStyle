@@ -18,10 +18,12 @@ Authors@R: c(
         )
 Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 1.2), stats, utils, yaml,
     BiocManager
-Suggests: BiocGenerics, RUnit, htmltools
+Suggests: BiocGenerics, RUnit, htmltools, quarto
 biocViews: Software
 License: Artistic-2.0
-VignetteBuilder: knitr
+VignetteBuilder: knitr, BiocStyle
+SystemRequirements: Quarto command line tool (optional; needed to build
+    Quarto vignettes, https://quarto.org)
 Encoding: UTF-8
 URL: https://github.com/Bioconductor/BiocStyle
 BugReports: https://github.com/Bioconductor/BiocStyle/issues

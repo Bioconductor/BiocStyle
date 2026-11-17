@@ -145,31 +145,11 @@ pdf_document <- function(toc = TRUE,
     )
   ))
   
-  post_processor = function(metadata, input, output, clean, verbose) {
-    lines = readUTF8(output)
-    
-    ## insert author affiliations
-    lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
-    
-    ## LaTeX soul hacks
-    r = "(?<=\\\\texttt{)((?:\\\\{|\\\\}|[^{}]|{(?1)})*)(?=})"
-    m <- gregexpr(r, lines, perl=TRUE)
-    regmatches(lines, m) <- lapply(regmatches(lines, m), function(x) {
-      # substitute all control spaces "\ " in \texttt by regular spaces
-      x <- gsub("\\ ", " ", x, fixed=TRUE)
-    })
-    
-    writeUTF8(lines, output)
-    
-    output
-  }
-  
   config <- output_format(
     knitr = knitr,
     pandoc = list(args = pandoc_args),
     pre_knit = pre_knit,
     pre_processor = pre_processor,
-    post_processor = post_processor,
     intermediates_generator = intermediates_generator,
     # use bookdown::pdf_book for the added capability of cross-referencing
     base_format = bookdown::pdf_book(
@@ -182,6 +162,11 @@ pdf_document <- function(toc = TRUE,
       base_format = rmarkdown::pdf_document,
       ...)
   )
+  
+  ## patch the .tex file as soon as pandoc has written it: when 'output_file'
+  ## ends in '.pdf', rmarkdown::render() runs LaTeX before any post-processor
+  ## (https://github.com/Bioconductor/BiocStyle/issues/93)
+  config$pandoc$convert_fun <- latex_convert_fun(config$pandoc$convert_fun)
   
   ## override the default document template which is used in order to retain
   ## some original template-dependent rmarkdown functionality
@@ -220,6 +205,49 @@ pdf_document <- function(toc = TRUE,
   }
   
   config
+}
+
+## Wrap the pandoc conversion function 'convert_fun' (rmarkdown::pandoc_convert
+## by default) so that BiocStyle's edits are applied to LaTeX output before
+## rmarkdown or bookdown compile it.
+latex_convert_fun <- function(convert_fun = NULL) {
+  if (!is.function(convert_fun))
+    convert_fun <- rmarkdown::pandoc_convert
+  
+  function(input, to = NULL, from = NULL, output = NULL, citeproc = FALSE,
+           options = NULL, verbose = FALSE, wd = NULL) {
+    result <- convert_fun(input = input, to = to, from = from, output = output,
+                          citeproc = citeproc, options = options,
+                          verbose = verbose, wd = wd)
+    
+    if (!is.null(output) && grepl("[.]tex$", output)) {
+      metadata <- rmarkdown::yaml_front_matter(input[1L])
+      
+      ## like pandoc_convert(), resolve 'output' relative to the input directory
+      oldwd <- setwd(if (is.null(wd)) dirname(input[1L]) else wd)
+      on.exit(setwd(oldwd), add = TRUE)
+      
+      writeUTF8(patch_latex_output(readUTF8(output), metadata), output)
+    }
+    
+    invisible(result)
+  }
+}
+
+## BiocStyle edits of the LaTeX document written by pandoc
+patch_latex_output <- function(lines, metadata) {
+  ## insert author affiliations
+  lines <- modifyLines(lines, from='%% AUTH AFFIL %%', insert=auth_affil_latex(metadata))
+  
+  ## LaTeX soul hacks
+  r = "(?<=\\\\texttt{)((?:\\\\{|\\\\}|[^{}]|{(?1)})*)(?=})"
+  m <- gregexpr(r, lines, perl=TRUE)
+  regmatches(lines, m) <- lapply(regmatches(lines, m), function(x) {
+    # substitute all control spaces "\ " in \texttt by regular spaces
+    gsub("\\ ", " ", x, fixed=TRUE)
+  })
+  
+  lines
 }
 
 create_latex_template <- function(opts=NULL, sty=bioconductor.sty) {

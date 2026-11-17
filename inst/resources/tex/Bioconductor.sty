@@ -14,7 +14,8 @@
 \ProcessOptions
 %
 \PassOptionsToPackage{usenames,dvipsnames}{color}
-\RequirePackage{color}
+\RequirePackage{xcolor}
+\definecolor{fgcolor}{rgb}{0.251, 0.251, 0.251}
 \definecolor{BiocBlue}{RGB}{24,129,194}
 \definecolor{BiocGreen}{RGB}{135,177,63}
 \definecolor{BiocGray}{cmyk}{0,0,0,0.50}
@@ -526,32 +527,34 @@
 }
 \patchcmd\SOUL@start{\SOUL@preamble}{\@inside@soultrue\SOUL@preamble}
   {}{\errmessage{Cannot patch \protect\SOUL@start}}
-\renewcommand{\@raggedtwoe@everyselectfont}{%
-  \if@raggedtwoe@spaceskip
-    \ifdim\fontdimen\thr@@\font=\z@\relax
-      \if@inside@soul
-        \if@inside@soul@ul
+  \@ifpackagelater{ragged2e}{2023/06/01}{}{
+    \renewcommand{\@raggedtwoe@everyselectfont}{%
+      \if@raggedtwoe@spaceskip
+        \ifdim\fontdimen\thr@@\font=\z@\relax
+          \if@inside@soul
+            \if@inside@soul@ul
+              \spaceskip\fontdimen\tw@\font
+              \@minus\fontdimen4\font
+            \fi
+          \else
+            \spaceskip\z@
+          \fi
+        \else
           \spaceskip\fontdimen\tw@\font
-          \@minus\fontdimen4\font
         \fi
       \else
-        \spaceskip\z@
+        \if@inside@soul
+          \if@inside@soul@ul
+            \spaceskip\fontdimen\tw@\font
+            \@plus\fontdimen\thr@@\font
+            \@minus\fontdimen4\font
+          \fi
+        \else
+          \spaceskip\z@
+        \fi
       \fi
-    \else
-      \spaceskip\fontdimen\tw@\font
-    \fi
-  \else
-    \if@inside@soul
-      \if@inside@soul@ul
-        \spaceskip\fontdimen\tw@\font
-        \@plus\fontdimen\thr@@\font
-        \@minus\fontdimen4\font
-      \fi
-    \else
-      \spaceskip\z@
-    \fi
-  \fi
-}
+    }
+  }
 \makeatother
 %
 % apply longtable patch from http://www.latex-project.org/cgi-bin/ltxbugs2html?pr=tools/3512
@@ -604,6 +607,11 @@
     \wlog{Patching longtable done!}
   }
 }{}
+%
+% New commands introduced in knitr 1.47.0
+% This over sets colors that match the original BiocStyle colors
+\newcommand{\hlsng}[1]{\textcolor[rgb]{0.251,0.627,0.251}{#1}}
+\newcommand{\hldef}[1]{\textcolor[rgb]{0.251,0.251,0.251}{#1}}
 %
 %
 \endinput

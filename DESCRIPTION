@@ -3,7 +3,7 @@ Title: Standard styles for vignettes and other Bioconductor documents
 Description: Provides standard formatting styles for Bioconductor PDF
     and HTML documents. Package vignettes illustrate use and
     functionality.
-Version: 2.29.1
+Version: 2.41.0
 Authors@R: c(
         person("Andrzej", "Oleś", role = "aut",
             comment = c(ORCID = "0000-0003-0285-2787")
@@ -13,7 +13,7 @@ Authors@R: c(
         ),
         person("Martin", "Morgan", role = "ctb"),
         person("Wolfgang", "Huber", role = "ctb"),
-        person("Bioconductor Package", role = "cre",
+        person("Bioconductor Package Maintainer", role = "cre",
             email = "maintainer@bioconductor.org")
         )
 Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 1.2), stats, utils, yaml,
@@ -26,3 +26,4 @@ Encoding: UTF-8
 URL: https://github.com/Bioconductor/BiocStyle
 BugReports: https://github.com/Bioconductor/BiocStyle/issues
 RoxygenNote: 6.1.0
+Date: 2025-08-01

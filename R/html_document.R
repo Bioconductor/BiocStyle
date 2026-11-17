@@ -316,7 +316,10 @@ modify_css = function(lines) {
   
   ## "pre code {" appears multiple times, so modifyLines() isn't appropriate here
   lines_collapsed = paste0(lines, collapse = "\n")
-  lines_collapsed = gsub("pre code {\n  padding: 0;\n}\n", replacement = "", x = lines_collapsed, fixed = TRUE)
+  ## pandoc >= 3 drops the indentation when it embeds the CSS (#103), so
+  ## match the rule with any whitespace
+  lines_collapsed = gsub("pre code \\{\\s*padding: 0;\\s*\\}\\s*",
+                         replacement = "", x = lines_collapsed, perl = TRUE)
   lines = strsplit(lines_collapsed, split = "\n", fixed = TRUE)[[1]]
   
   lines

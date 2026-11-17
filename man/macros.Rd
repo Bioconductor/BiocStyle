@@ -11,9 +11,9 @@
 \alias{Githubpkg}
 \title{Link to packages on Bioconductor, CRAN and GitHub}
 \usage{
-Biocpkg(pkg, vignette = NULL, label = NULL)
+Biocpkg(pkg, vignette = NULL, label = NULL, versioned = TRUE)
 
-Biocbook(pkg, label = NULL)
+Biocbook(pkg, label = NULL, versioned = TRUE)
 
 Biocannopkg(pkg)
 
@@ -33,6 +33,10 @@ html or pdf extension, e.g., "work-0-intro.html".}
 
 \item{label}{character(1) label used to identify the package or
 vignette. If \code{NULL}, defaults to \code{pkg}.}
+
+\item{versioned}{logical(1), determines the creation of links to Bioconductor
+packages including the version number (default) or not, using the general
+"short form" of the link. Applies to \code{Biocpkg} and \code{Biocbook}.}
 
 \item{repo}{Repository address in the format username/repo[/subdir]}
 }

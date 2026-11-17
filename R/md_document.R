@@ -34,7 +34,7 @@ md_document <- function(toc = TRUE, ...) {
     base_format$pre_processor <- function(metadata, input_file, runtime, knit_meta, files_dir, output_dir) {
       lines <- readUTF8(input_file)
       
-      doc <- rmarkdown:::partition_yaml_front_matter(lines)
+      doc <- partition_yaml_front_matter(lines)
       lines <- c(doc$front_matter, "{:toc}", doc$body)
       
       writeUTF8(lines, input_file)

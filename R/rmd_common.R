@@ -5,7 +5,7 @@ pre_processor = function(metadata, input_file, runtime, knit_meta, files_dir, ou
   ## the metadata may contain r code, so we extract it from the knitted 
   ## document instead of using the 'metadata' argument
   lines <- readUTF8(input_file)
-  lines <- rmarkdown:::partition_yaml_front_matter(lines)
+  lines <- partition_yaml_front_matter(lines)
   front_matter <- lines$front_matter
   body <- lines$body
   

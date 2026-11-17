@@ -12,6 +12,8 @@ contributes:
       date: today
       date-format: "D MMMM YYYY"
       filters:
+        - path: biocstyle-figures.lua
+          at: pre-ast
         - biocstyle.lua
         - path: biocstyle-post.lua
           at: post-render

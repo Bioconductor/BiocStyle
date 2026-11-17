@@ -1,13 +1,13 @@
 --[[
-BiocStyle Quarto filter (runs before Quarto's own filters).
+BiocStyle Quarto filter for document metadata (runs before Quarto's own
+filters, after Quarto has normalized authors and affiliations).
 
 * `package:` field -> `biocstyle-package` metadata ("Name version"), shown
   by the title block. The version comes from `package-version` metadata
   (set by the BiocStyle::quarto_html / quarto_pdf vignette engines) or,
   when previewing a vignette interactively, from the DESCRIPTION file in
   the parent directory of the document.
-* Figure size classes `fig-small` and `fig-wide`, the Quarto counterparts
-  of the R Markdown chunk options `fig.small` and `fig.wide`.
+* Email marks (*, **, ...) for the title block.
 * PDF author block: authors, affiliations and emails as `authblk`
   commands for Bioconductor.sty.
 ]]
@@ -152,42 +152,4 @@ function Meta(meta)
     end
   end
   return meta
-end
-
--- Figure size classes ------------------------------------------------------
-
-local small_width = "60%"
-
-local function set_image_width(el, width)
-  return el:walk({
-    Image = function(img)
-      if img.attributes.width == nil then
-        img.attributes.width = width
-      end
-      return img
-    end,
-  })
-end
-
-function Div(el)
-  if el.classes:includes("fig-wide") then
-    -- Reuse Quarto's page layout: the figure extends into the right
-    -- margin, as BiocStyle's wide figures do.
-    if not el.classes:includes("column-page-right") then
-      el.classes:insert("column-page-right")
-    end
-    return el
-  end
-  if el.classes:includes("fig-small") and quarto.doc.is_format("latex") then
-    return set_image_width(el, small_width)
-  end
-end
-
-function Image(img)
-  if img.classes:includes("fig-small") and quarto.doc.is_format("latex") then
-    if img.attributes.width == nil then
-      img.attributes.width = small_width
-    end
-    return img
-  end
 end

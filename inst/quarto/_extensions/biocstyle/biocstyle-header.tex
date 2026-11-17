@@ -2,7 +2,11 @@
 % BiocStyle::pdf_document uses, then shade code and output blocks the way
 % BiocStyle's highlighting-macros.def does.
 \usepackage{Bioconductor}
-\renewenvironment{Shaded}{\begin{myshaded}}{\end{myshaded}}
+\ifdefined\Shaded
+  \renewenvironment{Shaded}{\begin{myshaded}}{\end{myshaded}}
+\else
+  \newenvironment{Shaded}{\begin{myshaded}}{\end{myshaded}}
+\fi
 \let\biocoldverbatim\verbatim
 \let\biocoldendverbatim\endverbatim
 \renewenvironment{verbatim}{\color{codecolor}\begin{myshaded}\biocoldverbatim}{\biocoldendverbatim\end{myshaded}}

@@ -1,0 +1,82 @@
+---
+title: "Parity reference vignette"
+subtitle: "Same content, two engines"
+author:
+  - name: Ada Lovelace
+    affiliation: Analytical Engine Institute, London, UK
+    email: ada@example.org
+  - name: Charles Babbage
+    affiliation: Difference Engine Lab, Cambridge, UK
+package: BiocStyle
+abstract: |
+  A short abstract describing what this vignette covers.
+format:
+  biocstyle-html: default
+  biocstyle-pdf: default
+vignette: >
+  %\VignetteIndexEntry{Parity reference}
+  %\VignetteEngine{BiocStyle::quarto_html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+library(BiocStyle)
+```
+
+# Introduction
+
+This package builds on `r Biocpkg("SummarizedExperiment")` and
+`r CRANpkg("knitr")`, and is developed on GitHub as
+`r Githubpkg("Bioconductor/BiocStyle")`.
+Here is a sentence with a footnote.^[This footnote should appear in the margin.]
+
+## A subsection
+
+Some text with `inline code` and a [link](https://bioconductor.org).
+
+```{r}
+#| label: example
+x <- rnorm(100)
+summary(x)
+```
+
+# Figures
+
+```{r}
+#| label: fig-regular
+#| fig-cap: "A regular figure. With a caption."
+plot(cars)
+```
+
+```{r}
+#| label: fig-small
+#| classes: fig-small
+#| fig-width: 5
+#| fig-cap: "A small figure. Narrower than the text."
+plot(cars)
+```
+
+```{r}
+#| label: fig-wide
+#| classes: fig-wide
+#| fig-width: 10
+#| fig-cap: "A wide figure. Extends into the margin."
+plot(pressure, type = "b")
+```
+
+# Tables
+
+```{r}
+#| label: tbl-wide
+#| tbl-cap: "A wide table that scrolls horizontally."
+wide <- as.data.frame(matrix(round(seq(-1, 1, length.out = 60), 3), nrow = 3))
+knitr::kable(wide)
+```
+
+# Session info {.unnumbered}
+
+```{r}
+#| label: session-info
+sessionInfo()
+```

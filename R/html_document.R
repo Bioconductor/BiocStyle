@@ -21,6 +21,8 @@
 #' @param css character, one or more css files to include
 #' @param pandoc_args character, additional command line options to pass to
 #' pandoc
+#' @param keep_md logical(1), \code{TRUE} to keep a copy of the knitted
+#' Markdown file next to the output file
 #' @param \dots Additional arguments passed to
 #' \code{\link[rmarkdown]{html_document}}
 #' @param titlecaps logical(1), \code{TRUE} to use the emphasize the first
@@ -48,6 +50,7 @@ html_document <- function(toc = TRUE,
                           self_contained = TRUE,
                           css = NULL,
                           pandoc_args = NULL,
+                          keep_md = FALSE,
                           ...,
                           ## BiocStyle specific arguments:
                           titlecaps = TRUE) {
@@ -116,6 +119,7 @@ html_document <- function(toc = TRUE,
   config <- output_format(
     knitr = knitr,
     pandoc = NULL,
+    keep_md = keep_md,
     clean_supporting = self_contained,
     pre_processor = pre_processor,
     post_processor = post_processor,
@@ -127,6 +131,7 @@ html_document <- function(toc = TRUE,
       fig_height = fig_height,
       self_contained = self_contained,
       css = css,
+      keep_md = keep_md,
       ...)
   )
   

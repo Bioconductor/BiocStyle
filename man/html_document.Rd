@@ -12,6 +12,7 @@ html_document(
   self_contained = TRUE,
   css = NULL,
   pandoc_args = NULL,
+  keep_md = FALSE,
   ...,
   titlecaps = TRUE
 )
@@ -36,6 +37,9 @@ necessary because of it's size).}
 
 \item{pandoc_args}{character, additional command line options to pass to
 pandoc}
+
+\item{keep_md}{logical(1), \code{TRUE} to keep a copy of the knitted
+Markdown file next to the output file}
 
 \item{\dots}{Additional arguments passed to
 \code{\link[rmarkdown]{html_document}}}

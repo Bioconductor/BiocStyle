@@ -454,6 +454,7 @@ a full-width square plot, as in Figure~\ref{fig:square}.
 \end{figure*}
 
 When \knitr\ is used plots are cropped so that blank margins around them are removed to make better use of the space in the output document\footnote{otherwise one often has to struggle with \Rcode{par} to set appropriate margins}. This feature can be switched off by setting the chunk option \Rcode{knitr::opts\_chunk\$set(crop = NULL)}.
+Cropping uses the \software{pdfcrop} utility, which needs ghostscript; without them plots are left uncropped.
 
 \subsubsection{\latex{\textbackslash incfig} convenience macro}\label{incfig}
 
@@ -600,6 +601,20 @@ latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 \BiocStyle\ loads the following \LaTeX\ packages:
 
 \Sexpr{latexpkgs}.
+
+The TeX Live packages which provide them, together with \software{titling} for
+\Rcode{BiocStyle::pdf\_document} and \software{pdfcrop} for figure cropping,
+are listed in the file \file{resources/tex/required-packages.txt} of the
+installed \BiocStyle\ package, one package name per line. With
+\CRANpkg{tinytex}, for example on a continuous integration machine, install
+them with
+
+<<tlmgrInstall, eval=FALSE>>=
+pkgs <- readLines(system.file("resources", "tex", "required-packages.txt",
+                              package = "BiocStyle"))
+pkgs <- trimws(sub("#.*", "", pkgs))
+tinytex::tlmgr_install(pkgs[nzchar(pkgs)])
+@
 
 
 \section{Known issues}

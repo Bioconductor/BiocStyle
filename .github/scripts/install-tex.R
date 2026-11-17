@@ -1,16 +1,11 @@
 ## Install TinyTeX plus the LaTeX packages Bioconductor.sty and the
-## pandoc LaTeX templates need. Shared by all CI workflows.
+## pandoc LaTeX templates need. Shared by all CI workflows. The package
+## list ships with BiocStyle; read it from the checkout (run from the repo
+## root) so CI tests the same file users install from.
 if (!tinytex::is_tinytex()) tinytex::install_tinytex(force = TRUE)
-pkgs <- c(
-    "bera", "caption", "changepage", "enumitem", "etoolbox",
-    "everysel", "fancyhdr", "footmisc", "framed", "geometry", "marginfix",
-    "mathtools", "nowidow", "parnotes", "parskip", "pdfcrop", "placeins",
-    "preprint", "ragged2e", "sectsty", "silence", "soul", "titlesec",
-    "titling", "xcolor", "xstring",
-    ## used by Quarto's LaTeX template (biocstyle-pdf)
-    "bookmark", "footnotehyper", "marginnote", "sidenotes", "xurl"
-)
-tinytex::tlmgr_install(pkgs)
+pkgs <- readLines("inst/resources/tex/required-packages.txt")
+pkgs <- trimws(sub("#.*", "", pkgs))
+tinytex::tlmgr_install(pkgs[nzchar(pkgs)])
 
 ## Put TinyTeX's binaries on PATH for later steps (Sweave/texi2dvi look on
 ## PATH; rmarkdown finds TinyTeX on its own).

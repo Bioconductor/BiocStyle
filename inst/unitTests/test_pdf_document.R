@@ -72,3 +72,84 @@ test_pdf_document_csl_citation <- function() {
   checkTrue(file.exists(out))
   unlink(dir, recursive = TRUE)
 }
+
+test_pdf_document_patch_latex_output <- function() {
+  ## the edits BiocStyle applies to the .tex file written by pandoc
+  lines <- c("\\author{A}", "%% AUTH AFFIL %%",
+             "Using the \\texttt{images\\ =\\ \"lowres\"} is fine.")
+  metadata <- list(author = list(list(name = "Ann Author",
+                                      affiliation = "Some Institute")))
+  out <- BiocStyle:::patch_latex_output(lines, metadata)
+  checkTrue(!any(grepl("AUTH AFFIL", out, fixed = TRUE)),
+            "affiliation placeholder replaced")
+  checkTrue(any(grepl("\\affil[1]{Some Institute}", out, fixed = TRUE)),
+            "affiliation inserted")
+  checkTrue(any(grepl("\\texttt{images = \"lowres\"}", out, fixed = TRUE)),
+            "control spaces in \\texttt replaced by regular spaces")
+}
+
+test_pdf_document_output_file <- function() {
+  ## Regression test for https://github.com/Bioconductor/BiocStyle/issues/93
+  ##
+  ## When 'output_file' ends in '.pdf', rmarkdown::render() runs LaTeX on the
+  ## .tex file before any post-processor. BiocStyle's soul fix for inline
+  ## code (and the author affiliations) used to live in the post-processor, so
+  ## inline code with spaces failed with "Package soul Error: Reconstruction
+  ## failed." and the affiliations were never inserted.
+  dir <- tempfile(); dir.create(dir)
+  rmd <- file.path(dir, "inline.Rmd")
+  writeLines(c(
+    '---',
+    'title: "Inline code"',
+    'author:',
+    '- name: Ann Author',
+    '  affiliation: Some Institute',
+    'output: BiocStyle::pdf_document',
+    '---',
+    '',
+    'Using the `images = "lowres"` is fine, and so is',
+    '`sce <- fetch_data(type = "sce")`.'
+  ), rmd)
+
+  for (keep_tex in c(TRUE, FALSE)) {
+    for (output_file in list(NULL, "named.pdf", "noext")) {
+      what <- sprintf("keep_tex = %s, output_file = %s", keep_tex,
+                      deparse(output_file))
+      out <- rmarkdown::render(
+        rmd, BiocStyle::pdf_document(keep_tex = keep_tex),
+        output_file = output_file, quiet = TRUE)
+      checkTrue(file.exists(out), paste("PDF exists:", what))
+      checkIdentical(charToRaw("%PDF"), readBin(out, "raw", 4L),
+                     paste("output is a PDF:", what))
+      tex <- sub("[.]pdf$", ".tex", out)
+      checkIdentical(keep_tex, file.exists(tex),
+                     paste(".tex file kept only with keep_tex:", what))
+      if (keep_tex) {
+        lines <- readLines(tex)
+        checkTrue(any(grepl("\\affil[1]{Some Institute}", lines, fixed = TRUE)),
+                  paste("affiliation in .tex:", what))
+        checkTrue(any(grepl("\\texttt{images = \"lowres\"}", lines,
+                            fixed = TRUE)),
+                  paste("soul fix applied to .tex:", what))
+      }
+      unlink(c(out, tex))
+    }
+  }
+  unlink(dir, recursive = TRUE)
+}
+
+test_pdf_document_keep_md <- function() {
+  ## Regression test for https://github.com/Bioconductor/BiocStyle/issues/106
+  checkTrue(BiocStyle::pdf_document(keep_md = TRUE)$keep_md)
+  checkTrue(!BiocStyle::pdf_document()$keep_md)
+
+  dir <- tempfile(); dir.create(dir)
+  rmd <- file.path(dir, "keep.Rmd")
+  writeLines(c('---', 'title: "Keep MD"', 'output:',
+               '  BiocStyle::pdf_document:', '    keep_md: true', '---', '',
+               'Some text.'), rmd)
+  out <- rmarkdown::render(rmd, quiet = TRUE)
+  checkTrue(file.exists(out))
+  checkTrue(file.exists(file.path(dir, "keep.md")), ".md file kept")
+  unlink(dir, recursive = TRUE)
+}

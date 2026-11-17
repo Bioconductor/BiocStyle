@@ -16,7 +16,7 @@ Authors@R: c(
         person("Bioconductor Package Maintainer", role = "cre",
             email = "maintainer@bioconductor.org")
         )
-Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 1.2), stats, utils, yaml,
+Imports: bookdown, knitr (>= 1.30), rmarkdown (>= 2.18), stats, utils, yaml,
     BiocManager
 Suggests: BiocGenerics, RUnit, htmltools, quarto
 biocViews: Software

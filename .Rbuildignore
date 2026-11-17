@@ -5,3 +5,5 @@
 ^\.github$
 ^dev$
 ^justfile$
+^vignettes/_extensions$
+^vignettes/Bioconductor\.sty$

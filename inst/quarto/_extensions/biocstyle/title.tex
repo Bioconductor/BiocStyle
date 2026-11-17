@@ -1,0 +1,17 @@
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+$if(subtitle)$
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\Large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{$subtitle$}
+$endif$
+$if(biocstyle-latex-authors)$
+$biocstyle-latex-authors$
+$else$
+\author{$for(authors)$$it.name.literal$$sep$ \and $endfor$}
+$endif$
+\date{$date$}

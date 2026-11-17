@@ -1,2 +1,6 @@
 # reverse-dependency sweep output
 /dev/revdep/results/
+
+# Quarto extension copy and LaTeX style file left by previewing vignettes
+/vignettes/_extensions/
+/vignettes/Bioconductor.sty

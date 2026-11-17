@@ -1,0 +1,16 @@
+$if(toc)$
+$if(toc-title)$
+\renewcommand*\contentsname{$toc-title$}
+$endif$
+{
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+}
+\newpage
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
+$if(lot)$
+\listoftables
+$endif$

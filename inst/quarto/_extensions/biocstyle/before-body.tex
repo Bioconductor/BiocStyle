@@ -1,0 +1,14 @@
+$if(has-frontmatter)$
+\frontmatter
+$endif$
+$if(title)$
+\maketitle
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+$if(biocstyle-package)$
+\packageVersion{$biocstyle-package$}
+$endif$
+$endif$

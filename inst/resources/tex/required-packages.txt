@@ -38,3 +38,11 @@ titling
 
 # Figure cropping (crop = TRUE); also needs ghostscript
 pdfcrop
+
+# Loaded by Quarto's LaTeX template for the biocstyle-pdf Quarto format
+# (Quarto with TinyTeX can also install these on demand)
+bookmark
+footnotehyper
+marginnote
+sidenotes
+xurl

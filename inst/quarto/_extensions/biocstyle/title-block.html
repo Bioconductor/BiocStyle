@@ -1,0 +1,48 @@
+<header id="title-block-header" class="quarto-title-block default biocstyle-title-block">
+<div class="quarto-title">
+$if(title)$
+<h1 class="title">$title$</h1>
+$endif$
+$if(subtitle)$
+<p class="subtitle lead">$subtitle$</p>
+$endif$
+</div>
+
+$if(by-author)$
+<div class="biocstyle-authors">
+<p class="author-name">$for(by-author/allbutlast)$<span class="author">$it.name.literal$$if(biocstyle-affil-marks)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$sep$, $endfor$$if(by-author/allbutlast)$ and $endif$$for(by-author/last)$<span class="author">$it.name.literal$$if(biocstyle-affil-marks)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$endfor$</p>
+$if(by-affiliation)$
+<p class="author-affiliation">
+$for(by-affiliation)$
+<span class="affiliation">$if(biocstyle-affil-marks)$<span class="affil-mark">$it.number$</span>$endif$$if(it.url)$<a href="$it.url$">$endif$$it.name$$if(it.url)$</a>$endif$</span>$sep$<br>
+$endfor$
+</p>
+$endif$
+<p class="author-email">
+$for(by-author)$
+$if(it.email)$
+<span class="email"><span class="affil-mark">$it.emailmark$</span><a href="mailto:$it.email$">$it.email$</a></span><br>
+$endif$
+$endfor$
+</p>
+</div>
+$endif$
+
+$if(date)$
+<p class="date">$date$</p>
+$endif$
+
+$if(abstract)$
+<div class="abstract">
+<h4 class="abstract-title">$labels.abstract$</h4>
+$abstract$
+</div>
+$endif$
+
+$if(biocstyle-package)$
+<div class="package">
+<h4 class="package-title">Package</h4>
+<p>$biocstyle-package$</p>
+</div>
+$endif$
+</header>

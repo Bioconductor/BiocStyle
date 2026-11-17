@@ -1,0 +1,53 @@
+name: R CMD check
+
+on:
+  push:
+    branches: [devel, 'RELEASE_*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: R CMD check (Bioc devel)
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:devel
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_FORCE_SUGGESTS_: "false"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install TinyTeX and LaTeX packages used by Bioconductor.sty
+        run: Rscript .github/scripts/install-tex.R
+
+      - name: Install dependencies
+        run: |
+          Rscript -e 'BiocManager::install(ask = FALSE, update = FALSE)'
+          Rscript -e 'install.packages("remotes")'
+          Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never", repos = BiocManager::repositories())'
+          Rscript -e 'install.packages("magick")'
+
+      - name: Build
+        run: R CMD build .
+
+      - name: Check
+        run: R CMD check --no-manual BiocStyle_*.tar.gz
+
+      - name: BiocCheck (advisory)
+        continue-on-error: true
+        run: |
+          Rscript -e 'BiocManager::install("BiocCheck", ask = FALSE, update = FALSE)'
+          Rscript -e 'BiocCheck::BiocCheck(list.files(pattern = "BiocStyle_.*tar.gz")[1], `quit-with-status` = FALSE)'
+
+      - name: Upload check log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-log
+          path: BiocStyle.Rcheck/00check.log

@@ -77,9 +77,36 @@ local function latex(inlines)
   return pandoc.write(pandoc.Pandoc({ pandoc.Plain(inlines) }), "latex")
 end
 
+-- Affiliation marks are only needed to tell affiliations apart: omit them
+-- when every author has the same single affiliation, as parse_auth_affil()
+-- in R/auth_affil.R does (#53).
+local function affiliation_marks(meta)
+  local affiliations = meta["by-affiliation"] or {}
+  if #affiliations == 0 then
+    return false
+  end
+  if #affiliations > 1 then
+    return true
+  end
+  for _, author in ipairs(meta["by-author"] or {}) do
+    if author.affiliations == nil or #author.affiliations == 0 then
+      return true
+    end
+  end
+  return false
+end
+
+local function join_names(names)
+  local n = #names
+  if n > 1 then
+    return table.concat(names, ", ", 1, n - 1) .. " and " .. names[n]
+  end
+  return names[1]
+end
+
 -- \author / \affil commands for authblk, mirroring auth_affil_latex() in
 -- R/auth_affil.R.
-local function latex_authors(meta)
+local function latex_authors(meta, marked)
   local authors = meta["by-author"]
   if authors == nil or #authors == 0 then
     return nil
@@ -92,27 +119,30 @@ local function latex_authors(meta)
     if author.email ~= nil then
       name = name .. "\\thanks{\\ttfamily " .. latex(author.email) .. "}"
     end
-    local marks = {}
-    for _, affil in ipairs(author.affiliations or {}) do
-      table.insert(marks, stringify(affil.number))
-    end
-    if #affiliations > 0 then
+    if marked then
+      local marks = {}
+      for _, affil in ipairs(author.affiliations or {}) do
+        table.insert(marks, stringify(affil.number))
+      end
       table.insert(lines, "\\author[" .. table.concat(marks, ",") .. "]{" .. name .. "}")
     else
       table.insert(names, name)
     end
   end
-  if #affiliations > 0 then
+  if marked then
     for _, affil in ipairs(affiliations) do
       table.insert(lines, "\\affil[" .. stringify(affil.number) .. "]{" .. latex(affil.name) .. "}")
     end
   else
-    local n = #names
-    local joined = names[1]
-    if n > 1 then
-      joined = table.concat(names, ", ", 1, n - 1) .. " and " .. names[n]
+    table.insert(lines, "\\author{" .. join_names(names) .. "}")
+    if #affiliations > 0 then
+      -- Bioconductor.sty loads authblk with 'noblocks', which numbers every
+      -- affiliation; switch to block layout to print them without marks
+      table.insert(lines, "\\setcounter{Maxaffil}{\\maxdimen}")
+      for _, affil in ipairs(affiliations) do
+        table.insert(lines, "\\affil{" .. latex(affil.name) .. "}")
+      end
     end
-    table.insert(lines, "\\author{" .. joined .. "}")
   end
   return table.concat(lines, "\n")
 end
@@ -145,8 +175,12 @@ function Meta(meta)
   if line ~= nil then
     meta["biocstyle-package"] = pandoc.MetaInlines(pandoc.Inlines(line))
   end
+  local marked = affiliation_marks(meta)
+  if marked then
+    meta["biocstyle-affil-marks"] = true
+  end
   if quarto.doc.is_format("latex") then
-    local authors = latex_authors(meta)
+    local authors = latex_authors(meta, marked)
     if authors ~= nil then
       meta["biocstyle-latex-authors"] = pandoc.MetaBlocks({ pandoc.RawBlock("latex", authors) })
     end

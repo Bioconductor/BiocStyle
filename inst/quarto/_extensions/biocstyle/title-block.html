@@ -10,11 +10,11 @@ $endif$
 
 $if(by-author)$
 <div class="biocstyle-authors">
-<p class="author-name">$for(by-author/allbutlast)$<span class="author">$it.name.literal$$if(by-affiliation/first)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$sep$, $endfor$$if(by-author/allbutlast)$ and $endif$$for(by-author/last)$<span class="author">$it.name.literal$$if(by-affiliation/first)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$endfor$</p>
+<p class="author-name">$for(by-author/allbutlast)$<span class="author">$it.name.literal$$if(biocstyle-affil-marks)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$sep$, $endfor$$if(by-author/allbutlast)$ and $endif$$for(by-author/last)$<span class="author">$it.name.literal$$if(biocstyle-affil-marks)$<span class="affil-mark">$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.emailmark)$$it.emailmark$$endif$</span>$elseif(it.emailmark)$<span class="affil-mark">$it.emailmark$</span>$endif$</span>$endfor$</p>
 $if(by-affiliation)$
 <p class="author-affiliation">
 $for(by-affiliation)$
-<span class="affiliation"><span class="affil-mark">$it.number$</span>$if(it.url)$<a href="$it.url$">$endif$$it.name$$if(it.url)$</a>$endif$</span>$sep$<br>
+<span class="affiliation">$if(biocstyle-affil-marks)$<span class="affil-mark">$it.number$</span>$endif$$if(it.url)$<a href="$it.url$">$endif$$it.name$$if(it.url)$</a>$endif$</span>$sep$<br>
 $endfor$
 </p>
 $endif$

@@ -315,13 +315,22 @@ test_quarto_preview_reads_description <- function() {
     dir.create(vignettes)
     BiocStyle::use_quarto_extension(vignettes)
     qmd <- file.path(vignettes, "preview.qmd")
+    ## two authors sharing one affiliation: no affiliation marks (#53)
     writeLines(c("---", "title: Preview", "package: MyPkg",
+                 "author:",
+                 "  - name: Ada Lovelace",
+                 "    affiliation: Same Place",
+                 "  - name: Charles Babbage",
+                 "    affiliation: Same Place",
                  "format: biocstyle-html", "---", "", "# Section", "",
                  "Text."), qmd)
     quarto::quarto_render(qmd, quiet = TRUE, as_job = FALSE)
     html <- paste(readLines(file.path(vignettes, "preview.html"), warn = FALSE),
                   collapse = "\n")
     checkTrue(grepl("<p>MyPkg 0.99.3</p>", html, fixed = TRUE))
+    checkTrue(grepl('<span class="affiliation">Same Place</span>', html,
+                    fixed = TRUE))
+    checkTrue(!grepl('<span class="affil-mark">1', html, fixed = TRUE))
 }
 
 test_quarto_placeholder <- function() {

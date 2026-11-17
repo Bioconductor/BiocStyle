@@ -125,6 +125,13 @@
             else Sys.setenv(R_LIBS = r_libs),
             add = TRUE
         )
+        ## R CMD check sets R_TESTS to a startup file relative to tests/;
+        ## the R process Quarto starts in another directory fails on it
+        r_tests <- Sys.getenv("R_TESTS", NA)
+        if (!is.na(r_tests)) {
+            Sys.unsetenv("R_TESTS")
+            on.exit(Sys.setenv(R_TESTS = r_tests), add = TRUE)
+        }
 
         metadata <- list()
         version <- .quarto_package_version(input)

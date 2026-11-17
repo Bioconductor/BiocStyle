@@ -237,15 +237,19 @@ create_html_template <- function() {
 }
 
 caption_titles = function(lines) {
-  regex_template = '%s(\\(#%s:[-/[:alnum:]]+\\))[[:space:]]*(.*?)([[:space:]]*((\\.[[:space:]])|(\\.$)|($)))'
+  ## the last two '%s' match where a caption without a sentence break ends
+  regex_template = '%s(\\(#%s:[-/[:alnum:]]+\\))[[:space:]]*(.*?)([[:space:]]*((\\.[[:space:]])|(\\.%s)|(%s)))'
   replacement = '\\1<span class="caption-title">\\2</span><br>'
   
-  # tables: match to <caption>...</caption> lines
-  regex = sprintf(regex_template, '(?<=^<caption>)[[:space:]]*', 'tab')
+  # tables: match to <caption>...</caption> lines; the title must stop before
+  # a closing </caption> on the same line so that the tags nest properly
+  caption_end = '(?:(?=</caption>)|$)'
+  regex = sprintf(regex_template, '(?<=^<caption>)[[:space:]]*', 'tab',
+                  caption_end, caption_end)
   lines = gsub(regex, replacement, lines, perl=TRUE)
   
   # figures: match to figure labels preceded by '<p class="caption'
-  regex = sprintf(regex_template, '', 'fig')
+  regex = sprintf(regex_template, '', 'fig', '$', '$')
   idx =  which(grepl(regex, lines))
   idx = idx[vapply(idx, function(i) any(grepl('^<p class="caption', lines[i-0:1])), logical(1L))]
   lines[idx] = gsub(regex, replacement, lines[idx])

@@ -10,6 +10,7 @@ pdf_document(
   fig_width = NA,
   fig_height = NA,
   includes = NULL,
+  keep_md = FALSE,
   ...,
   titlecaps = TRUE,
   toc_newpage = FALSE,
@@ -29,6 +30,9 @@ output}
 
 \item{includes}{Named list of additional content to include within the
 document (typically created using the \code{\link{includes}} function).}
+
+\item{keep_md}{logical(1), \code{TRUE} to keep a copy of the knitted
+Markdown file next to the output file}
 
 \item{\dots}{Additional arguments passed to
 \code{\link[rmarkdown]{pdf_document}}.}

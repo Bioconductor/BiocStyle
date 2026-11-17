@@ -294,15 +294,19 @@ process_footnotes = function(lines) {
 ## We wrap tables in a <div> so they can fill the screen on mobile
 ## but also scroll if they overflow horizontally
 process_tables = function(lines) {
-    
-  ## this will inadvertently mess up some javascript e.g. from Glimma
-  ## so we only modify the body of the html
-  body_start = grep(pattern = "<body>", x = lines, fixed = TRUE)
-  body_end = grep(pattern = "</body>", x = lines, fixed = TRUE)
-    
-  lines[body_start:body_end] = gsub("<table", "<div class='horizontal-scroll'><table", lines[body_start:body_end], fixed = TRUE)
-  lines[body_start:body_end] = gsub("</table>", "</table></div>", lines[body_start:body_end], fixed = TRUE)
-  lines
+  ## Only wrap real <table> elements in the page markup. Tables that appear
+  ## inside <script> blocks (e.g. JavaScript or JSON payloads inserted by
+  ## htmlwidgets such as Glimma) must be left untouched, otherwise the
+  ## injected quotes break the script (#97, #99).
+  html = paste(lines, collapse = "\n")
+  script_re = "(?is)<script\\b.*?</script>"
+  scripts = regmatches(html, gregexpr(script_re, html, perl = TRUE))[[1]]
+  other = regmatches(html, gregexpr(script_re, html, perl = TRUE), invert = TRUE)[[1]]
+  other = gsub("<table(?=[\\s>])", "<div class='horizontal-scroll'><table",
+               other, perl = TRUE)
+  other = gsub("</table>", "</table></div>", other, fixed = TRUE)
+  html = paste0(c(rbind(other, c(scripts, ""))), collapse = "")
+  strsplit(html, "\n", fixed = TRUE)[[1]]
 }
 
 modify_css = function(lines) {

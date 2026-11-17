@@ -287,10 +287,7 @@ test_pdf_golden <- function() {
 }
 
 test_pdf_golden_subtitle_text <- function() {
-    DEACTIVATED(paste(
-        "Bioconductor.sty redefines \\maketitle without titling's \\posttitle,",
-        "where the template's \\subtitle stores the subtitle, so it is never",
-        "typeset"))
+    ## Regression test for #122
     if (!.golden_has_latex()) return(invisible())
     txt <- .golden_pdf()$text
     if (is.null(txt)) return(invisible())

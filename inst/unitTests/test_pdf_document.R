@@ -137,3 +137,19 @@ test_pdf_document_output_file <- function() {
   }
   unlink(dir, recursive = TRUE)
 }
+
+test_pdf_document_keep_md <- function() {
+  ## Regression test for https://github.com/Bioconductor/BiocStyle/issues/106
+  checkTrue(BiocStyle::pdf_document(keep_md = TRUE)$keep_md)
+  checkTrue(!BiocStyle::pdf_document()$keep_md)
+
+  dir <- tempfile(); dir.create(dir)
+  rmd <- file.path(dir, "keep.Rmd")
+  writeLines(c('---', 'title: "Keep MD"', 'output:',
+               '  BiocStyle::pdf_document:', '    keep_md: true', '---', '',
+               'Some text.'), rmd)
+  out <- rmarkdown::render(rmd, quiet = TRUE)
+  checkTrue(file.exists(out))
+  checkTrue(file.exists(file.path(dir, "keep.md")), ".md file kept")
+  unlink(dir, recursive = TRUE)
+}

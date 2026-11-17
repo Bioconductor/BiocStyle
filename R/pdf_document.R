@@ -37,6 +37,7 @@ pdf_document <- function(toc = TRUE,
                          fig_width = NA,
                          fig_height = NA,
                          includes = NULL,
+                         keep_md = FALSE,
                          ...,
                          ## BiocStyle specific arguments:
                          titlecaps = TRUE,
@@ -148,6 +149,7 @@ pdf_document <- function(toc = TRUE,
   config <- output_format(
     knitr = knitr,
     pandoc = list(args = pandoc_args),
+    keep_md = keep_md,
     pre_knit = pre_knit,
     pre_processor = pre_processor,
     intermediates_generator = intermediates_generator,
@@ -159,6 +161,7 @@ pdf_document <- function(toc = TRUE,
       fig_height = fig_height,
       template = "default",
       includes = includes,
+      keep_md = keep_md,
       base_format = rmarkdown::pdf_document,
       ...)
   )

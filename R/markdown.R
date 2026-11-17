@@ -162,12 +162,11 @@ NULL
 #' @importFrom BiocManager version
 #' @export
 Biocpkg <- function(pkg, vignette = NULL, label = NULL, versioned = TRUE) {
-    url <- ifelse(
-        versioned,
-        file.path("https://bioconductor.org/packages", version(), pkg),
+    stopifnot(isTRUE(versioned) || isFALSE(versioned))
+    url <- if (versioned)
+        file.path("https://bioconductor.org/packages", version(), pkg)
+    else
         file.path("https://bioconductor.org/packages", pkg)
-    )
-        
     if (!is.null(vignette)) {
         url <- file.path(url, "vignettes", vignette)
     }
@@ -185,11 +184,11 @@ labelled_link <- function(pkg, label, url) {
 #' @rdname macros
 #' @export
 Biocbook <- function(pkg, label = NULL, versioned = TRUE) {
-    url <- ifelse(
-        versioned,
-        file.path("https://bioconductor.org/books", version(), pkg),
+    stopifnot(isTRUE(versioned) || isFALSE(versioned))
+    url <- if (versioned)
+        file.path("https://bioconductor.org/books", version(), pkg)
+    else
         file.path("https://bioconductor.org/books", pkg)
-    )
     labelled_link(pkg, label, url)
 }
 

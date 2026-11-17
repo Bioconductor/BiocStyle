@@ -1,0 +1,60 @@
+name: Render across pandoc versions
+
+## Renders the R Markdown authoring vignette to HTML and PDF with a range
+## of pandoc versions, so template breakages (e.g. pandoc 3.8.2's new
+## counter requirement) show up before users hit them.
+
+on:
+  push:
+    branches: [devel, 'RELEASE_*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: "pandoc ${{ matrix.pandoc }}"
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:devel
+    strategy:
+      fail-fast: false
+      matrix:
+        pandoc: ['2.19.2', '3.1.13', '3.6.4', '3.8.2', '3.10', 'latest']
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: ${{ matrix.pandoc }}
+
+      - name: Install TinyTeX and LaTeX packages
+        run: Rscript .github/scripts/install-tex.R
+
+      - name: Install dependencies and this BiocStyle
+        run: |
+          Rscript -e 'install.packages("remotes")'
+          Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never", repos = BiocManager::repositories())'
+          Rscript -e 'install.packages("magick")'
+          R CMD INSTALL .
+
+      - name: Render HTML and PDF
+        working-directory: vignettes
+        run: |
+          pandoc --version | head -1
+          Rscript -e 'rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::html_document", quiet = TRUE)'
+          Rscript -e 'rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::pdf_document", quiet = TRUE)'
+
+      - name: Upload rendered output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: render-pandoc-${{ matrix.pandoc }}
+          path: |
+            vignettes/*.html
+            vignettes/*.pdf
+            vignettes/*.log

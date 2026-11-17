@@ -27,6 +27,9 @@ biocstyle_version <- tryCatch(as.character(packageVersion("BiocStyle")),
                               error = function(e) NA_character_)
 
 render <- function() {
+    ## Fix the RNG so unseeded randomness in a vignette (e.g. lattice's
+    ## jittered points) is identical in both renders instead of a diff.
+    set.seed(20240101L)
     ## Like R CMD build: the package's own namespace is available and the
     ## working directory is the vignettes directory.
     tools::buildVignette(file.path(vig_dir, basename(vignette_file)), dir = vig_dir,

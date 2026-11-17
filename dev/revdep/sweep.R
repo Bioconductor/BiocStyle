@@ -122,10 +122,11 @@ render_variant <- function(variant, pkg, src_dir, vignettes, pkg_dir) {
     dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
     todo <- vignettes[!file.exists(file.path(out_dir, paste0(basename(vignettes), ".json")))]
     if (!length(todo)) return(0)
-    ## A fresh copy per variant so the two renders cannot see each other's
-    ## intermediate files and can run concurrently.
-    work <- file.path(pkg_dir, paste0("work-", variant))
+    ## A fresh copy per variant, on the container's own filesystem: the
+    ## macOS bind mount breaks HDF5 file locking and chmod in some vignettes.
+    work <- file.path("/tmp/revdep-work", pkg, variant)
     unlink(work, recursive = TRUE)
+    dir.create(dirname(work), recursive = TRUE, showWarnings = FALSE)
     system2("cp", c("-a", shQuote(src_dir), shQuote(work)))
     on.exit(unlink(work, recursive = TRUE))
     env <- sprintf("R_LIBS=%s", shQuote(paste(file.path(run_dir, "lib", variant), shared_lib, sep = ":")))

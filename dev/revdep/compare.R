@@ -40,7 +40,7 @@ normalize_data_uris <- function(txt) {
 ## vignette that is unrelated to BiocStyle.
 noise_rules <- list(
     ## per-variant working copy and library paths
-    c("/run-dir/pkgs/[^/]+/work-(baseline|candidate)", "<WORKDIR>"),
+    c("/tmp/revdep-work/[^/]+/(baseline|candidate)", "<WORKDIR>"),
     c("/run-dir/lib/(baseline|candidate)", "<BIOCSTYLE_LIB>"),
     c("/tmp/Rtmp[A-Za-z0-9]+", "/tmp/RtmpXXXXXX"),
     ## the BiocStyle version itself (shown by sessionInfo())
@@ -51,10 +51,34 @@ noise_rules <- list(
     c("[0-9]{4}-[0-9]{2}-[0-9]{2}", "<DATE>"),
     c("[0-9]{1,2} (January|February|March|April|May|June|July|August|September|October|November|December),? [0-9]{4}", "<DATE>"),
     c("(January|February|March|April|May|June|July|August|September|October|November|December) [0-9]{1,2},? [0-9]{4}", "<DATE>"),
+    ## memory addresses, e.g. printed closures' <bytecode: 0x...>
+    c("0x[0-9a-f]{6,}", "0x<ADDR>"),
     ## random element ids (htmlwidgets, plotly, DT, pandoc footnote/TOC ids)
     c("htmlwidget-[0-9a-f]{8,}", "htmlwidget-<ID>"),
-    c("\\b[0-9a-f]{20,}\\b", "<HEXID>")
+    c("\\b[0-9a-f]{20,}\\b", "<HEXID>"),
+    ## pandoc's per-line code anchors; renumbered when a line is dropped below
+    c("\\bcb[0-9]+-[0-9]+\\b", "cb<N>")
 )
+
+## AnnotationHub/ExperimentHub/BiocFileCache progress messages depend on the
+## cache state (the baseline render downloads, the candidate then loads from
+## cache), not on BiocStyle. Lines that carry only such a message are dropped;
+## elsewhere the message text is removed.
+hub_message <- "(downloading [0-9]+ resources?|retrieving [0-9]+ resources?|loading from cache)"
+drop_hub_messages <- function(lines) {
+    text <- trimws(gsub("<[^>]+>", "", lines))
+    only <- grepl(paste0("^((#&gt;|#>|##) *)?", hub_message, "$"), text)
+    gsub(hub_message, "", lines[!only])
+}
+
+## system.time() output: blank the numbers (and their column padding) on
+## the line after its header.
+blank_system_time <- function(lines) {
+    hdr <- which(grepl("user +system +elapsed", gsub("<[^>]+>", "", lines)))
+    nxt <- intersect(hdr + 1L, seq_along(lines))
+    lines[nxt] <- gsub(" +", " ", gsub("[0-9]+(\\.[0-9]+)?", "<T>", lines[nxt]))
+    lines
+}
 
 apply_rules <- function(txt) {
     for (r in noise_rules) txt <- gsub(r[[1]], r[[2]], txt, perl = TRUE)
@@ -62,12 +86,12 @@ apply_rules <- function(txt) {
 }
 
 normalize_html <- function(path) {
-    txt <- paste(readLines(path, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-    txt <- normalize_data_uris(txt)
+    lines <- drop_hub_messages(readLines(path, warn = FALSE, encoding = "UTF-8"))
+    txt <- normalize_data_uris(paste(lines, collapse = "\n"))
     ## one tag per line, so a change shows as a few lines rather than one
     ## very long one
     txt <- gsub(">[ \t]*<", ">\n<", txt, perl = TRUE)
-    apply_rules(strsplit(txt, "\n", fixed = TRUE)[[1]])
+    apply_rules(blank_system_time(strsplit(txt, "\n", fixed = TRUE)[[1]]))
 }
 
 pdf_pages <- function(path) {
@@ -77,7 +101,7 @@ pdf_pages <- function(path) {
 
 normalize_pdf_text <- function(path) {
     txt <- system2("pdftotext", c("-layout", shQuote(path), "-"), stdout = TRUE, stderr = FALSE)
-    apply_rules(sub("\\s+$", "", txt))
+    apply_rules(blank_system_time(drop_hub_messages(sub("\\s+$", "", txt))))
 }
 
 ## Unified diff of two character vectors; returns number of changed lines.

@@ -15,10 +15,12 @@ status_json <- args[[4]]
 
 started <- Sys.time()
 vig_dir <- dirname(file.path(src_dir, vignette_file))
-builders <- NULL  # buildVignette() wants NULL, not character(0), for "none"
-desc <- file.path(src_dir, "DESCRIPTION")
-vb <- read.dcf(desc, fields = "VignetteBuilder")[1, 1]
-if (!is.na(vb)) builders <- trimws(strsplit(vb, ",")[[1]])
+## Load the VignetteBuilder packages so their engines are registered, but
+## don't pass them as buildVignette(buildPkg=): that restricts engine lookup
+## to those packages and hides utils::Sweave.
+vb <- read.dcf(file.path(src_dir, "DESCRIPTION"), fields = "VignetteBuilder")[1, 1]
+if (!is.na(vb))
+    for (b in trimws(strsplit(vb, ",")[[1]])) suppressPackageStartupMessages(loadNamespace(b))
 
 biocstyle_path <- tryCatch(find.package("BiocStyle"), error = function(e) NA_character_)
 biocstyle_version <- tryCatch(as.character(packageVersion("BiocStyle")),
@@ -28,8 +30,7 @@ render <- function() {
     ## Like R CMD build: the package's own namespace is available and the
     ## working directory is the vignettes directory.
     tools::buildVignette(file.path(vig_dir, basename(vignette_file)), dir = vig_dir,
-                         tangle = FALSE, quiet = FALSE, clean = TRUE,
-                         buildPkg = builders)
+                         tangle = FALSE, quiet = FALSE, clean = TRUE)
 }
 
 ## A missing LaTeX package is an environment gap, not a BiocStyle effect:

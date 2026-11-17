@@ -3,3 +3,5 @@
 ^.*\.md$
 ^\.git$
 ^\.github$
+^dev$
+^justfile$

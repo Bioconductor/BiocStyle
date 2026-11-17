@@ -1,0 +1,11 @@
+## Packages always included in a sweep (in addition to the top-n by
+## Bioconductor download score), chosen because they exercise riskier
+## BiocStyle output paths. One package per line; '#' starts a comment.
+
+Glimma                # HTML widgets; its devel vignettes use rmarkdown::html_vignette,
+                      # so it is also a control that should never change
+DirichletMultinomial  # DT::datatable() htmlwidget inside BiocStyle::html_document
+Biostrings            # BiocStyle::pdf_document Rmd (SequenceMatching) plus Rnw vignettes
+GeneOverlap           # Rnw with BiocStyle::latex(), light dependencies
+illuminaio            # Rnw with BiocStyle::latex()
+mixOmics              # kableExtra tables in BiocStyle::html_document

@@ -1,0 +1,40 @@
+# TeX Live packages needed to build BiocStyle PDF documents
+# (BiocStyle::pdf_document and BiocStyle::latex for Sweave/knitr .Rnw).
+# One TeX Live (tlmgr) package name per line; '#' starts a comment.
+# Install them with, e.g.,
+#   pkgs <- readLines(system.file("resources", "tex", "required-packages.txt",
+#                                 package = "BiocStyle"))
+#   pkgs <- trimws(sub("#.*", "", pkgs))
+#   tinytex::tlmgr_install(pkgs[nzchar(pkgs)])
+
+# Loaded by Bioconductor.sty
+bera        # beramono
+caption
+changepage
+enumitem
+etoolbox
+fancyhdr
+footmisc
+framed
+geometry
+graphics    # graphicx
+hyperref
+latex       # fontenc, ifthen
+marginfix
+mathtools
+nowidow
+parnotes
+parskip
+placeins
+preprint    # authblk
+ragged2e
+soul
+titlesec    # titlesec, titletoc
+xcolor
+xstring
+
+# Loaded by the BiocStyle::pdf_document LaTeX template
+titling
+
+# Figure cropping (crop = TRUE); also needs ghostscript
+pdfcrop

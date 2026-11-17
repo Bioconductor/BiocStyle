@@ -277,6 +277,28 @@ plot(cars)
 plot(cars)
 ```
 
+## Figure cropping
+
+_BiocStyle_ sets the chunk option `crop = TRUE`, so white margins around plots
+are trimmed with `knitr::plot_crop()`. This needs the `r CRANpkg("magick")`
+package for HTML output, and the `pdfcrop` utility together with ghostscript
+for PDF output. If they are missing, _knitr_ leaves the figures uncropped. If
+your vignettes rely on cropping, list `magick` in the `Suggests` field of your
+package's `DESCRIPTION` file.
+
+Since regular and wide figures are scaled to the full width of the text,
+cropping changes the size of plots that contain intended whitespace. For
+example, in a `par(mfrow = c(3, 3))` layout with ten panels the last image holds
+a single panel, which is cropped and then enlarged. Cropping also turns SVG
+figures (`dev = "svg"`) into embedded bitmaps. Turn it off with `crop = NULL`,
+either for a single chunk or for the whole document with
+`knitr::opts_chunk$set(crop = NULL)`.
+
+    ```{r mfrow, crop = NULL}`r ''`
+    par(mfrow = c(3, 3))
+    for (i in 1:10) plot(cars)
+    ```
+
 ## Accessibility considerations
 
 Alt (alternative) text is used by screen readers to provide a description of an

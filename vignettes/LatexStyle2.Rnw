@@ -454,6 +454,7 @@ a full-width square plot, as in Figure~\ref{fig:square}.
 \end{figure*}
 
 When \knitr\ is used plots are cropped so that blank margins around them are removed to make better use of the space in the output document\footnote{otherwise one often has to struggle with \Rcode{par} to set appropriate margins}. This feature can be switched off by setting the chunk option \Rcode{knitr::opts\_chunk\$set(crop = NULL)}.
+Cropping uses the \software{pdfcrop} utility, which needs ghostscript; without them plots are left uncropped.
 
 \subsubsection{\latex{\textbackslash incfig} convenience macro}\label{incfig}
 

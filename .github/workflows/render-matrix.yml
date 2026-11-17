@@ -48,6 +48,22 @@ jobs:
           Rscript -e 'rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::html_document", quiet = TRUE)'
           Rscript -e 'rmarkdown::render("AuthoringRmdVignettes.Rmd", output_format = "BiocStyle::pdf_document", quiet = TRUE)'
 
+      ## Structural assertions on the rendered output of the golden fixture
+      ## (inst/unitTests/cases/golden.Rmd), run against the installed package.
+      ## Runs even if the vignette render failed so every pandoc version
+      ## reports its assertion results.
+      - name: Golden-output render tests
+        if: ${{ !cancelled() }}
+        run: |
+          Rscript -e '
+            library(RUnit)
+            library(BiocStyle)
+            res <- runTestFile("inst/unitTests/test_render_golden.R")
+            printTextProtocol(res, showDetails = TRUE)
+            err <- getErrors(res)
+            if (err$nErr + err$nFail > 0L) quit(status = 1L)
+          '
+
       - name: Upload rendered output
         if: always()
         uses: actions/upload-artifact@v4

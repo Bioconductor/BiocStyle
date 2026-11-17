@@ -45,6 +45,22 @@
 
 .has <- function(pattern, text, ...) grepl(pattern, text, ...)
 
+## Percent-decode a string; utils::URLdecode() is too slow for the
+## embedded stylesheets
+.url_decode <- function(x) {
+    bytes <- charToRaw(x)
+    pct <- which(bytes == charToRaw("%"))
+    pct <- pct[pct + 2L <= length(bytes)]
+    hex <- strtoi(paste0(rawToChar(bytes[pct + 1L], multiple = TRUE),
+                         rawToChar(bytes[pct + 2L], multiple = TRUE)), 16L)
+    pct <- pct[!is.na(hex)]
+    hex <- hex[!is.na(hex)]
+    if (!length(pct))
+        return(x)
+    bytes[pct] <- as.raw(hex)
+    rawToChar(bytes[-c(pct + 1L, pct + 2L)])
+}
+
 test_quarto_extension_sty_matches_resources <- function() {
     ## the extension carries its own copy of Bioconductor.sty
     sty <- system.file("resources", "tex", "Bioconductor.sty",
@@ -113,7 +129,7 @@ test_quarto_html_parity <- function() {
     ## CSS compiled from the extension's SCSS is embedded (as URL-encoded
     ## data URIs)
     css <- regmatches(html, gregexpr('data:text/css,[^"]+', html))[[1L]]
-    css <- paste(vapply(css, utils::URLdecode, character(1L)), collapse = "\n")
+    css <- paste(vapply(css, .url_decode, character(1L)), collapse = "\n")
     checkTrue(.has("#1a81c2", css, ignore.case = TRUE))
     checkTrue(.has("#87b13f", css, ignore.case = TRUE))
     checkTrue(.has(".horizontal-scroll", css, fixed = TRUE))

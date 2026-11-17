@@ -1,0 +1,321 @@
+---
+title: "Authoring Quarto vignettes"
+subtitle: "The Bioconductor style for Quarto documents"
+author:
+  - name: Bioconductor Package Maintainer
+    affiliation: Bioconductor
+    email: maintainer@bioconductor.org
+package: BiocStyle
+abstract: |
+  Instructions on writing package vignettes in Quarto with the
+  _Bioconductor_ style: the `biocstyle-html` and `biocstyle-pdf` formats,
+  the `BiocStyle::quarto_html` and `BiocStyle::quarto_pdf` vignette
+  engines, and how the features of `BiocStyle::html_document` and
+  `BiocStyle::pdf_document` map to Quarto.
+format: biocstyle-html
+vignette: >
+  %\VignetteIndexEntry{Authoring Quarto vignettes}
+  %\VignetteEngine{BiocStyle::quarto_html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+library(BiocStyle)
+```
+
+# Prerequisites
+
+_BiocStyle_ includes a [Quarto](https://quarto.org) extension, `biocstyle`,
+that gives Quarto documents the _Bioconductor_ style, and two vignette
+engines that build `.qmd` vignettes with it. Building a Quarto vignette
+needs
+
+- the Quarto command line tool (see the [installation
+  instructions](https://quarto.org/docs/get-started/)),
+- the `r CRANpkg("quarto")` _R_ package, and
+- `r CRANpkg("knitr")` and `r CRANpkg("rmarkdown")`, which Quarto uses to run
+  _R_ code.
+
+This vignette is itself a Quarto vignette built with `BiocStyle::quarto_html`.
+Its companion, "Authoring R Markdown vignettes", describes the
+R Markdown formats `BiocStyle::html_document` and `BiocStyle::pdf_document`.
+
+# Getting started
+
+The quickest start is `use_vignette_quarto()`, run from the package
+directory:
+
+```{r}
+#| eval: false
+BiocStyle::use_vignette_quarto("MyPackage")              # HTML
+BiocStyle::use_vignette_quarto("MyPackage-pdf", "pdf")   # PDF
+```
+
+It creates `vignettes/<name>.qmd` with the vignette header and the outline of
+a package vignette (installation, support and session information), and calls
+`use_quarto_extension()` so that the vignette can be previewed (see
+@sec-preview).
+
+To set up a Quarto vignette by hand:
+
+- Edit the `DESCRIPTION` file by adding
+
+        VignetteBuilder: BiocStyle
+        Suggests: BiocStyle, knitr, quarto
+
+  If the package also has R Markdown vignettes, use
+  `VignetteBuilder: BiocStyle, knitr`.
+
+- Use the format `biocstyle-html` or `biocstyle-pdf`, and the matching
+  vignette engine, in the document header:
+
+        ---
+        title: "Vignette Title"
+        author: "Vignette Author"
+        package: PackageName
+        format: biocstyle-html
+        vignette: >
+          %\VignetteIndexEntry{Vignette Title}
+          %\VignetteEngine{BiocStyle::quarto_html}
+          %\VignetteEncoding{UTF-8}
+        ---
+
+  For PDF output use `format: biocstyle-pdf` and
+  `%\VignetteEngine{BiocStyle::quarto_pdf}`.
+
+When the package is built, the engine copies the `biocstyle` extension of the
+installed _BiocStyle_ next to the vignette, renders the vignette with
+`quarto::quarto_render()`, and removes the copy again. So the package does not
+carry a copy of the extension, and vignettes always get the style of the
+installed _BiocStyle_. If the `quarto` _R_ package or the Quarto command line
+tool is missing, building the vignette fails, except under `R CMD check`,
+where the engine warns and writes a placeholder instead.
+
+## Previewing a vignette {#sec-preview}
+
+`quarto render` and the RStudio "Render" button do not go through the
+vignette engine, so they need the extension in `vignettes/_extensions`.
+`use_quarto_extension()` copies it there:
+
+```{r}
+#| eval: false
+BiocStyle::use_quarto_extension("vignettes")
+```
+
+The copy is only for previewing, so the function adds
+`vignettes/_extensions` (and the `Bioconductor.sty` file that rendering to PDF
+leaves next to the document) to the package's `.Rbuildignore` and
+`.gitignore`. Run it again with `overwrite = TRUE` after updating
+_BiocStyle_. When previewing, the version in the package line (see
+@sec-header) is read from the package's `DESCRIPTION` file.
+
+# R Markdown and Quarto features
+
+@tbl-features maps the features of the R Markdown formats to their Quarto
+counterparts. Most of the Quarto features are Quarto's own; the `biocstyle`
+formats turn them on by default and style them.
+
+| R Markdown (_BiocStyle_) | Quarto (`biocstyle` extension) |
+|:-------------------------|:-------------------------------|
+| `output: BiocStyle::html_document` | `format: biocstyle-html` |
+| `output: BiocStyle::pdf_document` | `format: biocstyle-pdf` (uses the same `Bioconductor.sty`) |
+| `%\VignetteEngine{knitr::rmarkdown}` | `%\VignetteEngine{BiocStyle::quarto_html}` or `BiocStyle::quarto_pdf` |
+| `use_vignette_html()`, `use_vignette_pdf()` | `use_vignette_quarto(format = "html")` or `"pdf"` |
+| `author:` with `name`, `affiliation`, `email` | the same fields, following Quarto's [author schema](https://quarto.org/docs/journals/authors.html) |
+| `abstract:` | `abstract:` |
+| `package:` adds "Package: _name version_" | `package:` (same) |
+| `date:` defaults to today | `date:` defaults to today |
+| Floating table of contents (`toc_float: true`) | on by default, on the left (`toc-location: left`) |
+| Numbered sections | on by default (`number-sections: true`) |
+| Footnotes as sidenotes | footnotes in the margin (`reference-location: margin`) |
+| `fig.small = TRUE` | chunk option `classes: fig-small` (with `fig-width: 5`) |
+| `fig.wide = TRUE` | chunk option `classes: fig-wide` (with `fig-width: 10`), or Quarto's `column: page-right` |
+| Horizontally scrolling wide tables | same, tables are wrapped in a scrolling container |
+| `Biocpkg()`, `CRANpkg()`, `Githubpkg()` in inline _R_ code | the same inline _R_ code |
+| `\@ref(fig:label)` (_bookdown_) | `@fig-label`, `@tbl-label`, `@sec-label` |
+| `BiocStyle::md_document` | Quarto's `gfm` format |
+
+: R Markdown features of _BiocStyle_ and their Quarto equivalents. {#tbl-features}
+
+# Document header {#sec-header}
+
+## Authors and affiliations
+
+The `author` field takes author names with affiliations and emails, as in
+Quarto's [author schema](https://quarto.org/docs/journals/authors.html).
+A single author can be a character string
+
+    author: "Single Author"
+
+and several authors with affiliations and emails a list:
+
+    author:
+      - name: First Author
+        affiliations:
+          - Shared affiliation
+          - Additional affiliation
+      - name: Second Author
+        affiliation: Shared affiliation
+        email: corresponding@author.com
+
+As in `BiocStyle::html_document`, the formats list unique affiliations below
+the authors, with numbers linking authors to their affiliations, and emails
+marked with asterisks. Quarto's other author fields (ORCID, roles, ...) are
+accepted but not shown.
+
+## Abstract, package and date
+
+The `abstract` field is shown under an "Abstract" heading. The `package` field
+should contain the package name; it is shown under a "Package" heading
+together with the package version, as at the top of this document. When the
+vignette is built, the engine takes the version from the package being built
+(or, for a package other than the one being built, from the installed
+package). The `date` defaults to the date the document is rendered; set
+`date:` to override it.
+
+# Style macros
+
+`r Biocpkg("BiocStyle")` provides the following macros for referring to
+_R_ packages. Call them with inline _R_ code; the vignette has to load
+_BiocStyle_ first, for example in a setup chunk with `#| include: false`.
+
+```{r}
+#| include: false
+macro <- function(name, pkg, description)
+    sprintf('`%s("%s")` %s %s', name, pkg, description,
+            do.call(name, list(pkg)))
+inline <- function(cmd) sprintf('`` `r %s` ``', cmd)
+```
+
+* `r macro("Biocpkg", "IRanges", "for _Bioconductor_ software, annotation and experiment data packages, including a link to the package landing page,")`.
+
+* `r macro("CRANpkg", "data.table", "for _R_ packages available on CRAN, including a link to the CRAN landing page,")`.
+
+* `r macro("Githubpkg", "rstudio/rmarkdown", "for _R_ packages available on GitHub, including a link to the package repository,")`.
+
+* `r macro("Rpackage", "MyPkg", "for _R_ packages that are _not_ available on _Bioconductor_, CRAN or GitHub.")`
+
+For example, write `r inline('Biocpkg("IRanges")')` to get
+`r Biocpkg("IRanges")`.
+
+# Figures
+
+## Regular figures
+
+Figures with a caption are numbered, and can be referenced with Quarto's
+cross-reference syntax: a chunk labelled `fig-cars` is referenced with
+`@fig-cars`, as in @fig-cars.
+
+```{{r}}
+#| label: fig-cars
+#| fig-cap: "Regular figure. A plot produced by a code chunk."
+plot(cars)
+```
+
+```{r}
+#| label: fig-cars
+#| echo: false
+#| fig-cap: "Regular figure. A plot produced by a code chunk."
+plot(cars)
+```
+
+## Small and wide figures
+
+The R Markdown chunk options `fig.small` and `fig.wide` become the figure
+classes `fig-small` and `fig-wide`, set with the `classes` chunk option.
+A small figure (@fig-small) is narrower than the text and centered; a wide
+figure (@fig-wide) extends into the right margin. Unlike the R Markdown chunk
+options, the classes do not change the size of the plot itself, so set
+`fig-width` to match: 5 inches for small and 10 inches for wide figures (the
+formats default to 8 by 5 inches).
+
+```{{r}}
+#| label: fig-small
+#| classes: fig-small
+#| fig-width: 5
+#| fig-cap: "Small figure. A plot produced by a code chunk with `classes: fig-small`."
+plot(cars)
+```
+
+```{r}
+#| label: fig-small
+#| echo: false
+#| classes: fig-small
+#| fig-width: 5
+#| fig-cap: "Small figure. A plot produced by a code chunk with `classes: fig-small`."
+plot(cars)
+```
+
+```{{r}}
+#| label: fig-wide
+#| classes: fig-wide
+#| fig-width: 10
+#| fig-cap: "Wide figure. A plot produced by a code chunk with `classes: fig-wide`."
+plot(pressure, type = "b")
+```
+
+```{r}
+#| label: fig-wide
+#| echo: false
+#| classes: fig-wide
+#| fig-width: 10
+#| fig-cap: "Wide figure. A plot produced by a code chunk with `classes: fig-wide`."
+plot(pressure, type = "b")
+```
+
+The classes also work on Markdown images, e.g.
+`![Caption](image.png){.fig-small}`. For other layouts, use Quarto's
+[`column` option](https://quarto.org/docs/authoring/article-layout.html);
+`fig-wide` is a shortcut for `column: page-right`.
+
+## Alternative text
+
+Captions are used as the alternative text of figures. To describe a figure
+for screen readers in other words, or to describe a figure without a caption,
+use the `fig-alt` chunk option.
+
+# Tables
+
+Tables, from Markdown or from _R_ code such as `knitr::kable()`, are wrapped
+in a container that scrolls horizontally, so that wide tables, like
+@tbl-wide, do not overflow the page.
+
+```{r}
+#| label: tbl-wide
+#| tbl-cap: "A wide table."
+wide <- as.data.frame(matrix(round(seq(-1, 1, length.out = 60), 2), nrow = 3))
+knitr::kable(wide)
+```
+
+# Footnotes and margin notes
+
+Footnotes appear in the margin next to the text that refers to
+them.^[Like this footnote, written as `^[text of the footnote]`.] Other
+content can be put in the margin with the `.column-margin` class:
+
+    ::: {.column-margin}
+    A note in the margin.
+    :::
+
+::: {.column-margin}
+A note in the margin.
+:::
+
+In PDF output, footnotes are placed as by `BiocStyle::pdf_document`.
+
+# PDF output
+
+`format: biocstyle-pdf` uses `Bioconductor.sty`, the LaTeX style file of
+`BiocStyle::pdf_document`, and adds the title block (authors, affiliations,
+emails, abstract and package version) and a table of contents on its own
+page. It compiles with `pdflatex` by default; set `pdf-engine` to change
+that. `fig-small` and `fig-wide` work in PDF output too.
+
+# Session info {.unnumbered}
+
+```{r}
+#| label: session-info
+#| echo: false
+sessionInfo()
+```

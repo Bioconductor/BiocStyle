@@ -206,11 +206,20 @@
 % patch the following command in order to get rid of space after symbol
 \patchcmd{\PN@parnote@real}{\thinspace}{}{}{}
 \renewcommand{\thanks}[1]{\,\parnote{#1}\hspace{-.16667em}}
+% Store the subtitle for our own \maketitle. The pandoc template defines
+% \subtitle via titling's \posttitle, which this \maketitle never uses (#122).
+\let\@subtitle\@empty
+\providecommand{\subtitle}{}
+\renewcommand{\subtitle}[1]{\def\@subtitle{#1}}
 \renewcommand{\maketitle}{%
 %\begin{titlepage}
 \thispagestyle{empty}
 \begin{adjustwidth}{-\overhang}{0mm}
  {\huge\bfhelvet\color{BiocBlue}\@title\unskip\strut\par}
+ \ifx\@subtitle\@empty\else
+ \addvspace{1ex}
+ {\Large\bfhelvet\color{BiocBlue}\@subtitle\unskip\strut\par}
+ \fi
 \end{adjustwidth}
 \addvspace{3.5ex plus 0.5ex minus 0.25ex}
 {\@author\unskip\strut\par}

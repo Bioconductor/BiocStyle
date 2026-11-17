@@ -32,6 +32,18 @@ version of [pandoc](http://johnmacfarlane.net/pandoc/) (>= 1.17.2). See the
 instructions](https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md) for
 details on installing pandoc for your platform.
 
+PDF output also needs a LaTeX distribution. _BiocStyle_ ships the list of TeX
+Live packages it uses in `resources/tex/required-packages.txt` (one package
+name per line, `#` starts a comment). With `r CRANpkg("tinytex")`, for example
+on a continuous integration machine, install them with
+
+```{r tlmgr-install, eval=FALSE}
+pkgs <- readLines(system.file("resources", "tex", "required-packages.txt",
+                              package = "BiocStyle"))
+pkgs <- trimws(sub("#.*", "", pkgs))
+tinytex::tlmgr_install(pkgs[nzchar(pkgs)])
+```
+
 
 # Getting started
 

@@ -601,6 +601,20 @@ latexpkgs = paste0("\\\\latex{", pkgs, "}", collapse=", ")
 
 \Sexpr{latexpkgs}.
 
+The TeX Live packages which provide them, together with \software{titling} for
+\Rcode{BiocStyle::pdf\_document} and \software{pdfcrop} for figure cropping,
+are listed in the file \file{resources/tex/required-packages.txt} of the
+installed \BiocStyle\ package, one package name per line. With
+\CRANpkg{tinytex}, for example on a continuous integration machine, install
+them with
+
+<<tlmgrInstall, eval=FALSE>>=
+pkgs <- readLines(system.file("resources", "tex", "required-packages.txt",
+                              package = "BiocStyle"))
+pkgs <- trimws(sub("#.*", "", pkgs))
+tinytex::tlmgr_install(pkgs[nzchar(pkgs)])
+@
+
 
 \section{Known issues}
 

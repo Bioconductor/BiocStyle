@@ -32,11 +32,17 @@ parse_auth_affil = function(m) {
       affil_uniq <- unique(unlist(affil))
       
       if ( !is.null(affil_uniq) ) {
-        affil_ids <- setNames(seq_along(affil_uniq), affil_uniq)
-        affil_marks <- sapply(affil, function(a) paste(sort(affil_ids[a]), collapse = ',') )
-        
         res$affil <- affil_uniq
-        res$affil_marks <- affil_marks
+        
+        ## marks are only needed to tell affiliations apart, so omit them when
+        ## every author has the same single affiliation (#53)
+        shared <- length(affil_uniq) == 1L &&
+          all(vapply(affil, length, integer(1L)) > 0L)
+        
+        if ( !shared ) {
+          affil_ids <- setNames(seq_along(affil_uniq), affil_uniq)
+          res$affil_marks <- sapply(affil, function(a) paste(sort(affil_ids[a]), collapse = ',') )
+        }
       }
       
       ## assign IDs to emails
@@ -128,6 +134,11 @@ auth_affil_latex = function(m) {
     idx <- m$email_marks != ""
     author[idx] <-  sprintf("%s\\thanks{\\ttfamily %s}", author[idx], m$email)
   }
+  ## single author given as a map: email without marks
+  else if ( !is.null(m$email) ) {
+    author <- sprintf("%s\\thanks{\\ttfamily %s}", author,
+                      paste(unlist(m$email), collapse=", "))
+  }
   
   if ( is.null(m$affil_marks) ) {
     if ((l = length(author)) > 2)
@@ -136,6 +147,12 @@ auth_affil_latex = function(m) {
     author <- paste(author, collapse=" and ")
     author <- sprintf("\\author{%s}", author)
     affil <- NULL
+    ## unmarked affiliations, e.g. one affiliation shared by all authors;
+    ## Bioconductor.sty loads authblk with 'noblocks', which numbers every
+    ## affiliation, so switch to block layout to print them without marks
+    if ( !is.null(m$affil) )
+      affil <- c("\\setcounter{Maxaffil}{\\maxdimen}",
+                 sprintf("\\affil{%s}", unlist(m$affil)))
   }
   else {
     author <- sprintf("\\author[%s]{%s}", m$affil_marks, author)
